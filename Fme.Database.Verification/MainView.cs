@@ -50,7 +50,7 @@ namespace Fme.Database.Verification
     /// <seealso cref="DevExpress.XtraEditors.XtraForm" />
     public partial class MainView : DevExpress.XtraEditors.XtraForm
     {
-       
+
         /// <summary>
         /// The model
         /// </summary>
@@ -78,7 +78,7 @@ namespace Fme.Database.Verification
         void InitializeBindings()
         {
             var fluent = mvvmContext1.OfType<MainViewModel>();
-            
+
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Fme.Database.Verification
             InitializeComponent();
             if (!mvvmContext1.IsDesignMode)
                 InitializeBindings();
-                       
+
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace Fme.Database.Verification
         {
             OnCreateNewModel();
         }
-       
+
         /// <summary>
         /// Handles the ItemClick event of the btnOpen control.
         /// </summary>
@@ -133,7 +133,7 @@ namespace Fme.Database.Verification
 
                 OnOpenModel(dlg.FileName);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 ShowError(ex);
             }
@@ -145,7 +145,7 @@ namespace Fme.Database.Verification
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="DevExpress.XtraBars.ItemClickEventArgs"/> instance containing the event data.</param>
         private void btnSave_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
-        {          
+        {
             //  if (string.IsNullOrEmpty(model.Name))
             {
                 SaveFileDialog dlg = new SaveFileDialog()
@@ -167,7 +167,7 @@ namespace Fme.Database.Verification
             this.Text = model.Name;
 
         }
-        
+
         /// <summary>
         /// Handles the ItemClick event of the btnExecute control.
         /// </summary>
@@ -177,7 +177,7 @@ namespace Fme.Database.Verification
         {
             if (ValidateRequiredFields() == false)
                 return;
-            
+
             var fallback = model;
             btnExecute.Enabled = false;
             cancelTokenSource = new CancellationTokenSource();
@@ -190,31 +190,31 @@ namespace Fme.Database.Verification
                 timerElapsed.Start();
 
                 Animate(true);
-                
+
                 CompareModelRepository repo = new CompareModelRepository(this.model);
                 repo.CompareStart += Compare_CompareStart;
                 repo.SourceLoadComplete += Compare_SourceComplete;
                 repo.TargetLoadComplete += Compare_TargetComplete;
                 repo.CompareComplete += Compare_Complete;
-                repo.StatusEvent += OnEventStatus;                
+                repo.StatusEvent += OnEventStatus;
                 repo.Error += Compare_OnError;
 
                 repo.Execute(cancelTokenSource);
 
             }
-            catch(OperationCanceledException ex)
+            catch (OperationCanceledException ex)
             {
                 timerElapsed.Stop();
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 timerElapsed.Stop();
                 MessageBox.Show(ex.Message, "Cancellation Requested", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 model = fallback;
             }
         }
-       
+
         /// <summary>
         /// Handles the ItemClick event of the btnCancel control.
         /// </summary>
@@ -258,7 +258,7 @@ namespace Fme.Database.Verification
             gridCalcFields.DataSource = bsMappings;
             gridMappings.RefreshDataSource();
         }
-        
+
         /// <summary>
         /// Handles the ButtonClick event of the btnTargetData control.
         /// </summary>
@@ -298,7 +298,7 @@ namespace Fme.Database.Verification
             }
             Cursor = Cursors.Default;
         }
-        
+
         /// <summary>
         /// Handles the Leave event of the btnEditIdList control.
         /// </summary>
@@ -358,7 +358,7 @@ namespace Fme.Database.Verification
                 cbTargetKey.Properties.Items.AddRange(model.Target.SelectedSchema().
                     Fields.Select(s => s.Name).ToList());
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return;
             }
@@ -612,7 +612,7 @@ namespace Fme.Database.Verification
             {
                 Invoke(handler, sender, e);
                 return;
-            }            
+            }
             SetDataSource(gridSourceData, e.Table);
         }
 
@@ -677,6 +677,7 @@ namespace Fme.Database.Verification
             lblStatus.Caption = string.Format("Last Sucessful Compare {0}", DateTime.Now);
             MessageBox.Show("Comparison Completed", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Animate(false);
+            HideEmptyColumns();
             SetBestWidths();
             btnExecute.Enabled = true;
             MisMatches = CompareModelRepository.GetCompareResults(model);
@@ -696,11 +697,15 @@ namespace Fme.Database.Verification
                 this.Invoke(handler, sender, e);
                 return;
             }
-            Debug.Print("Got an Event Status");
+
             lblStatus.Caption = "Processing " + e.Source;
             viewMappings.MakeRowVisible(e.CurrentRow);
-            bsMappings.DataSource = model.ColumnCompare;
+            // bsMappings.DataSource = model.ColumnCompare;
             gridMappings.RefreshDataSource();
+
+            if (e.CurrentRow == 0)
+                gridMappings.BestFitWidth();
+
             Application.DoEvents();
         }
         #endregion
@@ -713,9 +718,9 @@ namespace Fme.Database.Verification
         private void ViewResults_RowCellStyle(object sender, RowCellStyleEventArgs e)
         {
 
-            if (MisMatches != null && MisMatches.ContainsKey(e.RowHandle + e.Column.FieldName.Replace("left_","")))
+            if (MisMatches != null && MisMatches.ContainsKey(e.RowHandle + e.Column.FieldName.Replace("left_", "")))
                 e.Appearance.BackColor = Color.Red;
-            if (MisMatches != null && MisMatches.ContainsKey(e.RowHandle +  e.Column.FieldName.Replace("right_","")))
+            if (MisMatches != null && MisMatches.ContainsKey(e.RowHandle + e.Column.FieldName.Replace("right_", "")))
                 e.Appearance.BackColor = Color.LightGreen;
 
 
@@ -730,7 +735,7 @@ namespace Fme.Database.Verification
         private void TimerElapsed_Tick(object sender, EventArgs e)
         {
             lblElapsed.Caption = new TimeSpan(DateTime.Now.Ticks - ExecutionStartTime.Ticks).Duration().ToString();
-        }          
+        }
 
         /// <summary>
         /// Handles the Enter event of the gridMappings control.
@@ -753,7 +758,7 @@ namespace Fme.Database.Verification
             ContextMenuStrip owner = item.Owner as ContextMenuStrip;
             if (owner.SourceControl is GridControl grid)
                 grid.ShowPrintPreview();
-          
+
         }
 
         /// <summary>
@@ -770,7 +775,7 @@ namespace Fme.Database.Verification
                 var table = gridControl.DataSource as DataTable;
                 var cols = table.RemoveEmptyColumns(false).Select(s => s.ColumnName).ToList();
                 view.HideColumns(cols);
-            }           
+            }
         }
 
 
@@ -807,27 +812,54 @@ namespace Fme.Database.Verification
         /// <param name="dataSource">The data source.</param>
         private void SetDataSource(GridControl ctrl, object dataSource)
         {
-            ctrl.ResetDataSource(dataSource);           
+            ctrl.ResetDataSource(dataSource);
+        }
+        /// <summary>
+        /// Hides the empty columns.
+        /// </summary>
+        private void HideEmptyColumns()
+        {
+            GridControl[] dataGrids = { gridSourceData, gridTargetData, gridReport, gridResults };
+            foreach (var dataGrid in dataGrids)
+            {
+                GridView view = (GridView)dataGrid.FocusedView;
+                var table = dataGrid.DataSource as DataTable;
+                if (table != null)
+                {
+                    var cols = table.RemoveEmptyColumns(false).Select(s => s.ColumnName).ToList();
+                    view.HideColumns(cols);
+                }
+            }
         }
         /// <summary>
         /// Sets the best widths.
         /// </summary>
         private void SetBestWidths()
         {
-            GridControl[] dynaGrids = { gridSourceData, gridTargetData, gridReport, gridResults };
+            GridControl[] dataGrids = { gridSourceData, gridTargetData, gridReport, gridResults,gridMessages };
+            GridControl[] configGrids = { gridMappings /*,gridCalcFields, gridFieldLookup */ };
+            
+            foreach (var dataGrid in dataGrids)            
+                dataGrid.BestFitWidth(false, true);
 
-            foreach (GridControl grid in dynaGrids)
-            {
-                GridView view = grid.MainView as GridView;
-                view.OptionsView.ColumnAutoWidth = false;
-                view.BestFitColumns(true);
-            }
-            viewMappings.OptionsView.ColumnAutoWidth = true;
-            viewMappings.BestFitColumns(true);
-            viewCalcFields.OptionsView.ColumnAutoWidth = true;
-            viewCalcFields.BestFitColumns(true);
-            viewFieldLookup.OptionsView.ColumnAutoWidth = true;
-            viewFieldLookup.BestFitColumns(true);
+            foreach (var configGrid in configGrids)
+                configGrid.BestFitWidth(true, true);
+
+            #region no longer needed?
+            //foreach (GridControl grid in set1)
+            //{
+            //    GridView view = grid.MainView as GridView;
+            //    view.OptionsView.ColumnAutoWidth = false;
+            //    view.BestFitColumns(true);
+            //}
+
+            //viewMappings.OptionsView.ColumnAutoWidth = true;
+            //viewMappings.BestFitColumns(true);
+            //viewCalcFields.OptionsView.ColumnAutoWidth = true;
+            //viewCalcFields.BestFitColumns(true);
+            //viewFieldLookup.OptionsView.ColumnAutoWidth = true;
+            //viewFieldLookup.BestFitColumns(true);
+            #endregion
 
         }
         /// <summary>
@@ -967,6 +999,31 @@ namespace Fme.Database.Verification
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         /// <summary>
+        /// Checks the alias lengths.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private bool CheckAliasLengths()
+        {
+            List<string> invalid = new List<string>();
+
+            foreach(var item in model.ColumnCompare)
+            {
+                if (item.LeftAlias.Length > 30) invalid.Add(item.LeftAlias + " | size = " + item.LeftAlias.Length);
+
+                if (item.RightAlias.Length > 30) invalid.Add(item.RightAlias + "| Size = " + item.RightAlias.Length);
+            }
+            if (invalid.Count > 0)
+            {
+                string buffer = string.Join(Environment.NewLine, invalid);
+                MessageBox.Show("The following fields exceed the maximum length\r\n\r\n" + buffer, "Validation", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+            
+            return true;
+
+        }
+        /// <summary>
         /// Determines whether [is session valid].
         /// </summary>
         /// <returns><c>true</c> if [is session valid]; otherwise, <c>false</c>.</returns>
@@ -1013,7 +1070,7 @@ namespace Fme.Database.Verification
             //    return false;
             //}
 
-            return true;
+            return CheckAliasLengths();
         }
         #endregion
 

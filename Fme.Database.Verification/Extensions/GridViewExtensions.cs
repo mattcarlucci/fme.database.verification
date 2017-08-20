@@ -5,21 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace Fme.Database.Verification.Extensions
 {
-    public static class WinFormsExtensions
-    {
-        public static T GetMenuContextOwner<T>(this ToolStripMenuItem sender) where T: class
-        {
-           // ToolStripMenuItem item = sender as ToolStripMenuItem;
-            ContextMenuStrip owner = sender.Owner as ContextMenuStrip;            
-            return owner?.SourceControl as T;
-        }      
-    }
-
-
+     /// <summary>
+    /// Class GridViewExtensions.
+    /// </summary>
     public static class GridViewExtensions
     {
 
@@ -35,22 +26,59 @@ namespace Fme.Database.Verification.Extensions
                 ToList().ForEach(item => item.Visible = false);
         }
         /// <summary>
+        /// Hides the columns.
+        /// </summary>
+        /// <param name="grid">The grid.</param>
+        /// <param name="fields">The fields.</param>
+        public static void HideColumns(this GridControl grid, IEnumerable<string> fields)
+        {
+            GridView view = grid.MainView as GridView;
+
+            view.Columns.
+                Where(s => fields.Contains(s.FieldName)).
+                ToList().ForEach(item => item.Visible = false);
+        }
+        /// <summary>
         /// Resets the data source.
         /// </summary>
-        /// <param name="ctrl">The control.</param>
+        /// <param name="grid">The control.</param>
         /// <param name="dataSource">The data source.</param>
-        public static void ResetDataSource(this GridControl ctrl, object dataSource)
+        public static void ResetDataSource(this GridControl grid, object dataSource)
         {
-            ctrl.BeginUpdate();
-            GridView view = ctrl.MainView as GridView;
+            grid.BeginUpdate();
+            GridView view = grid.MainView as GridView;
             view?.Columns.Clear();
-            ctrl.DataSource = null;
-            ctrl.RefreshDataSource();
-            ctrl.DataSource = dataSource;
-            ctrl.RefreshDataSource();
-            ctrl.EndUpdate();
+            grid.DataSource = null;
+            grid.RefreshDataSource();
+            grid.DataSource = dataSource;
+            grid.RefreshDataSource();
+            grid.EndUpdate();
+        }
+        /// <summary>
+        /// Bests the width of the fit.
+        /// </summary>
+        /// <param name="grid">The grid.</param>
+        /// <param name="bestFitColumns">if set to <c>true</c> [best fit columns].</param>
+        /// <param name="columnAutoWidth">if set to <c>true</c> [column automatic width].</param>
+        public static void BestFitWidth(this GridControl grid, bool columnAutoWidth  = true, bool bestFitColumns  = false)
+        {
+            GridView view = grid.MainView as GridView;
+            view.OptionsView.ColumnAutoWidth = columnAutoWidth;
+            view.BestFitColumns(bestFitColumns);
         }
 
-      
+        /// <summary>
+        /// Bests the width of the fit.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="bestFitColumns">if set to <c>true</c> [best fit columns].</param>
+        /// <param name="columnAutoWidth">if set to <c>true</c> [column automatic width].</param>
+        public static void BestFitWidth(this GridView view, bool columnAutoWidth = true, bool bestFitColumns = false)
+        {   
+            view.OptionsView.ColumnAutoWidth = columnAutoWidth;
+            view.BestFitColumns(bestFitColumns);
+        }
+
+
     }
 }
