@@ -93,7 +93,7 @@ namespace Fme.Library.Extensions
         /// </summary>
         /// <param name="table">The table.</param>
         /// <returns>DataColumn[].</returns>
-        public static DataColumn[] RemoveEmptyColumns(this DataTable table)
+        public static DataColumn[] RemoveEmptyColumns(this DataTable table, bool commit = true)
         {
             List<DataColumn> remove = new List<DataColumn>();
 
@@ -104,8 +104,8 @@ namespace Fme.Library.Extensions
                 {
                     remove.Add(col);
                 }
-
-            remove.ForEach(item => table.Columns.Remove(item));
+            if (commit)
+                remove.ForEach(item => table.Columns.Remove(item));
             return remove.ToArray();
         }
 

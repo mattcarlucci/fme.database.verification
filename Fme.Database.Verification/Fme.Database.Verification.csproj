@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ScriptFile.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.BonusSkins.v16.2" />
     <Reference Include="DevExpress.Data.v16.2" />
@@ -61,6 +64,7 @@
   <ItemGroup>
     <Compile Include="ConnectionProvider.cs" />
     <Compile Include="DbProviders.cs" />
+    <Compile Include="Extensions\GridViewExtensions.cs" />
     <Compile Include="frmConnection.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -114,6 +118,9 @@
       <Project>{7200302a-8da1-42c4-af13-56ba1b0fa43d}</Project>
       <Name>Fme.Library</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ScriptFile.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

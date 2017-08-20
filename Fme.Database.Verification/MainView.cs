@@ -39,6 +39,8 @@ using Fme.Library.Repositories;
 using System.Threading;
 using Fme.Library.Comparison;
 using System.Reflection;
+using Fme.Database.Verification.Extensions;
+using DevExpress.XtraGrid.Views.Base.ViewInfo;
 
 namespace Fme.Database.Verification
 {
@@ -129,14 +131,7 @@ namespace Fme.Database.Verification
                 };
                 if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
-                model = Serializer.DeSerialize<CompareModel>(dlg.FileName);
-                SetSourceModel();
-                SetTargetModel();
-                SetupMapping();
-
-                btnEditIdList.Text = model.Source.IdListFile;
-                this.Text = model.Name;
-                SetBestWidths();
+                OnOpenModel(dlg.FileName);
             }
             catch(Exception ex)
             {
@@ -180,10 +175,10 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="DevExpress.XtraBars.ItemClickEventArgs" /> instance containing the event data.</param>
         private void btnExecute_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-
             if (ValidateRequiredFields() == false)
                 return;
-
+            
+            var fallback = model;
             btnExecute.Enabled = false;
             cancelTokenSource = new CancellationTokenSource();
             cancelToken = cancelTokenSource.Token;
@@ -216,6 +211,7 @@ namespace Fme.Database.Verification
             {
                 timerElapsed.Stop();
                 MessageBox.Show(ex.Message, "Cancellation Requested", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                model = fallback;
             }
         }
        
@@ -399,6 +395,7 @@ namespace Fme.Database.Verification
         {
             try
             {
+                //this is ugly
                 GridView view = sender as GridView;
                 if (view.IsRowVisible(e.RowHandle) == RowVisibleState.Hidden)
                     return;
@@ -615,7 +612,7 @@ namespace Fme.Database.Verification
             {
                 Invoke(handler, sender, e);
                 return;
-            }
+            }            
             SetDataSource(gridSourceData, e.Table);
         }
 
@@ -763,17 +760,17 @@ namespace Fme.Database.Verification
         /// Handles the Click event of the removeEmptyColumnToolStripMenuItem control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void RemoveEmptyColumnToolStripMenuItem_Click(object sender, EventArgs e)
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        private void HideEmptyColumnToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem item = sender as ToolStripMenuItem;
-            ContextMenuStrip owner = item.Owner as ContextMenuStrip;
-            if (owner.SourceControl is GridControl grid)
+            var gridControl = ((ToolStripMenuItem)sender).GetMenuContextOwner<GridControl>();
+            if (gridControl != null)
             {
-                GridView view = (GridView)grid.FocusedView;
-                var table = grid.DataSource as DataTable;
-                SetDataSource(grid, table);
-            }
+                GridView view = (GridView)gridControl.FocusedView;
+                var table = gridControl.DataSource as DataTable;
+                var cols = table.RemoveEmptyColumns(false).Select(s => s.ColumnName).ToList();
+                view.HideColumns(cols);
+            }           
         }
 
 
@@ -810,13 +807,7 @@ namespace Fme.Database.Verification
         /// <param name="dataSource">The data source.</param>
         private void SetDataSource(GridControl ctrl, object dataSource)
         {
-            ctrl.BeginUpdate();
-            GridView view = ctrl.MainView as GridView;
-            view?.Columns.Clear();
-            ctrl.DataSource = null;
-            ctrl.DataSource = dataSource;
-            ctrl.RefreshDataSource();
-            ctrl.EndUpdate();
+            ctrl.ResetDataSource(dataSource);           
         }
         /// <summary>
         /// Sets the best widths.
@@ -869,6 +860,41 @@ namespace Fme.Database.Verification
             foreach (var grid in grids)
                 SetDataSource(grid, null);
 
+        }
+
+        /// <summary>
+        /// Called when [open model].
+        /// </summary>
+        /// <param name="fileName">Name of the file.</param>
+        public void OnOpenModel(string fileName)
+        {
+            try
+            {
+                var temp = Serializer.DeSerialize<CompareModel>(fileName);
+                OnCreateNewModel();
+                model = temp;
+                SetSourceModel();
+                SetTargetModel();
+                SetupMapping();
+
+                btnEditIdList.Text = model.Source.IdListFile;
+                this.Text = model.Name;
+                SetBestWidths();
+            }
+            catch(Exception ex)
+            {
+                ShowError(ex);
+            }
+        }
+
+        /// <summary>
+        /// Called when [rollback].
+        /// </summary>
+        /// <param name="fallback">The fallback.</param>
+        public void OnRollback(CompareModel fallback)
+        {
+            model.ColumnCompare = fallback.ColumnCompare;
+            gridMappings.RefreshDataSource();
         }
         /// <summary>
         /// Sets the source model.
@@ -990,5 +1016,27 @@ namespace Fme.Database.Verification
             return true;
         }
         #endregion
+
+        /// <summary>
+        /// Handles the Opening event of the ctxGrid control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="CancelEventArgs"/> instance containing the event data.</param>
+        private void ctxGrid_Opening(object sender, CancelEventArgs e)
+        {
+            ContextMenuStrip strip = sender as ContextMenuStrip;
+            if (strip.SourceControl is GridControl)            
+            {
+                GridControl gridControl = (GridControl)strip.SourceControl;
+                var p = gridControl.PointToClient(Cursor.Position);
+                GridView view = (GridView)gridControl.FocusedView;
+                BaseHitInfo baseHI = view.CalcHitInfo(p);
+                GridHitInfo gridHI = baseHI as GridHitInfo;
+                Debug.Print(gridHI.RowHandle.ToString());
+                if (gridHI.RowHandle < 0)
+                    e.Cancel = true;
+               
+            }        
+        }
     }
 }

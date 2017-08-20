@@ -135,10 +135,10 @@ namespace Fme.Library.Repositories
                      Model.ExecuteCalculatedFields(table1, table2, cancelToken);
 
                      var sourceData = table1.AsEnumerable().CopyToDataTable();
-                     sourceData.RemoveEmptyColumns();
+                    // sourceData.RemoveEmptyColumns();
 
                      var targetData = table2.AsEnumerable().CopyToDataTable();
-                     targetData.RemoveEmptyColumns();
+                    // targetData.RemoveEmptyColumns();
 
                      table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
                      CompareMappingHelper.OrderColumns(table1, pairs);

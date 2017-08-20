@@ -75,6 +75,9 @@ namespace Fme.Database.Verification
             this.barEditItem1 = new DevExpress.XtraBars.BarEditItem();
             this.pbStatus = new DevExpress.XtraEditors.Repository.RepositoryItemProgressBar();
             this.btnExport = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem7 = new DevExpress.XtraBars.BarButtonItem();
             this.commandBarGalleryDropDown2 = new DevExpress.XtraBars.Commands.CommandBarGalleryDropDown(this.components);
             this.commandBarGalleryDropDown3 = new DevExpress.XtraBars.Commands.CommandBarGalleryDropDown(this.components);
             this.commandBarGalleryDropDown4 = new DevExpress.XtraBars.Commands.CommandBarGalleryDropDown(this.components);
@@ -114,7 +117,7 @@ namespace Fme.Database.Verification
             this.gridMappings = new DevExpress.XtraGrid.GridControl();
             this.ctxGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.removeEmptyColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.hideEmptyColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMappings = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colSelected = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colLeftSide = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -209,8 +212,6 @@ namespace Fme.Database.Verification
             this.viewReport = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.tabSheetResults = new DevExpress.XtraTab.XtraTabPage();
             this.tabMessages = new DevExpress.XtraTab.XtraTabPage();
-            this.gridMessages = new DevExpress.XtraGrid.GridControl();
-            this.viewMessages = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.fieldSchemaModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tableSchemaModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
@@ -227,6 +228,9 @@ namespace Fme.Database.Verification
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.viewErrorDetailReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colRightLookupFile = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.popupMenu3 = new DevExpress.XtraBars.PopupMenu(this.components);
+            this.gridMessages = new DevExpress.XtraGrid.GridControl();
+            this.viewMessages = new DevExpress.XtraGrid.Views.Grid.GridView();
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).BeginInit();
@@ -326,8 +330,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.gridReport)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewReport)).BeginInit();
             this.tabMessages.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableSchemaModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
@@ -336,6 +338,9 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
             this.ctxLookupMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).BeginInit();
             this.SuspendLayout();
             // 
             // compareMappingModelBindingSource
@@ -374,8 +379,11 @@ namespace Fme.Database.Verification
             this.lblElapsed,
             this.btnAutoGenerate,
             this.lblVersion,
-            this.btnExport});
-            this.barManager1.MaxItemId = 196;
+            this.btnExport,
+            this.barButtonItem1,
+            this.barButtonItem2,
+            this.barButtonItem7});
+            this.barManager1.MaxItemId = 199;
             this.barManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.pbStatus,
             this.mbStatus});
@@ -688,6 +696,32 @@ namespace Fme.Database.Verification
             this.btnExport.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnExport.ImageOptions.LargeImage")));
             this.btnExport.Name = "btnExport";
             this.btnExport.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            // 
+            // barButtonItem1
+            // 
+            this.barButtonItem1.Caption = "Print/Export Data";
+            this.barButtonItem1.Id = 196;
+            this.barButtonItem1.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem1.ImageOptions.Image")));
+            this.barButtonItem1.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem1.ImageOptions.LargeImage")));
+            this.barButtonItem1.ItemShortcut = new DevExpress.XtraBars.BarShortcut((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P));
+            this.barButtonItem1.Name = "barButtonItem1";
+            this.barButtonItem1.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
+            // 
+            // barButtonItem2
+            // 
+            this.barButtonItem2.Caption = "Hide Empty Columns";
+            this.barButtonItem2.Id = 197;
+            this.barButtonItem2.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem2.ImageOptions.Image")));
+            this.barButtonItem2.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem2.ImageOptions.LargeImage")));
+            this.barButtonItem2.Name = "barButtonItem2";
+            // 
+            // barButtonItem7
+            // 
+            this.barButtonItem7.Caption = "Delete Empty Columns";
+            this.barButtonItem7.Id = 198;
+            this.barButtonItem7.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barButtonItem7.ImageOptions.Image")));
+            this.barButtonItem7.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem7.ImageOptions.LargeImage")));
+            this.barButtonItem7.Name = "barButtonItem7";
             // 
             // commandBarGalleryDropDown2
             // 
@@ -1139,23 +1173,24 @@ namespace Fme.Database.Verification
             // 
             this.ctxGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportToolStripMenuItem,
-            this.removeEmptyColumnToolStripMenuItem});
+            this.hideEmptyColumnToolStripMenuItem});
             this.ctxGrid.Name = "ctxGrid";
-            this.ctxGrid.Size = new System.Drawing.Size(201, 48);
+            this.ctxGrid.Size = new System.Drawing.Size(183, 48);
+            this.ctxGrid.Opening += new System.ComponentModel.CancelEventHandler(this.ctxGrid_Opening);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.exportToolStripMenuItem.Text = "Export...";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
-            // removeEmptyColumnToolStripMenuItem
+            // hideEmptyColumnToolStripMenuItem
             // 
-            this.removeEmptyColumnToolStripMenuItem.Name = "removeEmptyColumnToolStripMenuItem";
-            this.removeEmptyColumnToolStripMenuItem.Size = new System.Drawing.Size(200, 22);
-            this.removeEmptyColumnToolStripMenuItem.Text = "Remove Empty Column";
-            this.removeEmptyColumnToolStripMenuItem.Click += new System.EventHandler(this.RemoveEmptyColumnToolStripMenuItem_Click);
+            this.hideEmptyColumnToolStripMenuItem.Name = "hideEmptyColumnToolStripMenuItem";
+            this.hideEmptyColumnToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.hideEmptyColumnToolStripMenuItem.Text = "Hide Empty Column";
+            this.hideEmptyColumnToolStripMenuItem.Click += new System.EventHandler(this.HideEmptyColumnToolStripMenuItem_Click);
             // 
             // viewMappings
             // 
@@ -2085,40 +2120,6 @@ namespace Fme.Database.Verification
             this.tabMessages.Size = new System.Drawing.Size(856, 513);
             this.tabMessages.Text = "Messaages";
             // 
-            // gridMessages
-            // 
-            this.gridMessages.ContextMenuStrip = this.ctxGrid;
-            this.gridMessages.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridMessages.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.gridMessages.Location = new System.Drawing.Point(0, 0);
-            this.gridMessages.MainView = this.viewMessages;
-            this.gridMessages.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.gridMessages.MenuManager = this.barManager1;
-            this.gridMessages.Name = "gridMessages";
-            this.gridMessages.Size = new System.Drawing.Size(856, 513);
-            this.gridMessages.TabIndex = 5;
-            this.gridMessages.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.viewMessages});
-            // 
-            // viewMessages
-            // 
-            this.viewMessages.Appearance.FocusedCell.Options.UseTextOptions = true;
-            this.viewMessages.Appearance.FocusedCell.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.viewMessages.Appearance.Row.Options.UseTextOptions = true;
-            this.viewMessages.Appearance.Row.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.viewMessages.GridControl = this.gridMessages;
-            this.viewMessages.Name = "viewMessages";
-            this.viewMessages.OptionsBehavior.AllowAddRows = DevExpress.Utils.DefaultBoolean.False;
-            this.viewMessages.OptionsBehavior.AllowDeleteRows = DevExpress.Utils.DefaultBoolean.False;
-            this.viewMessages.OptionsBehavior.AllowGroupExpandAnimation = DevExpress.Utils.DefaultBoolean.True;
-            this.viewMessages.OptionsBehavior.Editable = false;
-            this.viewMessages.OptionsMenu.ShowConditionalFormattingItem = true;
-            this.viewMessages.OptionsMenu.ShowGroupSummaryEditorItem = true;
-            this.viewMessages.OptionsView.EnableAppearanceEvenRow = true;
-            this.viewMessages.OptionsView.EnableAppearanceOddRow = true;
-            this.viewMessages.OptionsView.RowAutoHeight = true;
-            this.viewMessages.RowHeight = 200;
-            // 
             // repositoryItemCheckEdit1
             // 
             this.repositoryItemCheckEdit1.AutoHeight = false;
@@ -2210,6 +2211,35 @@ namespace Fme.Database.Verification
             // 
             this.colRightLookupFile.FieldName = "RightLookupFile";
             this.colRightLookupFile.Name = "colRightLookupFile";
+            // 
+            // popupMenu3
+            // 
+            this.popupMenu3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem1),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem2, true),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem7)});
+            this.popupMenu3.Manager = this.barManager1;
+            this.popupMenu3.Name = "popupMenu3";
+            // 
+            // gridMessages
+            // 
+            this.gridMessages.ContextMenuStrip = this.ctxGrid;
+            this.gridMessages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridMessages.Location = new System.Drawing.Point(0, 0);
+            this.gridMessages.MainView = this.viewMessages;
+            this.gridMessages.MenuManager = this.barManager1;
+            this.gridMessages.Name = "gridMessages";
+            this.gridMessages.Size = new System.Drawing.Size(856, 513);
+            this.gridMessages.TabIndex = 0;
+            this.gridMessages.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.viewMessages});
+            // 
+            // viewMessages
+            // 
+            this.viewMessages.GridControl = this.gridMessages;
+            this.viewMessages.Name = "viewMessages";
+            this.viewMessages.OptionsBehavior.Editable = false;
+            this.viewMessages.OptionsView.RowAutoHeight = true;
             // 
             // MainView
             // 
@@ -2335,8 +2365,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.gridReport)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewReport)).EndInit();
             this.tabMessages.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableSchemaModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
@@ -2345,6 +2373,9 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.behaviorManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
             this.ctxLookupMenu.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2536,12 +2567,16 @@ namespace Fme.Database.Verification
         private DevExpress.XtraGrid.GridControl gridReport;
         private GridView viewReport;
         private DevExpress.XtraTab.XtraTabPage tabMessages;
-        private DevExpress.XtraGrid.GridControl gridMessages;
-        private GridView viewMessages;
         private DevExpress.XtraBars.BarButtonItem btnExport;
         private ContextMenuStrip ctxGrid;
         private ToolStripMenuItem exportToolStripMenuItem;
-        private ToolStripMenuItem removeEmptyColumnToolStripMenuItem;
+        private ToolStripMenuItem hideEmptyColumnToolStripMenuItem;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem1;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem2;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem7;
+        private DevExpress.XtraBars.PopupMenu popupMenu3;
+        private DevExpress.XtraGrid.GridControl gridMessages;
+        private GridView viewMessages;
     }
 
 }
