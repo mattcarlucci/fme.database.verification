@@ -71,6 +71,15 @@ namespace Fme.Database.Verification
         Dictionary<string, int> MisMatches = new Dictionary<string, int>();
 
         /// <summary>
+        /// Initializes the bindings.
+        /// </summary>
+        void InitializeBindings()
+        {
+            var fluent = mvvmContext1.OfType<MainViewModel>();
+            
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="MainView" /> class.
         /// </summary>
         public MainView()
@@ -82,13 +91,18 @@ namespace Fme.Database.Verification
         }
 
         /// <summary>
-        /// Initializes the bindings.
+        /// Handles the Load event of the MainView control.
         /// </summary>
-        void InitializeBindings()
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void MainView_Load(object sender, EventArgs e)
         {
-            var fluent = mvvmContext1.OfType<MainViewModel>();
-            
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+            string version = fileVersionInfo.ProductVersion;
+            lblVersion.Caption = "v" + version;
         }
+
 
         /// <summary>
         /// Handles the ItemClick event of the btnNew control.
@@ -99,37 +113,7 @@ namespace Fme.Database.Verification
         {
             OnCreateNewModel();
         }
-        /// <summary>
-        /// Called when [new model].
-        /// </summary>
-        public void OnCreateNewModel()
-        {
-            GridControl[] grids = { gridSourceData, gridTargetData, gridResults, gridReport, gridMessages };
-
-            BaseEdit[] editors = { cbSourceTable, cbTargetTable, cbSourceKey, cbTargetKey, btnSourceData, btnTargetData };
-            model = new CompareModel();
-
-            editors.ToList().ForEach(editor => editor.Text = "");
-
-            this.Text = "Untitled";
-
-            bsMappings.DataSource = model.ColumnCompare;
-            gridMappings.DataSource = bsMappings;
-            gridFieldLookup.DataSource = bsMappings;
-            gridCalcFields.DataSource = bsMappings;
-
-            cbLeftSide.Items.Clear();
-            cbRightSide.Items.Clear();
-            cbSourceTable.Properties.Items.Clear();
-            cbTargetTable.Properties.Items.Clear();
-            cbSourceKey.Properties.Items.Clear();
-            cbTargetKey.Properties.Items.Clear();
-            btnEditIdList.Text = "";
-
-            foreach (var grid in grids)
-                SetDataSource(grid, null);
-            
-        }
+       
         /// <summary>
         /// Handles the ItemClick event of the btnOpen control.
         /// </summary>
@@ -188,166 +172,7 @@ namespace Fme.Database.Verification
             this.Text = model.Name;
 
         }
-
-        /// <summary>
-        /// Animates the specified state.
-        /// </summary>
-        /// <param name="state">The state.</param>
-        private void Animate(bool state)
-        {
-            Cursor = state == true ? Cursors.WaitCursor : Cursors.Default;
-
-            if (state)
-                lblStatus.Caption = "Running";
-
-            barEditStatus.Visibility = state == true ? DevExpress.XtraBars.BarItemVisibility.Always : DevExpress.XtraBars.BarItemVisibility.Never;
-        }
-        /// <summary>
-        /// Sets the data source.
-        /// </summary>
-        /// <param name="ctrl">The control.</param>
-        /// <param name="dataSource">The data source.</param>
-        private void SetDataSource(BindingSource ctrl, object dataSource)
-        {
-            ctrl.DataSource = dataSource;
-            
-        }
-        /// <summary>
-        /// Sets the data source.
-        /// </summary>
-        /// <param name="ctrl">The control.</param>
-        /// <param name="dataSource">The data source.</param>
-        private void SetDataSource(GridControl ctrl, object dataSource)
-        {
-            ctrl.BeginUpdate();
-            GridView view = ctrl.MainView as GridView;
-            view?.Columns.Clear();
-            ctrl.DataSource = null;
-            ctrl.DataSource = dataSource;
-            ctrl.RefreshDataSource();
-            ctrl.EndUpdate();
-        }
-
-        /// <summary>
-        /// Handles the CompareStart event of the Compare control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="CompareStartEventArgs" /> instance containing the event data.</param>
-        public void Compare_CompareStart(object sender, CompareStartEventArgs e)
-        {
-            EventHandler<CompareStartEventArgs> handler = Compare_CompareStart;
-            if (InvokeRequired)
-            {
-                Invoke(handler, sender, e);
-                return;
-            }
-           // SetDataSource(gridMappings, e.Pairs);
-
-        }
-
-        /// <summary>
-        /// Handles the SourceComplete event of the Compare control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="DataTableEventArgs" /> instance containing the event data.</param>
-        public void Compare_SourceComplete(object sender, DataTableEventArgs e)
-        {
-            EventHandler<DataTableEventArgs> handler = Compare_SourceComplete;
-            if (InvokeRequired)
-            {
-                Invoke(handler, sender, e);
-                return;
-            }
-            SetDataSource(gridSourceData, e.Table);
-        }
-        /// <summary>
-        /// Handles the TargetComplete event of the Compare control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="DataTableEventArgs" /> instance containing the event data.</param>
-        public void Compare_TargetComplete(object sender, DataTableEventArgs e)
-        {
-            EventHandler<DataTableEventArgs> handler = Compare_TargetComplete;
-            if (InvokeRequired)
-            {
-                Invoke(handler, sender, e);
-                return;
-            }
-            SetDataSource(gridTargetData, e.Table);
-            SetDataSource(gridMessages, model.ErrorMessages);
-
-        }
-
-        /// <summary>
-        /// Handles the OnError event of the Compare control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
-        public void Compare_OnError(object sender, EventArgs e)
-        {
-            EventHandler<DataTableEventArgs> handler = Compare_TargetComplete;
-            if (InvokeRequired)
-            {
-                Invoke(handler, sender, e);
-                return;
-            }
-            timerElapsed.Stop();
-
-            ShowError(sender as Exception);
-            Animate(false);
-            SetBestWidths();
-            btnExecute.Enabled = true;
-            SetDataSource(gridMessages, model.ErrorMessages);
-
-        }
-
-
-        /// <summary>
-        /// Handles the <see cref="E:EventStatus" /> event.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The <see cref="CompareHelperEventArgs" /> instance containing the event data.</param>
-        private void OnEventStatus(object sender, CompareHelperEventArgs e)
-        {
-            EventHandler<CompareHelperEventArgs> handler = OnEventStatus;
-
-            if (InvokeRequired)
-            {
-                this.Invoke(handler, sender, e);
-                return;
-            }
-            Debug.Print("Got an Event Status");
-            lblStatus.Caption = "Processing " +  e.Source;
-            viewMappings.MakeRowVisible(e.CurrentRow);
-            bsMappings.DataSource = model.ColumnCompare;
-            gridMappings.RefreshDataSource();
-            Application.DoEvents();
-        }
-        /// <summary>
-        /// Handles the Complete event of the Compare control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="DataTableEventArgs" /> instance containing the event data.</param>
-        public void Compare_Complete(object sender, DataTableEventArgs e)
-        {
-            EventHandler<DataTableEventArgs> handler = Compare_Complete;
-            if (InvokeRequired)
-            {
-                Invoke(handler, sender, e);
-                return;
-            }          
-            SetDataSource(gridResults, e.Table);        
-            SetDataSource(gridReport, model.ColumnCompare.SelectMany(many => many.CompareResults).ToList());
-
-            timerElapsed.Stop();
-            lblStatus.Caption = string.Format("Last Sucessful Compare {0}", DateTime.Now);
-            MessageBox.Show("Comparison Completed", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            Animate(false);
-            SetBestWidths();
-            btnExecute.Enabled = true;
-            MisMatches = CompareModelRepository.GetCompareResults(model);
-        }
-
+        
         /// <summary>
         /// Handles the ItemClick event of the btnExecute control.
         /// </summary>
@@ -393,29 +218,7 @@ namespace Fme.Database.Verification
                 MessageBox.Show(ex.Message, "Cancellation Requested", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
         }
-
-        /// <summary>
-        /// Sets the best widths.
-        /// </summary>
-        private void SetBestWidths()
-        {
-            GridControl[] dynaGrids = { gridSourceData, gridTargetData, gridReport, gridResults };
-
-            foreach(GridControl grid in dynaGrids)
-            {
-                GridView view = grid.MainView as GridView;
-                view.OptionsView.ColumnAutoWidth = false;
-                view.BestFitColumns(true);
-            }
-            viewMappings.OptionsView.ColumnAutoWidth = true;
-            viewMappings.BestFitColumns(true);
-            viewCalcFields.OptionsView.ColumnAutoWidth = true;
-            viewCalcFields.BestFitColumns(true);
-            viewFieldLookup.OptionsView.ColumnAutoWidth = true;
-            viewFieldLookup.BestFitColumns(true);
-
-        }
-
+       
         /// <summary>
         /// Handles the ItemClick event of the btnCancel control.
         /// </summary>
@@ -459,73 +262,7 @@ namespace Fme.Database.Verification
             gridCalcFields.DataSource = bsMappings;
             gridMappings.RefreshDataSource();
         }
-
-
-        /// <summary>
-        /// Sets the source model.
-        /// </summary>
-        public void SetSourceModel()
-        {
-            btnSourceData.Text = model.Source.DataSource.GetConnectionStringBuilder()["Data Source"] as string;
-
-            cbSourceTable.Properties.Items.Clear();
-
-            cbSourceTable.Properties.Items.
-                AddRange(model.Source.TableSchemas.Select(s => s.TableName).ToArray());
-
-            cbSourceTable.Text = model.Source.SelectedTable;
-            cbSourceKey.Text = model.Source.Key;
-
-        }
-        /// <summary>
-        /// Sets the target model.
-        /// </summary>
-        public void SetTargetModel()
-        {
-            btnTargetData.Text = model.Target.DataSource.GetConnectionStringBuilder()["Data Source"] as string;
-
-            cbTargetTable.Properties.Items.Clear();
-
-            cbTargetTable.Properties.Items.
-                AddRange(model.Target.TableSchemas.Select(s => s.TableName).ToArray());
-
-            cbTargetTable.Text = model.Target.SelectedTable;
-            cbTargetKey.Text = model.Target.Key;
-
-        }
-
-        /// <summary>
-        /// Setups the mapping.
-        /// </summary>
-        public void SetupMapping()
-        {
-            bsMappings.DataSource = model.ColumnCompare;
-            gridMappings.DataSource = bsMappings;
-            gridFieldLookup.DataSource = bsMappings;
-            gridCalcFields.DataSource = bsMappings;
-            gridMappings.RefreshDataSource();
-
-            ColumnView view = viewCalcFields;
-            ViewColumnFilterInfo viewFilterInfo = new ViewColumnFilterInfo(view.Columns["CategoryName"],
-              new ColumnFilterInfo("[IsCalculated] = True", ""));
-            view.ActiveFilter.Add(viewFilterInfo);
-
-            viewCalcFields.ActiveFilterCriteria = new DevExpress.Data.Filtering.BinaryOperator("IsCalculated", true);
-
-            gridMappings.RefreshDataSource();
-
-            ComboBoxItemCollection[] gridBoxes = { cbLeftSide.Items, cbRightSide.Items, cbCompareType.Items, cbOperator.Items };
-            gridBoxes.ToList().ForEach(item => item.Clear());
-
-
-            cbLeftSide.Items.AddRange(cbSourceKey.Properties.Items);
-            cbRightSide.Items.AddRange(cbTargetKey.Properties.Items);
-
-            cbCompareType.Items.AddRange(Enum.GetNames(typeof(ComparisonTypeEnum)));
-            cbOperator.Items.AddRange(Enum.GetNames(typeof(OperatorEnums)));
-        }
-
-
+        
         /// <summary>
         /// Handles the ButtonClick event of the btnTargetData control.
         /// </summary>
@@ -564,6 +301,34 @@ namespace Fme.Database.Verification
                     AddRange(model.Source.TableSchemas.Select(s => s.TableName).ToArray());
             }
             Cursor = Cursors.Default;
+        }
+        
+        /// <summary>
+        /// Handles the Leave event of the btnEditIdList control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void btnEditIdList_Leave(object sender, EventArgs e)
+        {
+            model.Source.IdListFile = btnEditIdList.Text;
+        }
+
+        /// <summary>
+        /// Handles the ButtonClick event of the btnEditIdList control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ButtonPressedEventArgs" /> instance containing the event data.</param>
+        private void btnEditIdList_ButtonClick(object sender, ButtonPressedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog()
+            {
+                Filter = "Text File *.txt;*.csv|*.txt;*.csv"
+            };
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+
+            model.Source.IdListFile = dlg.FileName;
+            btnEditIdList.Text = dlg.FileName;
+
         }
 
         /// <summary>
@@ -623,6 +388,7 @@ namespace Fme.Database.Verification
         {
             model.Target.Key = cbTargetKey.Text;
         }
+
 
         /// <summary>
         /// Handles the RowCellStyle event of the GridViewMapping control.
@@ -710,7 +476,7 @@ namespace Fme.Database.Verification
             edit.Text = dlg.FileName;
         }
 
-        #region Need to refactor some of this. Just for draggin columsn
+        #region Need to refactor some of this. Just for dragging columns
         /// <summary>
         /// Down hit information
         /// </summary>
@@ -819,34 +585,128 @@ namespace Fme.Database.Verification
         #endregion
 
 
-
+        #region Execution Events
         /// <summary>
-        /// Handles the Leave event of the btnEditIdList control.
+        /// Handles the CompareStart event of the Compare control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void btnEditIdList_Leave(object sender, EventArgs e)
+        /// <param name="e">The <see cref="CompareStartEventArgs" /> instance containing the event data.</param>
+        public void Compare_CompareStart(object sender, CompareStartEventArgs e)
         {
-            model.Source.IdListFile = btnEditIdList.Text;
-        }
-
-        /// <summary>
-        /// Handles the ButtonClick event of the btnEditIdList control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="ButtonPressedEventArgs" /> instance containing the event data.</param>
-        private void btnEditIdList_ButtonClick(object sender, ButtonPressedEventArgs e)
-        {
-            OpenFileDialog dlg = new OpenFileDialog()
+            EventHandler<CompareStartEventArgs> handler = Compare_CompareStart;
+            if (InvokeRequired)
             {
-                Filter = "Text File *.txt;*.csv|*.txt;*.csv"
-            };
-            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
-
-            model.Source.IdListFile = dlg.FileName;
-            btnEditIdList.Text = dlg.FileName;
+                Invoke(handler, sender, e);
+                return;
+            }
+            // SetDataSource(gridMappings, e.Pairs);
 
         }
+
+        /// <summary>
+        /// Handles the SourceComplete event of the Compare control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DataTableEventArgs" /> instance containing the event data.</param>
+        public void Compare_SourceComplete(object sender, DataTableEventArgs e)
+        {
+            EventHandler<DataTableEventArgs> handler = Compare_SourceComplete;
+            if (InvokeRequired)
+            {
+                Invoke(handler, sender, e);
+                return;
+            }
+            SetDataSource(gridSourceData, e.Table);
+        }
+
+        /// <summary>
+        /// Handles the TargetComplete event of the Compare control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DataTableEventArgs" /> instance containing the event data.</param>
+        public void Compare_TargetComplete(object sender, DataTableEventArgs e)
+        {
+            EventHandler<DataTableEventArgs> handler = Compare_TargetComplete;
+            if (InvokeRequired)
+            {
+                Invoke(handler, sender, e);
+                return;
+            }
+            SetDataSource(gridTargetData, e.Table);
+            SetDataSource(gridMessages, model.ErrorMessages);
+
+        }
+
+        /// <summary>
+        /// Handles the OnError event of the Compare control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
+        public void Compare_OnError(object sender, EventArgs e)
+        {
+            EventHandler<DataTableEventArgs> handler = Compare_TargetComplete;
+            if (InvokeRequired)
+            {
+                Invoke(handler, sender, e);
+                return;
+            }
+            timerElapsed.Stop();
+
+            ShowError(sender as Exception);
+            Animate(false);
+            SetBestWidths();
+            btnExecute.Enabled = true;
+            SetDataSource(gridMessages, model.ErrorMessages);
+
+        }
+
+        /// <summary>
+        /// Handles the Complete event of the Compare control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DataTableEventArgs" /> instance containing the event data.</param>
+        public void Compare_Complete(object sender, DataTableEventArgs e)
+        {
+            EventHandler<DataTableEventArgs> handler = Compare_Complete;
+            if (InvokeRequired)
+            {
+                Invoke(handler, sender, e);
+                return;
+            }
+            SetDataSource(gridResults, e.Table);
+            SetDataSource(gridReport, model.ColumnCompare.SelectMany(many => many.CompareResults).ToList());
+
+            timerElapsed.Stop();
+            lblStatus.Caption = string.Format("Last Sucessful Compare {0}", DateTime.Now);
+            MessageBox.Show("Comparison Completed", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Animate(false);
+            SetBestWidths();
+            btnExecute.Enabled = true;
+            MisMatches = CompareModelRepository.GetCompareResults(model);
+        }
+
+        /// <summary>
+        /// Handles the <see cref="E:EventStatus" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="CompareHelperEventArgs" /> instance containing the event data.</param>
+        private void OnEventStatus(object sender, CompareHelperEventArgs e)
+        {
+            EventHandler<CompareHelperEventArgs> handler = OnEventStatus;
+
+            if (InvokeRequired)
+            {
+                this.Invoke(handler, sender, e);
+                return;
+            }
+            Debug.Print("Got an Event Status");
+            lblStatus.Caption = "Processing " + e.Source;
+            viewMappings.MakeRowVisible(e.CurrentRow);
+            bsMappings.DataSource = model.ColumnCompare;
+            gridMappings.RefreshDataSource();
+            Application.DoEvents();
+        }
+        #endregion
 
         /// <summary>
         /// Handles the RowCellStyle event of the viewResults control.
@@ -873,15 +733,7 @@ namespace Fme.Database.Verification
         private void TimerElapsed_Tick(object sender, EventArgs e)
         {
             lblElapsed.Caption = new TimeSpan(DateTime.Now.Ticks - ExecutionStartTime.Ticks).Duration().ToString();
-        }
-        /// <summary>
-        /// Shows the error.
-        /// </summary>
-        /// <param name="ex">The ex.</param>
-        private void ShowError(Exception ex)
-        {
-            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-        }
+        }          
 
         /// <summary>
         /// Handles the Enter event of the gridMappings control.
@@ -924,32 +776,177 @@ namespace Fme.Database.Verification
             }
         }
 
-        /// <summary>
-        /// Handles the Load event of the MainView control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void MainView_Load(object sender, EventArgs e)
-        {
-            Assembly assembly = Assembly.GetExecutingAssembly();
-            FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
-            string version = fileVersionInfo.ProductVersion;
-            lblVersion.Caption = "v" + version;
-        }
 
+        #region Helper Functions
+        /// <summary>
+        /// Animates the specified state.
+        /// </summary>
+        /// <param name="state">The state.</param>
+        private void Animate(bool state)
+        {
+            Cursor = state == true ? Cursors.WaitCursor : Cursors.Default;
+
+            if (state)
+                lblStatus.Caption = "Running";
+
+            barEditStatus.Visibility = state == true ?
+                DevExpress.XtraBars.BarItemVisibility.Always :
+                DevExpress.XtraBars.BarItemVisibility.Never;
+        }
+        /// <summary>
+        /// Sets the data source.
+        /// </summary>
+        /// <param name="ctrl">The control.</param>
+        /// <param name="dataSource">The data source.</param>
+        private void SetDataSource(BindingSource ctrl, object dataSource)
+        {
+            ctrl.DataSource = dataSource;
+
+        }
+        /// <summary>
+        /// Sets the data source.
+        /// </summary>
+        /// <param name="ctrl">The control.</param>
+        /// <param name="dataSource">The data source.</param>
+        private void SetDataSource(GridControl ctrl, object dataSource)
+        {
+            ctrl.BeginUpdate();
+            GridView view = ctrl.MainView as GridView;
+            view?.Columns.Clear();
+            ctrl.DataSource = null;
+            ctrl.DataSource = dataSource;
+            ctrl.RefreshDataSource();
+            ctrl.EndUpdate();
+        }
+        /// <summary>
+        /// Sets the best widths.
+        /// </summary>
+        private void SetBestWidths()
+        {
+            GridControl[] dynaGrids = { gridSourceData, gridTargetData, gridReport, gridResults };
+
+            foreach (GridControl grid in dynaGrids)
+            {
+                GridView view = grid.MainView as GridView;
+                view.OptionsView.ColumnAutoWidth = false;
+                view.BestFitColumns(true);
+            }
+            viewMappings.OptionsView.ColumnAutoWidth = true;
+            viewMappings.BestFitColumns(true);
+            viewCalcFields.OptionsView.ColumnAutoWidth = true;
+            viewCalcFields.BestFitColumns(true);
+            viewFieldLookup.OptionsView.ColumnAutoWidth = true;
+            viewFieldLookup.BestFitColumns(true);
+
+        }
+        /// <summary>
+        /// Called when [new model].
+        /// </summary>
+        public void OnCreateNewModel()
+        {
+            GridControl[] grids = { gridSourceData, gridTargetData, gridResults, gridReport, gridMessages };
+
+            BaseEdit[] editors = { cbSourceTable, cbTargetTable, cbSourceKey, cbTargetKey, btnSourceData, btnTargetData };
+            model = new CompareModel();
+
+            editors.ToList().ForEach(editor => editor.Text = "");
+
+            this.Text = "Untitled";
+
+            bsMappings.DataSource = model.ColumnCompare;
+            gridMappings.DataSource = bsMappings;
+            gridFieldLookup.DataSource = bsMappings;
+            gridCalcFields.DataSource = bsMappings;
+
+            cbLeftSide.Items.Clear();
+            cbRightSide.Items.Clear();
+            cbSourceTable.Properties.Items.Clear();
+            cbTargetTable.Properties.Items.Clear();
+            cbSourceKey.Properties.Items.Clear();
+            cbTargetKey.Properties.Items.Clear();
+            btnEditIdList.Text = "";
+
+            foreach (var grid in grids)
+                SetDataSource(grid, null);
+
+        }
+        /// <summary>
+        /// Sets the source model.
+        /// </summary>
+        public void SetSourceModel()
+        {
+            btnSourceData.Text = model.Source.DataSource.GetConnectionStringBuilder()["Data Source"] as string;
+
+            cbSourceTable.Properties.Items.Clear();
+
+            cbSourceTable.Properties.Items.
+                AddRange(model.Source.TableSchemas.Select(s => s.TableName).ToArray());
+
+            cbSourceTable.Text = model.Source.SelectedTable;
+            cbSourceKey.Text = model.Source.Key;
+
+        }
+        /// <summary>
+        /// Sets the target model.
+        /// </summary>
+        public void SetTargetModel()
+        {
+            btnTargetData.Text = model.Target.DataSource.GetConnectionStringBuilder()["Data Source"] as string;
+
+            cbTargetTable.Properties.Items.Clear();
+
+            cbTargetTable.Properties.Items.
+                AddRange(model.Target.TableSchemas.Select(s => s.TableName).ToArray());
+
+            cbTargetTable.Text = model.Target.SelectedTable;
+            cbTargetKey.Text = model.Target.Key;
+
+        }
+        /// <summary>
+        /// Setups the mapping.
+        /// </summary>
+        public void SetupMapping()
+        {
+            bsMappings.DataSource = model.ColumnCompare;
+            gridMappings.DataSource = bsMappings;
+            gridFieldLookup.DataSource = bsMappings;
+            gridCalcFields.DataSource = bsMappings;
+            gridMappings.RefreshDataSource();
+
+            ColumnView view = viewCalcFields;
+            ViewColumnFilterInfo viewFilterInfo = new ViewColumnFilterInfo(view.Columns["CategoryName"],
+              new ColumnFilterInfo("[IsCalculated] = True", ""));
+            view.ActiveFilter.Add(viewFilterInfo);
+
+            viewCalcFields.ActiveFilterCriteria = new DevExpress.Data.Filtering.BinaryOperator("IsCalculated", true);
+
+            gridMappings.RefreshDataSource();
+
+            ComboBoxItemCollection[] gridBoxes = { cbLeftSide.Items, cbRightSide.Items, cbCompareType.Items, cbOperator.Items };
+            gridBoxes.ToList().ForEach(item => item.Clear());
+
+
+            cbLeftSide.Items.AddRange(cbSourceKey.Properties.Items);
+            cbRightSide.Items.AddRange(cbTargetKey.Properties.Items);
+
+            cbCompareType.Items.AddRange(Enum.GetNames(typeof(ComparisonTypeEnum)));
+            cbOperator.Items.AddRange(Enum.GetNames(typeof(OperatorEnums)));
+        }
+        /// <summary>
+        /// Shows the error.
+        /// </summary>
+        /// <param name="ex">The ex.</param>
+        private void ShowError(Exception ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
         /// <summary>
         /// Determines whether [is session valid].
         /// </summary>
         /// <returns><c>true</c> if [is session valid]; otherwise, <c>false</c>.</returns>
         private bool ValidateRequiredFields()
         {
-            if (model.ColumnCompare.Count == 0)
-            {
-                MessageBox.Show("Please select the field mappings before you continue.", "No Mappings Defined",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-
+           
             if (string.IsNullOrEmpty(cbSourceTable.Text))
             {
                 MessageBox.Show("Please select the Table");
@@ -976,14 +973,22 @@ namespace Fme.Database.Verification
                 return false;
             }
 
+            if (model.ColumnCompare.Count == 0)
+            {
+                MessageBox.Show("Please select the field mappings before you continue.", "No Mappings Defined",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+
             //if (GetIdList() == null || GetIdList().Count == 0)
             //{                
             //    MessageBox.Show("Please enter a valid ID List File.");
             //    cbSourceKey.Focus();
             //    return false;
             //}
-          
+
             return true;
         }
+        #endregion
     }
 }
