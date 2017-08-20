@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7200302A-8DA1-42C4-AF13-56BA1B0FA43D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fme.Library</RootNamespace>
+    <AssemblyName>Fme.Library</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Builders\AccessDbConnectionStringBuilder.cs" />
+    <Compile Include="Builders\AceDbConnectionStringBuilder.cs" />
+    <Compile Include="Comparison\AggregateComparer.cs" />
+    <Compile Include="Comparison\CompareCells.cs" />
+    <Compile Include="Comparison\CompareHelperEventArgs.cs" />
+    <Compile Include="Comparison\CompareRows.cs" />
+    <Compile Include="Comparison\DateCompare.cs" />
+    <Compile Include="Comparison\DateTimeCompare.cs" />
+    <Compile Include="DataSources\AccessDataSource.cs" />
+    <Compile Include="DataSources\DataSourceBase.cs" />
+    <Compile Include="DataSources\DqlDataSource.cs" />
+    <Compile Include="Builders\DqlQueryBuilder.cs" />
+    <Compile Include="EventArgs\CompareModelEventArgs.cs" />
+    <Compile Include="Extensions\DataSetExtensions.cs" />
+    <Compile Include="Extensions\DataTableExtensions.cs" />
+    <Compile Include="Extensions\EnumerableExtensionExtensions.cs" />
+    <Compile Include="Enums\ComparisonTypeEnum.cs" />
+    <Compile Include="Enums\DataSourceEnums.cs" />
+    <Compile Include="DataSources\ExcelDataSource.cs" />
+    <Compile Include="Builders\ExcelDbConnectionStringBuilder.cs" />
+    <Compile Include="GetConnectionProvider.cs" />
+    <Compile Include="KernelExtensions.cs" />
+    <Compile Include="Models\CompareMappingHelper.cs" />
+    <Compile Include="Models\CompareMappingModel.cs" />
+    <Compile Include="Models\CompareModel.cs" />
+    <Compile Include="Models\CompareResultModel.cs" />
+    <Compile Include="Models\DataSourceModel.cs" />
+    <Compile Include="Models\ErrorMessageModel.cs" />
+    <Compile Include="Models\FieldSchemaModel.cs" />
+    <Compile Include="Models\TableSchemaModel.cs" />
+    <Compile Include="DataSources\OleDbDataSource.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Builders\QueryBuilder.cs" />
+    <Compile Include="Repositories\CompareModelRepository.cs" />
+    <Compile Include="Repositories\CompareStartEventArgs.cs" />
+    <Compile Include="Repositories\DataTableEventArgs.cs" />
+    <Compile Include="Serializer.cs" />
+    <Compile Include="SourceRepository.cs" />
+    <Compile Include="DataSources\SqlDataSource.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fme.DqlProvider\Fme.DqlProvider.csproj">
+      <Project>{3588db7e-8962-4505-bc6b-d43de0af4bce}</Project>
+      <Name>Fme.DqlProvider</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
