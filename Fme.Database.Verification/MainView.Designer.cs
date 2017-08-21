@@ -32,14 +32,14 @@ namespace Fme.Database.Verification
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.Utils.SuperToolTip superToolTip23 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem23 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip24 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem24 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip21 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem21 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip22 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem22 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip7 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem7 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip8 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem8 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip5 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem5 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip6 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem6 = new DevExpress.Utils.ToolTipTitleItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
             this.compareMappingModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
@@ -107,6 +107,9 @@ namespace Fme.Database.Verification
             this.btnSourceData = new DevExpress.XtraEditors.ButtonEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.xtraTabPage7 = new DevExpress.XtraTab.XtraTabPage();
+            this.chkSourceRandom = new System.Windows.Forms.CheckBox();
+            this.txtSourceMaxRows = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl10 = new DevExpress.XtraEditors.LabelControl();
             this.btnEditIdList = new DevExpress.XtraEditors.ButtonEdit();
             this.xtraTabControl2 = new DevExpress.XtraTab.XtraTabControl();
@@ -208,7 +211,10 @@ namespace Fme.Database.Verification
             this.tabCompareResults = new DevExpress.XtraTab.XtraTabPage();
             this.gridReport = new DevExpress.XtraGrid.GridControl();
             this.viewReport = new DevExpress.XtraGrid.Views.Grid.GridView();
-            this.tabSheetResults = new DevExpress.XtraTab.XtraTabPage();
+            this.tabQueries = new DevExpress.XtraTab.XtraTabPage();
+            this.splitContainerControl1 = new DevExpress.XtraEditors.SplitContainerControl();
+            this.txtSourceQuery = new DevExpress.XtraEditors.MemoEdit();
+            this.txtTargetQuery = new DevExpress.XtraEditors.MemoEdit();
             this.tabMessages = new DevExpress.XtraTab.XtraTabPage();
             this.gridMessages = new DevExpress.XtraGrid.GridControl();
             this.viewMessages = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -229,9 +235,6 @@ namespace Fme.Database.Verification
             this.viewErrorDetailReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colRightLookupFile = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu3 = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.chkSourceRandom = new System.Windows.Forms.CheckBox();
-            this.txtSourceMaxRows = new DevExpress.XtraEditors.TextEdit();
-            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).BeginInit();
@@ -260,6 +263,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.cbSourceTable.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnSourceData.Properties)).BeginInit();
             this.xtraTabPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSourceMaxRows.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnEditIdList.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl2)).BeginInit();
             this.xtraTabControl2.SuspendLayout();
@@ -329,6 +333,11 @@ namespace Fme.Database.Verification
             this.tabCompareResults.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridReport)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewReport)).BeginInit();
+            this.tabQueries.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).BeginInit();
+            this.splitContainerControl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSourceQuery.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTargetQuery.Properties)).BeginInit();
             this.tabMessages.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).BeginInit();
@@ -341,7 +350,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
             this.ctxLookupMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSourceMaxRows.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // compareMappingModelBindingSource
@@ -452,9 +460,9 @@ namespace Fme.Database.Verification
             this.btnExecute.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnExecute.ImageOptions.LargeImage")));
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem23.Text = "Execute a Compare";
-            superToolTip23.Items.Add(toolTipTitleItem23);
-            this.btnExecute.SuperTip = superToolTip23;
+            toolTipTitleItem7.Text = "Execute a Compare";
+            superToolTip7.Items.Add(toolTipTitleItem7);
+            this.btnExecute.SuperTip = superToolTip7;
             this.btnExecute.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnExecute_ItemClick);
             // 
             // btnCancel
@@ -465,9 +473,9 @@ namespace Fme.Database.Verification
             this.btnCancel.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.ImageOptions.LargeImage")));
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem24.Text = "Cancel Execution";
-            superToolTip24.Items.Add(toolTipTitleItem24);
-            this.btnCancel.SuperTip = superToolTip24;
+            toolTipTitleItem8.Text = "Cancel Execution";
+            superToolTip8.Items.Add(toolTipTitleItem8);
+            this.btnCancel.SuperTip = superToolTip8;
             this.btnCancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnCancel_ItemClick);
             // 
             // btnRefresh
@@ -621,9 +629,9 @@ namespace Fme.Database.Verification
             this.barButtonItem4.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem4.ImageOptions.LargeImage")));
             this.barButtonItem4.Name = "barButtonItem4";
             this.barButtonItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem21.Text = "Select the Source Data";
-            superToolTip21.Items.Add(toolTipTitleItem21);
-            this.barButtonItem4.SuperTip = superToolTip21;
+            toolTipTitleItem5.Text = "Select the Source Data";
+            superToolTip5.Items.Add(toolTipTitleItem5);
+            this.barButtonItem4.SuperTip = superToolTip5;
             // 
             // popupMenu1
             // 
@@ -659,9 +667,9 @@ namespace Fme.Database.Verification
             this.barButtonItem5.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem5.ImageOptions.LargeImage")));
             this.barButtonItem5.Name = "barButtonItem5";
             this.barButtonItem5.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem22.Text = "Select the Target Data";
-            superToolTip22.Items.Add(toolTipTitleItem22);
-            this.barButtonItem5.SuperTip = superToolTip22;
+            toolTipTitleItem6.Text = "Select the Target Data";
+            superToolTip6.Items.Add(toolTipTitleItem6);
+            this.barButtonItem5.SuperTip = superToolTip6;
             // 
             // popupMenu2
             // 
@@ -811,7 +819,7 @@ namespace Fme.Database.Verification
             this.tabTargetData,
             this.tabGridResults,
             this.tabCompareResults,
-            this.tabSheetResults,
+            this.tabQueries,
             this.tabMessages});
             // 
             // tabConfiguration
@@ -1064,6 +1072,40 @@ namespace Fme.Database.Verification
             this.xtraTabPage7.Name = "xtraTabPage7";
             this.xtraTabPage7.Size = new System.Drawing.Size(392, 150);
             this.xtraTabPage7.Text = "Id List";
+            // 
+            // chkSourceRandom
+            // 
+            this.chkSourceRandom.AutoSize = true;
+            this.chkSourceRandom.Location = new System.Drawing.Point(199, 66);
+            this.chkSourceRandom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chkSourceRandom.Name = "chkSourceRandom";
+            this.chkSourceRandom.Size = new System.Drawing.Size(100, 17);
+            this.chkSourceRandom.TabIndex = 53;
+            this.chkSourceRandom.Text = "Select Random ";
+            this.chkSourceRandom.UseVisualStyleBackColor = true;
+            this.chkSourceRandom.CheckedChanged += new System.EventHandler(this.chkSourceRandom_CheckedChanged);
+            // 
+            // txtSourceMaxRows
+            // 
+            this.txtSourceMaxRows.EditValue = "100";
+            this.txtSourceMaxRows.Location = new System.Drawing.Point(95, 64);
+            this.txtSourceMaxRows.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtSourceMaxRows.MenuManager = this.barManager1;
+            this.txtSourceMaxRows.Name = "txtSourceMaxRows";
+            this.txtSourceMaxRows.Size = new System.Drawing.Size(86, 20);
+            this.txtSourceMaxRows.TabIndex = 52;
+            this.txtSourceMaxRows.EditValueChanged += new System.EventHandler(this.txtSourceMaxRows_EditValueChanged);
+            this.txtSourceMaxRows.Validating += new System.ComponentModel.CancelEventHandler(this.txtSourceMaxRows_Validating);
+            this.txtSourceMaxRows.Validated += new System.EventHandler(this.txtSourceMaxRows_Validated);
+            // 
+            // labelControl9
+            // 
+            this.labelControl9.Location = new System.Drawing.Point(27, 68);
+            this.labelControl9.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.labelControl9.Name = "labelControl9";
+            this.labelControl9.Size = new System.Drawing.Size(62, 13);
+            this.labelControl9.TabIndex = 51;
+            this.labelControl9.Text = "Max Records";
             // 
             // labelControl10
             // 
@@ -2083,12 +2125,51 @@ namespace Fme.Database.Verification
             this.viewReport.OptionsView.EnableAppearanceEvenRow = true;
             this.viewReport.OptionsView.EnableAppearanceOddRow = true;
             // 
-            // tabSheetResults
+            // tabQueries
             // 
-            this.tabSheetResults.Name = "tabSheetResults";
-            this.tabSheetResults.PageVisible = false;
-            this.tabSheetResults.Size = new System.Drawing.Size(856, 513);
-            this.tabSheetResults.Text = "Spread Sheet Results";
+            this.tabQueries.Controls.Add(this.splitContainerControl1);
+            this.tabQueries.Image = ((System.Drawing.Image)(resources.GetObject("tabQueries.Image")));
+            this.tabQueries.Name = "tabQueries";
+            this.tabQueries.Size = new System.Drawing.Size(856, 513);
+            this.tabQueries.Text = "Queries";
+            // 
+            // splitContainerControl1
+            // 
+            this.splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerControl1.FixedPanel = DevExpress.XtraEditors.SplitFixedPanel.None;
+            this.splitContainerControl1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerControl1.Name = "splitContainerControl1";
+            this.splitContainerControl1.Panel1.Controls.Add(this.txtSourceQuery);
+            this.splitContainerControl1.Panel1.Text = "Panel1";
+            this.splitContainerControl1.Panel2.Controls.Add(this.txtTargetQuery);
+            this.splitContainerControl1.Panel2.Text = "Panel2";
+            this.splitContainerControl1.Size = new System.Drawing.Size(856, 513);
+            this.splitContainerControl1.SplitterPosition = 438;
+            this.splitContainerControl1.TabIndex = 0;
+            this.splitContainerControl1.Text = "splitContainerControl1";
+            // 
+            // txtSourceQuery
+            // 
+            this.txtSourceQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSourceQuery.Location = new System.Drawing.Point(0, 0);
+            this.txtSourceQuery.MenuManager = this.barManager1;
+            this.txtSourceQuery.Name = "txtSourceQuery";
+            this.txtSourceQuery.Properties.Appearance.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtSourceQuery.Properties.Appearance.Options.UseFont = true;
+            this.txtSourceQuery.Size = new System.Drawing.Size(438, 513);
+            this.txtSourceQuery.TabIndex = 0;
+            // 
+            // txtTargetQuery
+            // 
+            this.txtTargetQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtTargetQuery.EditValue = "";
+            this.txtTargetQuery.Location = new System.Drawing.Point(0, 0);
+            this.txtTargetQuery.MenuManager = this.barManager1;
+            this.txtTargetQuery.Name = "txtTargetQuery";
+            this.txtTargetQuery.Properties.Appearance.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTargetQuery.Properties.Appearance.Options.UseFont = true;
+            this.txtTargetQuery.Size = new System.Drawing.Size(413, 513);
+            this.txtTargetQuery.TabIndex = 0;
             // 
             // tabMessages
             // 
@@ -2219,40 +2300,6 @@ namespace Fme.Database.Verification
             this.popupMenu3.Manager = this.barManager1;
             this.popupMenu3.Name = "popupMenu3";
             // 
-            // chkSourceRandom
-            // 
-            this.chkSourceRandom.AutoSize = true;
-            this.chkSourceRandom.Location = new System.Drawing.Point(199, 66);
-            this.chkSourceRandom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.chkSourceRandom.Name = "chkSourceRandom";
-            this.chkSourceRandom.Size = new System.Drawing.Size(100, 17);
-            this.chkSourceRandom.TabIndex = 53;
-            this.chkSourceRandom.Text = "Select Random ";
-            this.chkSourceRandom.UseVisualStyleBackColor = true;
-            this.chkSourceRandom.CheckedChanged += new System.EventHandler(this.chkSourceRandom_CheckedChanged);
-            // 
-            // txtSourceMaxRows
-            // 
-            this.txtSourceMaxRows.EditValue = "100";
-            this.txtSourceMaxRows.Location = new System.Drawing.Point(95, 64);
-            this.txtSourceMaxRows.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtSourceMaxRows.MenuManager = this.barManager1;
-            this.txtSourceMaxRows.Name = "txtSourceMaxRows";
-            this.txtSourceMaxRows.Size = new System.Drawing.Size(86, 20);
-            this.txtSourceMaxRows.TabIndex = 52;
-            this.txtSourceMaxRows.EditValueChanged += new System.EventHandler(this.txtSourceMaxRows_EditValueChanged);
-            this.txtSourceMaxRows.Validating += new System.ComponentModel.CancelEventHandler(this.txtSourceMaxRows_Validating);
-            this.txtSourceMaxRows.Validated += new System.EventHandler(this.txtSourceMaxRows_Validated);
-            // 
-            // labelControl9
-            // 
-            this.labelControl9.Location = new System.Drawing.Point(27, 68);
-            this.labelControl9.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.labelControl9.Name = "labelControl9";
-            this.labelControl9.Size = new System.Drawing.Size(62, 13);
-            this.labelControl9.TabIndex = 51;
-            this.labelControl9.Text = "Max Records";
-            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2304,6 +2351,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.btnSourceData.Properties)).EndInit();
             this.xtraTabPage7.ResumeLayout(false);
             this.xtraTabPage7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSourceMaxRows.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnEditIdList.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl2)).EndInit();
             this.xtraTabControl2.ResumeLayout(false);
@@ -2375,6 +2423,11 @@ namespace Fme.Database.Verification
             this.tabCompareResults.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridReport)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewReport)).EndInit();
+            this.tabQueries.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerControl1)).EndInit();
+            this.splitContainerControl1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.txtSourceQuery.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtTargetQuery.Properties)).EndInit();
             this.tabMessages.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).EndInit();
@@ -2387,7 +2440,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
             this.ctxLookupMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSourceMaxRows.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2571,7 +2623,7 @@ namespace Fme.Database.Verification
         private GridView viewTargetData;
         private DevExpress.XtraGrid.GridControl gridResults;
         private GridView viewResults;
-        private DevExpress.XtraTab.XtraTabPage tabSheetResults;
+        private DevExpress.XtraTab.XtraTabPage tabQueries;
         private DevExpress.XtraTab.XtraTabPage tabCompareResults;
         private DevExpress.XtraGrid.GridControl gridReport;
         private GridView viewReport;
@@ -2590,6 +2642,9 @@ namespace Fme.Database.Verification
         private CheckBox chkSourceRandom;
         private DevExpress.XtraEditors.TextEdit txtSourceMaxRows;
         private DevExpress.XtraEditors.LabelControl labelControl9;
+        private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
+        private DevExpress.XtraEditors.MemoEdit txtSourceQuery;
+        private DevExpress.XtraEditors.MemoEdit txtTargetQuery;
     }
 
 }

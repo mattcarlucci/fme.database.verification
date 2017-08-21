@@ -85,7 +85,7 @@ namespace Fme.Library
         {  
 
             alias = string.IsNullOrEmpty(alias) ? alias : " as " + alias + "_";           
-            return string.Join(",\n", fields.Select(s => "\t" + s + alias + s)); 
+            return string.Join("\r\n,", fields.Select(s => "" + s + alias + s)); 
         }
 
         /// <summary>

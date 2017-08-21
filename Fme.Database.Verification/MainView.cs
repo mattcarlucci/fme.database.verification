@@ -41,6 +41,7 @@ using Fme.Library.Comparison;
 using System.Reflection;
 using Fme.Database.Verification.Extensions;
 using DevExpress.XtraGrid.Views.Base.ViewInfo;
+using System.IO;
 
 namespace Fme.Database.Verification
 {
@@ -615,7 +616,7 @@ namespace Fme.Database.Verification
                 Invoke(handler, sender, e);
                 return;
             }
-            lblStatus.Caption = e.StatusMessage;
+            lblStatus.Caption = e.StatusMessage;            
             Application.DoEvents();
         }
 
@@ -675,6 +676,7 @@ namespace Fme.Database.Verification
             btnExecute.Enabled = true;
             SetDataSource(gridMessages, model.ErrorMessages);
             lblStatus.Caption = "Idle";
+            LoadQueries();
 
         }
 
@@ -702,8 +704,23 @@ namespace Fme.Database.Verification
             SetBestWidths();
             btnExecute.Enabled = true;
             MisMatches = CompareModelRepository.GetCompareResults(model);
+            LoadQueries();
         }
+        /// <summary>
+        /// Loads the queries.
+        /// </summary>
+        private void LoadQueries()
+        {
+            try
+            {
+                txtSourceQuery.Text = File.ReadAllText(string.Format(@".\logs\{0}Query_{1}_{2}.sql", "Left", model.Source.SelectedTable, model.Source.Key));
+                txtTargetQuery.Text = File.ReadAllText(string.Format(@".\logs\{0}Query_{1}_{2}.sql", "Right", model.Target.SelectedTable, model.Target.Key));
+            }
+            catch (Exception)
+            {
 
+            }
+        }
         /// <summary>
         /// Handles the <see cref="E:EventStatus" /> event.
         /// </summary>

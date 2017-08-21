@@ -94,7 +94,7 @@ namespace Fme.Library
             //string enabletop = string.Format("enable(return_top {0})", maxRows);
             //enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows) > 0 ? maxRows : "";
             var enabletop = "";
-            return string.Format("select r_object_id, {0} as primary_key, {1} from {2}, {3}", primaryKey, aliases, tableName, enabletop);
+            return string.Format("select r_object_id, {0} as primary_key, {1} from {2} {3}", primaryKey, aliases, tableName, enabletop);
         }
     }
 }
