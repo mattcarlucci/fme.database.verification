@@ -9,6 +9,7 @@ using System.Data;
 using System.Threading;
 using Fme.Library.Comparison;
 using System.Diagnostics;
+using System.IO;
 
 namespace Fme.Library.Repositories
 {
@@ -51,7 +52,7 @@ namespace Fme.Library.Repositories
         }
 
         public EventHandler<CompareModelStatusEventArgs> CompareModelStatus;       
-        protected virtual void OnCompareModelEventArgs(object sender, CompareModelStatusEventArgs e)
+        protected virtual void OnCompareModelStatus(object sender, CompareModelStatusEventArgs e)
         {
             CompareModelStatus?.Invoke(sender, e);
         }
@@ -100,60 +101,79 @@ namespace Fme.Library.Repositories
             try
             {
                 await Task.Run(() =>
-                 {
+                {
 
-                     //  var pairs = CompareMappingHelper.GetPairs(Model.Source.SelectedSchema(), Model.Target.SelectedSchema());
+                    //  var pairs = CompareMappingHelper.GetPairs(Model.Source.SelectedSchema(), Model.Target.SelectedSchema());
 
-                     var pairs = Model.ColumnCompare.Where(w=> w.IsCalculated == false).ToList();
+                    var pairs = Model.ColumnCompare.Where(w => w.IsCalculated == false).ToList();
 
-                     QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();
+                    QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();
 
-                 //var sql1 = GetQueryString(Model.Source, "left", pairs.Select(s => s.LeftSide).ToArray(), pairs);
-                 //var sql2 = GetQueryString(Model.Source, "right", pairs.Select(s => s.RightSide).ToArray(), pairs);
+                    //var sql1 = GetQueryString(Model.Source, "left", pairs.Select(s => s.LeftSide).ToArray(), pairs);
+                    //var sql2 = GetQueryString(Model.Source, "right", pairs.Select(s => s.RightSide).ToArray(), pairs);
 
-                 var select1 = query.BuildSql(Model.Source.Key, pairs.Select(s => s.LeftSide).ToArray(),
+                    var select1 = query.BuildSql(Model.Source.Key, pairs.Select(s => s.LeftSide).ToArray(),
                       Model.Source.SelectedTable, "left", Model.Source.Key, Model.GetIdsFromFile());
 
-                     var table1 = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token).Tables?[0];
+                    OnCompareModelStatus(this, new CompareModelStatusEventArgs()
+                    { DataSource = Model.Source, Data = select1, StatusMessage = "Executing Query" });
 
-                     var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
-                         Model.Target.SelectedTable, "right", Model.Target.Key, table1.SelectKeys<string>("primary_key"));
+                    LogQuery(Model.Source, select1, "Left");
+
+                    var ds = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
+
+                    if (ds.Tables == null || ds.Tables.Count == 0)
+                        throw new Exception("No data was returned for the selected table " + Model.Source.SelectedTable);
+
+                    DataTable table1 = ds.Tables[0];
+
+                    var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
+                        Model.Target.SelectedTable, "right", Model.Target.Key, table1.SelectKeys<string>("primary_key"));
+
+                    OnCompareModelStatus(this, new CompareModelStatusEventArgs()
+                    { DataSource = Model.Target, Data = select1, StatusMessage = "Executing Query" });
+
+                    LogQuery(Model.Target, select2, "Right");                                      
+
+                    var ds2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);
+
+                    DataTable table2 = ds2.Tables[0];
+                    if (ds2 == null || ds2.Tables.Count == 0)
+                        throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
 
 
-                     var table2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token).Tables?[0];
+                    if (table1.Rows.Count == 0 || table2.Rows.Count == 0)
+                        throw new DataException("No matching records found to complete the request");
 
-                     if (table1.Rows.Count == 0 || table2.Rows.Count == 0)
-                         throw new DataException("No matching records found to complete the request");
+                    table1.InnerJoin<string>("primary_key", table2);
 
-                     table1.InnerJoin<string>("primary_key", table2);
+                    var dupset1 = table1.RemoveDuplicates<string>("primary_key");
+                    var dupset2 = table2.RemoveDuplicates<string>("primary_key");
 
-                     var dupset1 = table1.RemoveDuplicates<string>("primary_key");
-                     var dupset2 = table2.RemoveDuplicates<string>("primary_key");
+                    table1.SetPrimaryKey("primary_key", table2);
+                                        
+                    Model.ExecuteCalculatedFields(table1, table2, cancelToken);
 
-                     table1.SetPrimaryKey("primary_key", table2);
-
-                     Model.ExecuteCalculatedFields(table1, table2, cancelToken);
-
-                     var sourceData = table1.AsEnumerable().CopyToDataTable();
+                    var sourceData = table1.AsEnumerable().CopyToDataTable();
                     // sourceData.RemoveEmptyColumns();
 
-                     var targetData = table2.AsEnumerable().CopyToDataTable();
+                    var targetData = table2.AsEnumerable().CopyToDataTable();
                     // targetData.RemoveEmptyColumns();
 
-                     table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
-                     CompareMappingHelper.OrderColumns(table1, pairs);
+                    table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
+                    CompareMappingHelper.OrderColumns(table1, pairs);
 
 
-                     OnCompareStart(this, new CompareStartEventArgs() { Pairs = null });
-                     OnSourceLoadComplete(this, new DataTableEventArgs() { Table = sourceData });
-                     OnTargetLoadComplete(this, new DataTableEventArgs() { Table = targetData });
+                    OnCompareStart(this, new CompareStartEventArgs() { Pairs = null });
+                    OnSourceLoadComplete(this, new DataTableEventArgs() { Table = sourceData });
+                    OnTargetLoadComplete(this, new DataTableEventArgs() { Table = targetData });
 
 
 
-                     CompareMappingHelper.CompareColumns(this, table1, pairs, cancelToken);
+                    CompareMappingHelper.CompareColumns(this, table1, pairs, cancelToken);
 
-                     OnCompareComplete(this, new DataTableEventArgs() { Table = table1, Pairs = null });
-                 }
+                    OnCompareComplete(this, new DataTableEventArgs() { Table = table1, Pairs = null });
+                }
                   ); //.Wait(cancelToken.Token);
 
             }
@@ -166,6 +186,30 @@ namespace Fme.Library.Repositories
             {
 
                 OnError(ex, EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
+        /// Logs the query.
+        /// </summary>
+        /// <param name="model">The model.</param>
+        /// <param name="select">The select.</param>
+        /// <param name="side">The side.</param>
+        private void LogQuery(DataSourceModel model, string select, string side)
+        {
+            //var name = model.Name.Split(new string[] { "\\"}, StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
+            //if (string.IsNullOrEmpty(name))
+            //    name = "Untitled";
+            try
+            {
+                if (Directory.Exists(@".\logs") == false)
+                    Directory.CreateDirectory(@".\logs");
+
+                File.WriteAllText(string.Format(@".\logs\{0}Query_{1}_{2}.sql", side, model.SelectedTable, model.Key), select);
+            }
+            catch(Exception)
+            {
+                return;
             }
         }
 

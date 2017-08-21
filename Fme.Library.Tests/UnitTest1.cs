@@ -50,6 +50,8 @@ namespace Fme.Library.Tests
             QueryBuilder query = dql.GetQueryBuilder();
             var select = query.BuildSql("r_object_id", new string[] { "keywords", "authors" }, "dm_cabinet", "left", "r_object_id", new string[] { "0c00301880000104" } );
             var table = dql.ExecuteQuery(select, token);
+            
+
             Assert.AreEqual(table.Tables.Count, 1);
             Assert.AreEqual(table.Tables[0].Rows.Count, 1);
         }
@@ -106,6 +108,19 @@ namespace Fme.Library.Tests
             var table = dql.ExecuteQuery(select);
             Assert.AreEqual(table.Tables.Count, 1);
             Assert.AreEqual(table.Tables[0].Rows.Count, 1);
+        }
+        [TestMethod]
+        public void Test_DqlQuery_EmtpyRecordset()
+        {
+            DqlConnectionStringBuilder builder = new DqlConnectionStringBuilder("dmadmin", "@vmware99", "ls_repos");
+            DqlDataSource dql = new DqlDataSource(builder.ConnectionString);
+            var x = dql.GetConnectionStringBuilder();       
+
+            var query = dql.GetQueryBuilder();
+            var select = query.BuildSql("keywords", new string[] { "r_object_id", "keywords", "authors" }, "dm_cabinet", "left", "r_object_id", new string[] { "0c0030188000010X" });
+            var table = dql.ExecuteQuery(select);
+            Assert.AreEqual(table.Tables.Count,0);
+          //  Assert.AreEqual(table.Tables[0].Rows.Count, 1);
         }
         /// <summary>
         /// Tests the excel connection.

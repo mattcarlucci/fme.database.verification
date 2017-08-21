@@ -82,8 +82,10 @@ namespace Fme.Library
         /// <param name="alias">The alias.</param>
         /// <returns>System.String.</returns>
         protected string BuildFieldAliases(string[] fields, string alias)
-        {
-            return string.Join(", ", fields.Select(s => s + " as " + alias + "_" + s)); 
+        {  
+
+            alias = string.IsNullOrEmpty(alias) ? alias : " as " + alias + "_";           
+            return string.Join(",\n", fields.Select(s => "\t" + s + alias + s)); 
         }
 
         /// <summary>

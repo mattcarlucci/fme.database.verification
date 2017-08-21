@@ -19,6 +19,8 @@ using System.Data;
 using System.Data.Common;
 using System.Threading;
 using System.Xml.Serialization;
+using System.Linq;
+using System.Collections;
 
 namespace Fme.Library
 {
@@ -26,6 +28,7 @@ namespace Fme.Library
     /// Class DataSource.
     /// </summary>
     [Serializable]
+    [XmlInclude(typeof(AccessDataSource))]
     [XmlInclude(typeof(ExcelDataSource))]
     [XmlInclude(typeof(DqlDataSource))]
     [XmlInclude(typeof(SqlDataSource))]    
@@ -44,6 +47,21 @@ namespace Fme.Library
         /// <returns>DataSet.</returns>
         public abstract DataSet ExecuteQuery(string select);
 
+        /// <summary>
+        /// Sets the aliases.
+        /// </summary>
+        /// <param name="dataSet">The data set.</param>
+        /// <param name="alias">The alias.</param>
+        public virtual void SetAliases(DataSet dataSet, string alias)
+        {
+            foreach(DataTable table in dataSet.Tables)
+            {
+                foreach(DataColumn column in table.Columns.Cast<IEnumerable>().Skip(1).ToList())
+                {
+                    column.ColumnName = alias + "_" + column.ColumnName;
+                }
+            }
+        }
         /// <summary>
         /// Executes the query.
         /// </summary>

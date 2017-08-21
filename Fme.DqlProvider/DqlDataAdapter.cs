@@ -136,7 +136,9 @@ namespace Fme.DqlProvider
                 #endregion
 
                 records.close();
-                dataSet.Tables.Add(table);
+
+                if (table != null)
+                    dataSet.Tables.Add(table);
             }
 
             commands.ForEach(item => item.Dispose());

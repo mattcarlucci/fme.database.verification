@@ -212,6 +212,8 @@ namespace Fme.Database.Verification
             this.viewReport = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.tabSheetResults = new DevExpress.XtraTab.XtraTabPage();
             this.tabMessages = new DevExpress.XtraTab.XtraTabPage();
+            this.gridMessages = new DevExpress.XtraGrid.GridControl();
+            this.viewMessages = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.fieldSchemaModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tableSchemaModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
@@ -229,8 +231,6 @@ namespace Fme.Database.Verification
             this.viewErrorDetailReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colRightLookupFile = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu3 = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.gridMessages = new DevExpress.XtraGrid.GridControl();
-            this.viewMessages = new DevExpress.XtraGrid.Views.Grid.GridView();
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).BeginInit();
@@ -330,6 +330,8 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.gridReport)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewReport)).BeginInit();
             this.tabMessages.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableSchemaModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
@@ -339,8 +341,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
             this.ctxLookupMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).BeginInit();
             this.SuspendLayout();
             // 
             // compareMappingModelBindingSource
@@ -2120,6 +2120,26 @@ namespace Fme.Database.Verification
             this.tabMessages.Size = new System.Drawing.Size(856, 513);
             this.tabMessages.Text = "Messaages";
             // 
+            // gridMessages
+            // 
+            this.gridMessages.ContextMenuStrip = this.ctxGrid;
+            this.gridMessages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridMessages.Location = new System.Drawing.Point(0, 0);
+            this.gridMessages.MainView = this.viewMessages;
+            this.gridMessages.MenuManager = this.barManager1;
+            this.gridMessages.Name = "gridMessages";
+            this.gridMessages.Size = new System.Drawing.Size(856, 513);
+            this.gridMessages.TabIndex = 0;
+            this.gridMessages.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.viewMessages});
+            // 
+            // viewMessages
+            // 
+            this.viewMessages.GridControl = this.gridMessages;
+            this.viewMessages.Name = "viewMessages";
+            this.viewMessages.OptionsBehavior.Editable = false;
+            this.viewMessages.OptionsView.RowAutoHeight = true;
+            // 
             // repositoryItemCheckEdit1
             // 
             this.repositoryItemCheckEdit1.AutoHeight = false;
@@ -2220,26 +2240,6 @@ namespace Fme.Database.Verification
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem7)});
             this.popupMenu3.Manager = this.barManager1;
             this.popupMenu3.Name = "popupMenu3";
-            // 
-            // gridMessages
-            // 
-            this.gridMessages.ContextMenuStrip = this.ctxGrid;
-            this.gridMessages.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gridMessages.Location = new System.Drawing.Point(0, 0);
-            this.gridMessages.MainView = this.viewMessages;
-            this.gridMessages.MenuManager = this.barManager1;
-            this.gridMessages.Name = "gridMessages";
-            this.gridMessages.Size = new System.Drawing.Size(856, 513);
-            this.gridMessages.TabIndex = 0;
-            this.gridMessages.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
-            this.viewMessages});
-            // 
-            // viewMessages
-            // 
-            this.viewMessages.GridControl = this.gridMessages;
-            this.viewMessages.Name = "viewMessages";
-            this.viewMessages.OptionsBehavior.Editable = false;
-            this.viewMessages.OptionsView.RowAutoHeight = true;
             // 
             // MainView
             // 
@@ -2365,6 +2365,8 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.gridReport)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewReport)).EndInit();
             this.tabMessages.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableSchemaModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
@@ -2374,8 +2376,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
             this.ctxLookupMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

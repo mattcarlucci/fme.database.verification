@@ -654,6 +654,7 @@ namespace Fme.Database.Verification
             SetBestWidths();
             btnExecute.Enabled = true;
             SetDataSource(gridMessages, model.ErrorMessages);
+            lblStatus.Caption = "Idle";
 
         }
 
