@@ -109,9 +109,9 @@ namespace Fme.Library
         /// <param name="inValues">The in values.</param>
         /// <param name="aliasPrefix">The alias prefix.</param>
         /// <returns>System.String.</returns>
-        public virtual string FormatSql(QueryBuilder builder, string primaryKey, string[] fields, string tableName, string aliasPrefix, string inField, string[] inValues)
+        public virtual string FormatSql(QueryBuilder builder, string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues)
         {
-            return builder.BuildSql(primaryKey, fields, tableName, aliasPrefix, inField, inValues); 
+            return builder.BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows, inField, inValues); 
         }
 
         /// <summary>
@@ -124,10 +124,10 @@ namespace Fme.Library
         /// <param name="inValues">The in values.</param>
         /// <param name="aliasPrefix">The alias prefix.</param>
         /// <returns>System.String.</returns>
-        public virtual string FormatSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string inField, string[] inValues )
+        public virtual string FormatSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues )
         {
             QueryBuilder builder = new QueryBuilder();
-            return builder.BuildSql(primaryKey, fields, tableName, aliasPrefix, inField, inValues);
+            return builder.BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows, inField, inValues);
         }
 
         /// <summary>

@@ -103,8 +103,11 @@ namespace Fme.Database.Verification
             FileVersionInfo fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
             string version = fileVersionInfo.ProductVersion;
             lblVersion.Caption = "v" + version;
-        }
+            exportToolStripMenuItem.Image = barButtonItem1.ImageOptions.Image;
+            hideEmptyColumnToolStripMenuItem.Image = barButtonItem2.ImageOptions.Image;
 
+        }
+        
 
         /// <summary>
         /// Handles the ItemClick event of the btnNew control.
@@ -197,6 +200,7 @@ namespace Fme.Database.Verification
                 repo.TargetLoadComplete += Compare_TargetComplete;
                 repo.CompareComplete += Compare_Complete;
                 repo.StatusEvent += OnEventStatus;
+                repo.CompareModelStatus += Compare_CompareStatus;
                 repo.Error += Compare_OnError;
 
                 repo.Execute(cancelTokenSource);
@@ -205,12 +209,12 @@ namespace Fme.Database.Verification
             catch (OperationCanceledException ex)
             {
                 timerElapsed.Stop();
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(ex.Message, "Cancellation Requested", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             catch (Exception ex)
             {
                 timerElapsed.Stop();
-                MessageBox.Show(ex.Message, "Cancellation Requested", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ShowError(ex);
                 model = fallback;
             }
         }
@@ -596,9 +600,25 @@ namespace Fme.Database.Verification
                 Invoke(handler, sender, e);
                 return;
             }
-            // SetDataSource(gridMappings, e.Pairs);
-
+            lblStatus.Caption = "Executing...";
         }
+        /// <summary>
+        /// Handles the CompareStatus event of the Compare control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="CompareModelStatusEventArgs"/> instance containing the event data.</param>
+        public void Compare_CompareStatus(object sender, CompareModelStatusEventArgs e)
+        {
+            EventHandler<CompareModelStatusEventArgs> handler = Compare_CompareStatus;
+            if (InvokeRequired)
+            {
+                Invoke(handler, sender, e);
+                return;
+            }
+            lblStatus.Caption = e.StatusMessage;
+            Application.DoEvents();
+        }
+
 
         /// <summary>
         /// Handles the SourceComplete event of the Compare control.
@@ -735,7 +755,8 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void TimerElapsed_Tick(object sender, EventArgs e)
         {
-            lblElapsed.Caption = new TimeSpan(DateTime.Now.Ticks - ExecutionStartTime.Ticks).Duration().ToString();
+            lblElapsed.Caption = new TimeSpan(DateTime.Now.Ticks - ExecutionStartTime.Ticks).
+                Duration().ToString();
         }
 
         /// <summary>
@@ -889,6 +910,8 @@ namespace Fme.Database.Verification
             cbSourceKey.Properties.Items.Clear();
             cbTargetKey.Properties.Items.Clear();
             btnEditIdList.Text = "";
+            chkSourceRandom.Checked = false;
+            txtSourceMaxRows.Text = "";
 
             foreach (var grid in grids)
                 SetDataSource(grid, null);
@@ -911,6 +934,9 @@ namespace Fme.Database.Verification
                 SetupMapping();
 
                 btnEditIdList.Text = model.Source.IdListFile;
+                chkSourceRandom.Checked = model.Source.IsRandom;
+                txtSourceMaxRows.Text = model.Source.MaxRows;
+
                 this.Text = model.Name;
                 SetBestWidths();
             }
@@ -1095,6 +1121,46 @@ namespace Fme.Database.Verification
                     e.Cancel = true;
                
             }        
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event of the chkSourceRandom control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void chkSourceRandom_CheckedChanged(object sender, EventArgs e)
+        {
+            model.Source.IsRandom = chkSourceRandom.Checked;
+        }
+
+        private void txtSourceMaxRows_EditValueChanged(object sender, EventArgs e)
+        {
+            //try
+            //{
+            //    if (int.TryParse(txtSourceMaxRows.Text, out int value))
+            //        model.Source.MaxRows = value.ToString();
+            //}
+            //catch(Exception)
+            //{
+            //    return;
+            //}
+        }
+
+        /// <summary>
+        /// Handles the Validating event of the txtSourceMaxRows control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="CancelEventArgs"/> instance containing the event data.</param>
+        private void txtSourceMaxRows_Validating(object sender, CancelEventArgs e)
+        {
+            e.Cancel = !int.TryParse(txtSourceMaxRows.Text, out int value);
+        }
+
+        private void txtSourceMaxRows_Validated(object sender, EventArgs e)
+        {
+            if (int.TryParse(txtSourceMaxRows.Text, out int value))
+                model.Source.MaxRows = value.ToString();
+
         }
     }
 }

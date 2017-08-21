@@ -96,6 +96,7 @@ namespace Fme.Library.Extensions
         public static DataColumn[] RemoveEmptyColumns(this DataTable table, bool commit = true)
         {
             List<DataColumn> remove = new List<DataColumn>();
+            if (table == null) return null;
 
             foreach (DataColumn col in table.Columns)
                 if (table.AsEnumerable().

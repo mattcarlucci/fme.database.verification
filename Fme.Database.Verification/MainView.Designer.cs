@@ -32,15 +32,15 @@ namespace Fme.Database.Verification
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            DevExpress.Utils.SuperToolTip superToolTip23 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem23 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip24 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem24 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip21 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem21 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip22 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem22 = new DevExpress.Utils.ToolTipTitleItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
-            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem1 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem2 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip3 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem3 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip4 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem4 = new DevExpress.Utils.ToolTipTitleItem();
             this.compareMappingModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar1 = new DevExpress.XtraBars.Bar();
@@ -100,9 +100,6 @@ namespace Fme.Database.Verification
             this.xtraTabPage6 = new DevExpress.XtraTab.XtraTabPage();
             this.btnDCTM = new DevExpress.XtraEditors.SimpleButton();
             this.btnGetSchema = new DevExpress.XtraEditors.SimpleButton();
-            this.chkSourceRandom = new System.Windows.Forms.CheckBox();
-            this.txtSourceMaxRows = new DevExpress.XtraEditors.TextEdit();
-            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             this.cbSourceKey = new DevExpress.XtraEditors.ComboBoxEdit();
             this.cbSourceTable = new DevExpress.XtraEditors.ComboBoxEdit();
             this.labelControl5 = new DevExpress.XtraEditors.LabelControl();
@@ -117,6 +114,7 @@ namespace Fme.Database.Verification
             this.gridMappings = new DevExpress.XtraGrid.GridControl();
             this.ctxGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.hideEmptyColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMappings = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colSelected = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -231,6 +229,9 @@ namespace Fme.Database.Verification
             this.viewErrorDetailReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colRightLookupFile = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu3 = new DevExpress.XtraBars.PopupMenu(this.components);
+            this.chkSourceRandom = new System.Windows.Forms.CheckBox();
+            this.txtSourceMaxRows = new DevExpress.XtraEditors.TextEdit();
+            this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).BeginInit();
@@ -255,7 +256,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl3)).BeginInit();
             this.xtraTabControl3.SuspendLayout();
             this.xtraTabPage6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSourceMaxRows.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSourceKey.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSourceTable.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnSourceData.Properties)).BeginInit();
@@ -341,6 +341,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
             this.ctxLookupMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSourceMaxRows.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // compareMappingModelBindingSource
@@ -451,9 +452,9 @@ namespace Fme.Database.Verification
             this.btnExecute.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnExecute.ImageOptions.LargeImage")));
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem1.Text = "Execute a Compare";
-            superToolTip1.Items.Add(toolTipTitleItem1);
-            this.btnExecute.SuperTip = superToolTip1;
+            toolTipTitleItem23.Text = "Execute a Compare";
+            superToolTip23.Items.Add(toolTipTitleItem23);
+            this.btnExecute.SuperTip = superToolTip23;
             this.btnExecute.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnExecute_ItemClick);
             // 
             // btnCancel
@@ -464,9 +465,9 @@ namespace Fme.Database.Verification
             this.btnCancel.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.ImageOptions.LargeImage")));
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem2.Text = "Cancel Execution";
-            superToolTip2.Items.Add(toolTipTitleItem2);
-            this.btnCancel.SuperTip = superToolTip2;
+            toolTipTitleItem24.Text = "Cancel Execution";
+            superToolTip24.Items.Add(toolTipTitleItem24);
+            this.btnCancel.SuperTip = superToolTip24;
             this.btnCancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnCancel_ItemClick);
             // 
             // btnRefresh
@@ -620,9 +621,9 @@ namespace Fme.Database.Verification
             this.barButtonItem4.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem4.ImageOptions.LargeImage")));
             this.barButtonItem4.Name = "barButtonItem4";
             this.barButtonItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem3.Text = "Select the Source Data";
-            superToolTip3.Items.Add(toolTipTitleItem3);
-            this.barButtonItem4.SuperTip = superToolTip3;
+            toolTipTitleItem21.Text = "Select the Source Data";
+            superToolTip21.Items.Add(toolTipTitleItem21);
+            this.barButtonItem4.SuperTip = superToolTip21;
             // 
             // popupMenu1
             // 
@@ -658,9 +659,9 @@ namespace Fme.Database.Verification
             this.barButtonItem5.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem5.ImageOptions.LargeImage")));
             this.barButtonItem5.Name = "barButtonItem5";
             this.barButtonItem5.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem4.Text = "Select the Target Data";
-            superToolTip4.Items.Add(toolTipTitleItem4);
-            this.barButtonItem5.SuperTip = superToolTip4;
+            toolTipTitleItem22.Text = "Select the Target Data";
+            superToolTip22.Items.Add(toolTipTitleItem22);
+            this.barButtonItem5.SuperTip = superToolTip22;
             // 
             // popupMenu2
             // 
@@ -955,9 +956,6 @@ namespace Fme.Database.Verification
             // 
             this.xtraTabPage6.Controls.Add(this.btnDCTM);
             this.xtraTabPage6.Controls.Add(this.btnGetSchema);
-            this.xtraTabPage6.Controls.Add(this.chkSourceRandom);
-            this.xtraTabPage6.Controls.Add(this.txtSourceMaxRows);
-            this.xtraTabPage6.Controls.Add(this.labelControl9);
             this.xtraTabPage6.Controls.Add(this.cbSourceKey);
             this.xtraTabPage6.Controls.Add(this.cbSourceTable);
             this.xtraTabPage6.Controls.Add(this.labelControl5);
@@ -990,35 +988,6 @@ namespace Fme.Database.Verification
             this.btnGetSchema.TabIndex = 51;
             this.btnGetSchema.Text = "...";
             this.btnGetSchema.Visible = false;
-            // 
-            // chkSourceRandom
-            // 
-            this.chkSourceRandom.AutoSize = true;
-            this.chkSourceRandom.Location = new System.Drawing.Point(239, 121);
-            this.chkSourceRandom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.chkSourceRandom.Name = "chkSourceRandom";
-            this.chkSourceRandom.Size = new System.Drawing.Size(100, 17);
-            this.chkSourceRandom.TabIndex = 50;
-            this.chkSourceRandom.Text = "Select Random ";
-            this.chkSourceRandom.UseVisualStyleBackColor = true;
-            // 
-            // txtSourceMaxRows
-            // 
-            this.txtSourceMaxRows.Location = new System.Drawing.Point(120, 119);
-            this.txtSourceMaxRows.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txtSourceMaxRows.MenuManager = this.barManager1;
-            this.txtSourceMaxRows.Name = "txtSourceMaxRows";
-            this.txtSourceMaxRows.Size = new System.Drawing.Size(86, 20);
-            this.txtSourceMaxRows.TabIndex = 49;
-            // 
-            // labelControl9
-            // 
-            this.labelControl9.Location = new System.Drawing.Point(24, 122);
-            this.labelControl9.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.labelControl9.Name = "labelControl9";
-            this.labelControl9.Size = new System.Drawing.Size(62, 13);
-            this.labelControl9.TabIndex = 48;
-            this.labelControl9.Text = "Max Records";
             // 
             // cbSourceKey
             // 
@@ -1086,6 +1055,9 @@ namespace Fme.Database.Verification
             // 
             // xtraTabPage7
             // 
+            this.xtraTabPage7.Controls.Add(this.chkSourceRandom);
+            this.xtraTabPage7.Controls.Add(this.txtSourceMaxRows);
+            this.xtraTabPage7.Controls.Add(this.labelControl9);
             this.xtraTabPage7.Controls.Add(this.labelControl10);
             this.xtraTabPage7.Controls.Add(this.btnEditIdList);
             this.xtraTabPage7.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage7.Image")));
@@ -1173,17 +1145,23 @@ namespace Fme.Database.Verification
             // 
             this.ctxGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportToolStripMenuItem,
+            this.toolStripMenuItem2,
             this.hideEmptyColumnToolStripMenuItem});
             this.ctxGrid.Name = "ctxGrid";
-            this.ctxGrid.Size = new System.Drawing.Size(183, 48);
+            this.ctxGrid.Size = new System.Drawing.Size(183, 54);
             this.ctxGrid.Opening += new System.ComponentModel.CancelEventHandler(this.ctxGrid_Opening);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
             this.exportToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.exportToolStripMenuItem.Text = "Export...";
+            this.exportToolStripMenuItem.Text = "Print/Export Data";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(179, 6);
             // 
             // hideEmptyColumnToolStripMenuItem
             // 
@@ -2241,6 +2219,40 @@ namespace Fme.Database.Verification
             this.popupMenu3.Manager = this.barManager1;
             this.popupMenu3.Name = "popupMenu3";
             // 
+            // chkSourceRandom
+            // 
+            this.chkSourceRandom.AutoSize = true;
+            this.chkSourceRandom.Location = new System.Drawing.Point(199, 66);
+            this.chkSourceRandom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chkSourceRandom.Name = "chkSourceRandom";
+            this.chkSourceRandom.Size = new System.Drawing.Size(100, 17);
+            this.chkSourceRandom.TabIndex = 53;
+            this.chkSourceRandom.Text = "Select Random ";
+            this.chkSourceRandom.UseVisualStyleBackColor = true;
+            this.chkSourceRandom.CheckedChanged += new System.EventHandler(this.chkSourceRandom_CheckedChanged);
+            // 
+            // txtSourceMaxRows
+            // 
+            this.txtSourceMaxRows.EditValue = "100";
+            this.txtSourceMaxRows.Location = new System.Drawing.Point(95, 64);
+            this.txtSourceMaxRows.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txtSourceMaxRows.MenuManager = this.barManager1;
+            this.txtSourceMaxRows.Name = "txtSourceMaxRows";
+            this.txtSourceMaxRows.Size = new System.Drawing.Size(86, 20);
+            this.txtSourceMaxRows.TabIndex = 52;
+            this.txtSourceMaxRows.EditValueChanged += new System.EventHandler(this.txtSourceMaxRows_EditValueChanged);
+            this.txtSourceMaxRows.Validating += new System.ComponentModel.CancelEventHandler(this.txtSourceMaxRows_Validating);
+            this.txtSourceMaxRows.Validated += new System.EventHandler(this.txtSourceMaxRows_Validated);
+            // 
+            // labelControl9
+            // 
+            this.labelControl9.Location = new System.Drawing.Point(27, 68);
+            this.labelControl9.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.labelControl9.Name = "labelControl9";
+            this.labelControl9.Size = new System.Drawing.Size(62, 13);
+            this.labelControl9.TabIndex = 51;
+            this.labelControl9.Text = "Max Records";
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2287,7 +2299,6 @@ namespace Fme.Database.Verification
             this.xtraTabControl3.ResumeLayout(false);
             this.xtraTabPage6.ResumeLayout(false);
             this.xtraTabPage6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSourceMaxRows.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSourceKey.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSourceTable.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnSourceData.Properties)).EndInit();
@@ -2376,6 +2387,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
             this.ctxLookupMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSourceMaxRows.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2518,9 +2530,6 @@ namespace Fme.Database.Verification
         private DevExpress.XtraEditors.LabelControl labelControl10;
         private DevExpress.XtraEditors.ButtonEdit btnEditIdList;
         private DevExpress.XtraEditors.SimpleButton btnGetSchema;
-        private System.Windows.Forms.CheckBox chkSourceRandom;
-        private DevExpress.XtraEditors.TextEdit txtSourceMaxRows;
-        private DevExpress.XtraEditors.LabelControl labelControl9;
         private DevExpress.XtraEditors.ComboBoxEdit cbSourceKey;
         private DevExpress.XtraEditors.ComboBoxEdit cbSourceTable;
         private DevExpress.XtraEditors.LabelControl labelControl5;
@@ -2577,6 +2586,10 @@ namespace Fme.Database.Verification
         private DevExpress.XtraBars.PopupMenu popupMenu3;
         private DevExpress.XtraGrid.GridControl gridMessages;
         private GridView viewMessages;
+        private ToolStripSeparator toolStripMenuItem2;
+        private CheckBox chkSourceRandom;
+        private DevExpress.XtraEditors.TextEdit txtSourceMaxRows;
+        private DevExpress.XtraEditors.LabelControl labelControl9;
     }
 
 }

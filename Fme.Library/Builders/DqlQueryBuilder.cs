@@ -29,15 +29,19 @@ namespace Fme.Library
         /// <param name="inField">The in field.</param>
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
-        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string inField, string[] inValues)
+        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues)
         {
             if (inValues == null)
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix);
+                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
 
-            return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3}", primaryKey, aliases, tableName, inCaluse);
+            //string enabletop = string.Format("enable(return_top {0})", maxRows);
+            //enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows) > 0 ? maxRows : "";
+            var enabletop = "";
+
+            return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", primaryKey, aliases, tableName, inCaluse, enabletop);
 
            /// var key = primaryKey == "r_object_id" ? "," : ", " + primaryKey + " as primary_key,";
 
@@ -54,10 +58,10 @@ namespace Fme.Library
         /// <param name="inField">The in field.</param>
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
-        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string inField, int[] inValues)
+        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues)
         {
             if (inValues == null)
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix);
+                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
@@ -66,7 +70,11 @@ namespace Fme.Library
             /// string key = primaryKey == "r_object_id" ? " as primary_key," : ", " + primaryKey + " as primary_key,";
             // return string.Format("select r_object_id{0} {1} from {2} where {3}", key, aliases, tableName, inCaluse);
 
-            return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3}", primaryKey, aliases, tableName, inCaluse);
+            //string enabletop = string.Format("enable(return_top {0})", maxRows);
+            //enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows) > 0 ? maxRows : "";
+            var enabletop = "";
+
+            return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", primaryKey, aliases, tableName, inCaluse, enabletop);
         }
         /// <summary>
         /// Builds the SQL.
@@ -76,14 +84,17 @@ namespace Fme.Library
         /// <param name="tableName">Name of the table.</param>
         /// <param name="aliasPrefix">The alias prefix.</param>
         /// <returns>System.String.</returns>
-        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix)
+        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows)
         {
             var aliases = BuildFieldAliases(fields, aliasPrefix);
 
-           // string key = primaryKey == "r_object_id" ? " as primary_key," : ", " + primaryKey + " as primary_key,";
-           // return string.Format("select r_object_id{0} {1} from {2}", key, aliases, tableName);
+            // string key = primaryKey == "r_object_id" ? " as primary_key," : ", " + primaryKey + " as primary_key,";
+            // return string.Format("select r_object_id{0} {1} from {2}", key, aliases, tableName);
 
-            return string.Format("select r_object_id, {0} as primary_key, {1} from {2}", primaryKey, aliases, tableName);
+            //string enabletop = string.Format("enable(return_top {0})", maxRows);
+            //enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows) > 0 ? maxRows : "";
+            var enabletop = "";
+            return string.Format("select r_object_id, {0} as primary_key, {1} from {2}, {3}", primaryKey, aliases, tableName, enabletop);
         }
     }
 }

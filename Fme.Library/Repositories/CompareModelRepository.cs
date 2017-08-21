@@ -89,7 +89,7 @@ namespace Fme.Library.Repositories
             QueryBuilder query = source.DataSource.GetQueryBuilder();
 
             return query.BuildSql(source.Key, fields,
-                source.SelectedTable, side, source.Key, Model.GetIdsFromFile());
+                source.SelectedTable, side, source.MaxRows, source.Key, Model.GetIdsFromFile());
         }
 
         /// <summary>
@@ -112,8 +112,8 @@ namespace Fme.Library.Repositories
                     //var sql1 = GetQueryString(Model.Source, "left", pairs.Select(s => s.LeftSide).ToArray(), pairs);
                     //var sql2 = GetQueryString(Model.Source, "right", pairs.Select(s => s.RightSide).ToArray(), pairs);
 
-                    var select1 = query.BuildSql(Model.Source.Key, pairs.Select(s => s.LeftSide).ToArray(),
-                      Model.Source.SelectedTable, "left", Model.Source.Key, Model.GetIdsFromFile());
+                    var select1 = query.BuildSql(Model.Source.Key,pairs.Select(s => s.LeftSide).ToArray(),
+                      Model.Source.SelectedTable, "left", Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
 
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs()
                     { DataSource = Model.Source, Data = select1, StatusMessage = "Executing Query" });
@@ -128,7 +128,7 @@ namespace Fme.Library.Repositories
                     DataTable table1 = ds.Tables[0];
 
                     var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
-                        Model.Target.SelectedTable, "right", Model.Target.Key, table1.SelectKeys<string>("primary_key"));
+                        Model.Target.SelectedTable, "right", "0", Model.Target.Key,  table1.SelectKeys<string>("primary_key"));
 
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs()
                     { DataSource = Model.Target, Data = select1, StatusMessage = "Executing Query" });

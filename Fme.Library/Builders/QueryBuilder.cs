@@ -119,10 +119,10 @@ namespace Fme.Library
         /// <param name="inField">The in field.</param>
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
-        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string inField, string[] inValues )
+        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues )
         {
             if (inValues == null)            
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix);
+                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
                 
             
             var aliases = BuildFieldAliases(fields, aliasPrefix);
@@ -141,10 +141,10 @@ namespace Fme.Library
         /// <param name="inField">The in field.</param>
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
-        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string inField, int[] inValues)
+        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues)
         {
             if (inValues == null)
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix);
+                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
@@ -160,7 +160,7 @@ namespace Fme.Library
         /// <param name="tableName">Name of the table.</param>
         /// <param name="aliasPrefix">The alias prefix.</param>
         /// <returns>System.String.</returns>
-        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix)
+        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows)
         {
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             return string.Format("select {0} as primary_key, {1} from [{2}] where {0} IS NOT NULL", primaryKey, aliases, tableName);

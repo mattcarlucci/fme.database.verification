@@ -117,8 +117,13 @@ namespace Fme.Library.Models
              if (IsValidIdFile() == false)
                 return null;
 
-            var list = File.ReadAllLines(Source.IdListFile).ToList();
-            return list.Except(list.Where(w => string.IsNullOrEmpty(w))).ToArray();
+            var list = File.ReadAllLines(Source.IdListFile).
+                Where(w => !string.IsNullOrEmpty(w)).ToList();
+
+            if (Source.IsRandom && !string.IsNullOrEmpty(Source.MaxRows))
+                list = list.PickRandom(int.Parse(Source.MaxRows)).ToList();
+
+            return list.ToArray();
         }
 
         #region Calculated Fields. TODO refactor
