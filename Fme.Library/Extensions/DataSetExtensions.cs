@@ -86,7 +86,12 @@ namespace Fme.Library.Extensions
         /// <returns>T[].</returns>
         public static T[] SelectKeys<T>(this DataTable table, string field)
         {
-            return table.AsEnumerable().Select(s => s.Field<T>(field)).ToArray();
+          //  if (table.Columns[field].DataType != typeof(string))
+         //       return null;
+
+            Type t = typeof(T);
+
+            return table.AsEnumerable().Select(s => (T)Convert.ChangeType(s[field], t)).ToArray();
         }
         /// <summary>
         /// Removes the empty columns.

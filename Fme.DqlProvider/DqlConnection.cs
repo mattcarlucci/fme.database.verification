@@ -202,6 +202,7 @@ namespace Fme.DqlProvider
         public DqlCommand CreateDqlCommand()
         {
             return new DqlCommand();
+            //DqlClientFactory.Instance.CreateCommand();
         }
 
         /// <summary>

@@ -56,8 +56,12 @@ namespace Fme.Library.Repositories
         {
             CompareModelStatus?.Invoke(sender, e);
         }
-        //public EventHandler<CompareHelperEventArgs> StatusEvent { get; set; }
 
+        /// <summary>
+        /// Handles the <see cref="E:StatusEvent" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="CompareHelperEventArgs" /> instance containing the event data.</param>
         public override void OnStatusEvent(object sender, CompareHelperEventArgs e)
         {
             Debug.Print("Current Row is " + e.CurrentRow);
@@ -72,6 +76,7 @@ namespace Fme.Library.Repositories
             StatusEvent?.Invoke(sender, e);
             base.OnStatusEvent(sender, e);
         }
+
         public CompareModelRepository(CompareModel model)
         {
             this.Model = model;
@@ -111,7 +116,7 @@ namespace Fme.Library.Repositories
 
                     //var sql1 = GetQueryString(Model.Source, "left", pairs.Select(s => s.LeftSide).ToArray(), pairs);
                     //var sql2 = GetQueryString(Model.Source, "right", pairs.Select(s => s.RightSide).ToArray(), pairs);
-
+                   
                     var select1 = query.BuildSql(Model.Source.Key,pairs.Select(s => s.LeftSide).ToArray(),
                       Model.Source.SelectedTable, "left", Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
 
@@ -136,6 +141,9 @@ namespace Fme.Library.Repositories
                     LogQuery(Model.Target, select2, "Right");                                      
 
                     var ds2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);
+
+                    if (ds2.Tables == null || ds2.Tables.Count == 0)
+                        throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
 
                     DataTable table2 = ds2.Tables[0];
                     if (ds2 == null || ds2.Tables.Count == 0)

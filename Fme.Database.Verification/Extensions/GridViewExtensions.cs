@@ -12,8 +12,7 @@ namespace Fme.Database.Verification.Extensions
     /// Class GridViewExtensions.
     /// </summary>
     public static class GridViewExtensions
-    {
-
+    {     
         /// <summary>
         /// Hides the columns.
         /// </summary>

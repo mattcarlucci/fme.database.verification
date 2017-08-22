@@ -75,15 +75,23 @@ namespace Fme.DqlProvider
             
         }
 
-        /// <summary>
-        /// Attempts to cancels the execution of a <see cref="T:System.Data.Common.DbCommand" />.
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public override void Cancel()
-        {
-            throw new NotImplementedException();
+        private DqlCommand(DqlCommand from)
+      : this()
+    {
+            this.CommandText = from.CommandText;
+            this.CommandTimeout = from.CommandTimeout;
+            this.CommandType = from.CommandType;
+            this.connection = from.Connection;
+            this.DesignTimeVisible = from.DesignTimeVisible;
+            this.Transaction = from.Transaction;
+            this.UpdatedRowSource = from.UpdatedRowSource;
+            //this._columnEncryptionSetting = from.ColumnEncryptionSetting;
+            //DqlParameterCollection parameters = this.Parameters;
+            //foreach (object obj in (DbParameterCollection)from.Parameters)
+            //    parameters.Add(obj is ICloneable ? (obj as ICloneable).Clone() : obj);
         }
 
+       
         /// <summary>
         /// Gets or sets the text command to run against the data source.
         /// </summary>
@@ -274,9 +282,20 @@ namespace Fme.DqlProvider
         /// </summary>
         /// <returns>A new object that is a copy of this instance.</returns>
         public object Clone()
-        {
-            return this.Clone();
+        {            
+            var dqlCommand = new DqlCommand(this);
+            return dqlCommand;
+                
+          //  return this.Clone();
         }
-       
+
+        /// <summary>
+        /// Attempts to cancels the execution of a <see cref="T:System.Data.Common.DbCommand" />.
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        public override void Cancel()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

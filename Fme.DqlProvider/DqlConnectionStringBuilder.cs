@@ -74,9 +74,6 @@ namespace Fme.DqlProvider
             this.Add("Password", password);
             this.Add("Data Source", repository);
             this.Add("Extended Properties", "");
-            
-           // this.Add("User", user);
-           // this.Add("Repository", repository);            
         }
         
         /// <summary>
