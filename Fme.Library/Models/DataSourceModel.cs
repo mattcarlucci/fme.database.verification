@@ -12,7 +12,7 @@ namespace Fme.Library.Models
     {
         public string Name { get; set; }
         public string Key { get; set; }
-        //public DataSourceEnums Type { get; set; }
+        
         public List<TableSchemaModel> TableSchemas {get;set;}
 
         public bool IsRandom { get; set; }
@@ -20,6 +20,10 @@ namespace Fme.Library.Models
         public string IdList { get; set; }
         public string IdListFile { get; set; }
         public string SelectedTable { get; set; }
+
+        public bool IncludeAllVersion { get; set; }
+        public bool IncludeDeletedVersions { get; set; }
+        public int TimeZoneOffset { get; set; }
 
         public DataSourceBase DataSource { get; set; }
 

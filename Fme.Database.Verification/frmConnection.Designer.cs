@@ -134,7 +134,6 @@
             // btnOk
             // 
             this.btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.btnOk.Location = new System.Drawing.Point(233, 200);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(75, 23);
@@ -191,6 +190,7 @@
             // 
             // pbar
             // 
+            this.pbar.EditValue = 0;
             this.pbar.Location = new System.Drawing.Point(110, 12);
             this.pbar.Name = "pbar";
             this.pbar.Size = new System.Drawing.Size(279, 18);

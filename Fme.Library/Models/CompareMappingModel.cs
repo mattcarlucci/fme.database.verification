@@ -130,6 +130,13 @@ namespace Fme.Library.Models
         public string RightQuery { get;set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [time zone offset].
+        /// </summary>
+        /// <value><c>true</c> if [time zone offset]; otherwise, <c>false</c>.</value>
+        public int LeftTimeZoneOffset { get; set; }
+        public int RightTimeZoneOffset { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="CompareMappingModel"/> class.
         /// </summary>
         public CompareMappingModel()

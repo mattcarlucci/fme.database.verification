@@ -95,6 +95,7 @@ namespace Fme.Database.Verification
           //  });
          //   this.Enabled = true;
             pbar.Visible = false;
+            
         }
 
       

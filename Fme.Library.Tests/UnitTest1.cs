@@ -23,6 +23,9 @@ using Fme.Library;
 using Fme.Library.Models;
 using Fme.Library.Extensions;
 using Fme.DqlProvider;
+using Fme.Library.Repositories;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace Fme.Library.Tests
 {
@@ -357,17 +360,31 @@ namespace Fme.Library.Tests
         /// <summary>
         /// Populates the model.
         /// </summary>
-        public void PopulateModel()
+        [TestMethod]
+        public void Test_Comparison_UseCases()
         {
+            CompareModel model = new CompareModel();
 
-            //var model = new CompModel();
-            //ExcelDbConnectionStringBuilder xlsBuilder = new ExcelDbConnectionStringBuilder(@".\dm_document1.xlsx");
-            //model.Left.DataSource = new ExcelDataSource(xlsBuilder);
+            string file = @".\Comparisons\v2_xls_docment_compare_use_cases.xml";
+            if (File.Exists(file) == false)
+                throw new FileNotFoundException(file);
 
-            //DqlConnectionStringBuilder builder = new DqlConnectionStringBuilder("dmadmin", "@vmware99", "ls_repos");
-            //DqlDataSource dql = new DqlDataSource(builder.ConnectionString);
-            //model.Right.DataSource = dql;
-            //model.CompareC
+            model = CompareModel.Load(file);
+            CompareModelRepository repo = new CompareModelRepository(model);
+
+            CancellationTokenSource token = new CancellationTokenSource();
+            Task task = repo.ExecuteWait(token);
+            token.Cancel();
+
+            repo.CompareComplete += (o, e) =>
+               {
+                   var errors = model.ColumnCompare.Where(w => w.Errors != "0" && !string.IsNullOrEmpty(w.Errors)).Count();
+                   Assert.AreEqual(errors, 3);
+                   Assert.AreEqual(model.ColumnCompare.Count, 7);
+                   
+               };
+
+            task.Wait(token.Token);
         }
 
 

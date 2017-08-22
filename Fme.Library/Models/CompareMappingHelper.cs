@@ -18,14 +18,23 @@ using System.Data;
 using Fme.Library.Enums;
 using Fme.Library.Comparison;
 using System.Threading;
+using System.IO;
 
 namespace Fme.Library.Models
 {
-      /// <summary>
+    /// <summary>
     /// Class CompareMappingHelper.
     /// </summary>
     public class CompareMappingHelper
     {
+        public static List<string> IgnoreList()
+        {
+            if (File.Exists(".\\IgnoreAutoMappings.txt"))
+                return File.ReadAllLines(".\\IgnoreAutoMappings.txt").ToList();
+
+            return new List<string>();
+
+        }
         /// <summary>
         /// Gets the pairs.
         /// </summary>
@@ -34,8 +43,10 @@ namespace Fme.Library.Models
         /// <returns>List&lt;CompareMappingModel&gt;.</returns>
         public static List<CompareMappingModel> GetPairs(TableSchemaModel source, TableSchemaModel target)
         {
-            return source.Fields.
-             Join(target.Fields,
+            var exceptions = IgnoreList();
+
+            return source.Fields.Where(w=> exceptions.Contains(w.Name) == false).
+             Join(target.Fields.Where(w => exceptions.Contains(w.Name) == false),
                  s => new { s.Name },
                  t => new { t.Name },
                  (s, t) => new CompareMappingModel(s.Name, t.Name)
@@ -71,13 +82,13 @@ namespace Fme.Library.Models
         /// <param name="table">The table.</param>
         /// <param name="ColumnCompare">The column compare.</param>
         /// <param name="token">The token.</param>
-        public static void CompareColumns(CompareRows comparer, DataTable table, List<CompareMappingModel> ColumnCompare, CancellationTokenSource token)
+        public static void CompareColumns(CompareRows comparer, DataTable table, CompareModel model, CancellationTokenSource token)
         {
-           
-            foreach (var item in ColumnCompare.Where(w => w.IsPair()))
+            var items = model.ColumnCompare.Where(w => w.IsPair() && w.Selected);
+            foreach (var item in items)
             {
-                var currentRow = ColumnCompare.IndexOf(item);
-                var results = comparer.CompareColumns(currentRow, table, item, token);
+                var currentRow = model.ColumnCompare.IndexOf(item);
+                var results = comparer.CompareColumns(currentRow, table, item, model, token);
                // item.CompareResults.AddRange(results);
             }
         }

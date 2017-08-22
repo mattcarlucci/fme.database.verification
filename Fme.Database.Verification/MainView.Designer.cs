@@ -121,6 +121,7 @@ namespace Fme.Database.Verification
             this.hideEmptyColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMappings = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colSelected = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repo_chkSelected = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.colLeftSide = new DevExpress.XtraGrid.Columns.GridColumn();
             this.cbLeftSide = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.colRightSide = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -187,6 +188,8 @@ namespace Fme.Database.Verification
             this.bindingNavigatorMoveNextItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.bindingNavigatorDeleteAll = new System.Windows.Forms.ToolStripButton();
             this.groupControl6 = new DevExpress.XtraEditors.GroupControl();
             this.labelControl8 = new DevExpress.XtraEditors.LabelControl();
             this.labelControl7 = new DevExpress.XtraEditors.LabelControl();
@@ -235,6 +238,11 @@ namespace Fme.Database.Verification
             this.viewErrorDetailReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colRightLookupFile = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu3 = new DevExpress.XtraBars.PopupMenu(this.components);
+            this.colCalcSelected = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.cbSourceTZ = new DevExpress.XtraEditors.ComboBoxEdit();
+            this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
+            this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
+            this.cbTargetTZ = new DevExpress.XtraEditors.ComboBoxEdit();
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).BeginInit();
@@ -271,6 +279,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.gridMappings)).BeginInit();
             this.ctxGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.viewMappings)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repo_chkSelected)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbLeftSide)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbRightSide)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbCompareType)).BeginInit();
@@ -350,6 +359,8 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
             this.ctxLookupMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cbSourceTZ.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cbTargetTZ.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // compareMappingModelBindingSource
@@ -542,8 +553,8 @@ namespace Fme.Database.Verification
             this.barEditStatus.AutoFillWidth = true;
             this.barEditStatus.Edit = this.mbStatus;
             this.barEditStatus.Id = 15;
-            this.barEditStatus.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("barEditStatus.ImageOptions.Image")));
-            this.barEditStatus.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barEditStatus.ImageOptions.LargeImage")));
+            this.barEditStatus.ImageOptions.Image = global::Fme.Database.Verification.Properties.Resources.deletesheetrows_16x16;
+            this.barEditStatus.ImageOptions.LargeImage = global::Fme.Database.Verification.Properties.Resources.deletesheetrows_32x32;
             this.barEditStatus.Name = "barEditStatus";
             this.barEditStatus.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             // 
@@ -850,6 +861,8 @@ namespace Fme.Database.Verification
             // 
             // xtraTabPage8
             // 
+            this.xtraTabPage8.Controls.Add(this.labelControl12);
+            this.xtraTabPage8.Controls.Add(this.cbTargetTZ);
             this.xtraTabPage8.Controls.Add(this.simpleButton2);
             this.xtraTabPage8.Controls.Add(this.simpleButton1);
             this.xtraTabPage8.Controls.Add(this.cbTargetKey);
@@ -891,8 +904,10 @@ namespace Fme.Database.Verification
             this.cbTargetKey.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbTargetKey.MenuManager = this.barManager1;
             this.cbTargetKey.Name = "cbTargetKey";
+            this.cbTargetKey.Properties.AllowMouseWheel = false;
             this.cbTargetKey.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cbTargetKey.Properties.Sorted = true;
             this.cbTargetKey.Size = new System.Drawing.Size(226, 20);
             this.cbTargetKey.TabIndex = 38;
             this.cbTargetKey.SelectedIndexChanged += new System.EventHandler(this.cbTargetKey_SelectedIndexChanged);
@@ -903,8 +918,10 @@ namespace Fme.Database.Verification
             this.cbTargetTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbTargetTable.MenuManager = this.barManager1;
             this.cbTargetTable.Name = "cbTargetTable";
+            this.cbTargetTable.Properties.AllowMouseWheel = false;
             this.cbTargetTable.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cbTargetTable.Properties.Sorted = true;
             this.cbTargetTable.Size = new System.Drawing.Size(226, 20);
             this.cbTargetTable.TabIndex = 37;
             this.cbTargetTable.SelectedIndexChanged += new System.EventHandler(this.cbTargetTable_SelectedIndexChanged);
@@ -962,6 +979,8 @@ namespace Fme.Database.Verification
             // 
             // xtraTabPage6
             // 
+            this.xtraTabPage6.Controls.Add(this.labelControl11);
+            this.xtraTabPage6.Controls.Add(this.cbSourceTZ);
             this.xtraTabPage6.Controls.Add(this.btnDCTM);
             this.xtraTabPage6.Controls.Add(this.btnGetSchema);
             this.xtraTabPage6.Controls.Add(this.cbSourceKey);
@@ -1003,8 +1022,10 @@ namespace Fme.Database.Verification
             this.cbSourceKey.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbSourceKey.MenuManager = this.barManager1;
             this.cbSourceKey.Name = "cbSourceKey";
+            this.cbSourceKey.Properties.AllowMouseWheel = false;
             this.cbSourceKey.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cbSourceKey.Properties.Sorted = true;
             this.cbSourceKey.Size = new System.Drawing.Size(229, 20);
             this.cbSourceKey.TabIndex = 47;
             this.cbSourceKey.SelectedIndexChanged += new System.EventHandler(this.cbSourceKey_SelectedIndexChanged);
@@ -1015,8 +1036,10 @@ namespace Fme.Database.Verification
             this.cbSourceTable.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.cbSourceTable.MenuManager = this.barManager1;
             this.cbSourceTable.Name = "cbSourceTable";
+            this.cbSourceTable.Properties.AllowMouseWheel = false;
             this.cbSourceTable.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cbSourceTable.Properties.Sorted = true;
             this.cbSourceTable.Size = new System.Drawing.Size(229, 20);
             this.cbSourceTable.TabIndex = 46;
             this.cbSourceTable.SelectedIndexChanged += new System.EventHandler(this.cbSourceTable_SelectedIndexChanged);
@@ -1176,7 +1199,8 @@ namespace Fme.Database.Verification
             this.cbLeftSide,
             this.cbRightSide,
             this.cbCompareType,
-            this.cbOperator});
+            this.cbOperator,
+            this.repo_chkSelected});
             this.gridMappings.Size = new System.Drawing.Size(798, 231);
             this.gridMappings.TabIndex = 0;
             this.gridMappings.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -1229,14 +1253,25 @@ namespace Fme.Database.Verification
             this.viewMappings.GridControl = this.gridMappings;
             this.viewMappings.Name = "viewMappings";
             this.viewMappings.OptionsCustomization.AllowRowSizing = true;
+            this.viewMappings.OptionsCustomization.AllowSort = false;
+            this.viewMappings.OptionsMenu.ShowGroupSortSummaryItems = false;
             this.viewMappings.OptionsMenu.ShowGroupSummaryEditorItem = true;
             this.viewMappings.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.GridViewMapping_RowCellStyle);
             // 
             // colSelected
             // 
+            this.colSelected.ColumnEdit = this.repo_chkSelected;
             this.colSelected.FieldName = "Selected";
             this.colSelected.Name = "colSelected";
-            this.colSelected.Width = 20;
+            this.colSelected.ToolTip = "Selected";
+            this.colSelected.Visible = true;
+            this.colSelected.VisibleIndex = 0;
+            this.colSelected.Width = 40;
+            // 
+            // repo_chkSelected
+            // 
+            this.repo_chkSelected.AutoHeight = false;
+            this.repo_chkSelected.Name = "repo_chkSelected";
             // 
             // colLeftSide
             // 
@@ -1244,15 +1279,17 @@ namespace Fme.Database.Verification
             this.colLeftSide.FieldName = "LeftSide";
             this.colLeftSide.Name = "colLeftSide";
             this.colLeftSide.Visible = true;
-            this.colLeftSide.VisibleIndex = 0;
+            this.colLeftSide.VisibleIndex = 1;
             this.colLeftSide.Width = 100;
             // 
             // cbLeftSide
             // 
+            this.cbLeftSide.AllowMouseWheel = false;
             this.cbLeftSide.AutoHeight = false;
             this.cbLeftSide.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cbLeftSide.Name = "cbLeftSide";
+            this.cbLeftSide.Sorted = true;
             // 
             // colRightSide
             // 
@@ -1260,15 +1297,17 @@ namespace Fme.Database.Verification
             this.colRightSide.FieldName = "RightSide";
             this.colRightSide.Name = "colRightSide";
             this.colRightSide.Visible = true;
-            this.colRightSide.VisibleIndex = 1;
+            this.colRightSide.VisibleIndex = 2;
             this.colRightSide.Width = 96;
             // 
             // cbRightSide
             // 
+            this.cbRightSide.AllowMouseWheel = false;
             this.cbRightSide.AutoHeight = false;
             this.cbRightSide.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cbRightSide.Name = "cbRightSide";
+            this.cbRightSide.Sorted = true;
             // 
             // colCompareType
             // 
@@ -1276,22 +1315,24 @@ namespace Fme.Database.Verification
             this.colCompareType.FieldName = "CompareType";
             this.colCompareType.Name = "colCompareType";
             this.colCompareType.Visible = true;
-            this.colCompareType.VisibleIndex = 2;
+            this.colCompareType.VisibleIndex = 3;
             this.colCompareType.Width = 94;
             // 
             // cbCompareType
             // 
+            this.cbCompareType.AllowMouseWheel = false;
             this.cbCompareType.AutoHeight = false;
             this.cbCompareType.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cbCompareType.Name = "cbCompareType";
+            this.cbCompareType.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             // 
             // colIgnoreChars
             // 
             this.colIgnoreChars.FieldName = "IgnoreChars";
             this.colIgnoreChars.Name = "colIgnoreChars";
             this.colIgnoreChars.Visible = true;
-            this.colIgnoreChars.VisibleIndex = 4;
+            this.colIgnoreChars.VisibleIndex = 5;
             this.colIgnoreChars.Width = 102;
             // 
             // colErrors
@@ -1299,7 +1340,7 @@ namespace Fme.Database.Verification
             this.colErrors.FieldName = "Errors";
             this.colErrors.Name = "colErrors";
             this.colErrors.Visible = true;
-            this.colErrors.VisibleIndex = 5;
+            this.colErrors.VisibleIndex = 6;
             this.colErrors.Width = 70;
             // 
             // colStatus
@@ -1307,7 +1348,7 @@ namespace Fme.Database.Verification
             this.colStatus.FieldName = "Status";
             this.colStatus.Name = "colStatus";
             this.colStatus.Visible = true;
-            this.colStatus.VisibleIndex = 6;
+            this.colStatus.VisibleIndex = 7;
             this.colStatus.Width = 70;
             // 
             // colOperator
@@ -1316,14 +1357,16 @@ namespace Fme.Database.Verification
             this.colOperator.FieldName = "Operator";
             this.colOperator.Name = "colOperator";
             this.colOperator.Visible = true;
-            this.colOperator.VisibleIndex = 3;
+            this.colOperator.VisibleIndex = 4;
             // 
             // cbOperator
             // 
+            this.cbOperator.AllowMouseWheel = false;
             this.cbOperator.AutoHeight = false;
             this.cbOperator.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cbOperator.Name = "cbOperator";
+            this.cbOperator.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.DisableTextEditor;
             // 
             // colSelection
             // 
@@ -1338,7 +1381,7 @@ namespace Fme.Database.Verification
             this.colStartTime.FieldName = "StartTime";
             this.colStartTime.Name = "colStartTime";
             this.colStartTime.Visible = true;
-            this.colStartTime.VisibleIndex = 7;
+            this.colStartTime.VisibleIndex = 8;
             this.colStartTime.Width = 105;
             // 
             // xtraTabLookup
@@ -1506,6 +1549,7 @@ namespace Fme.Database.Verification
             // viewCalcFields
             // 
             this.viewCalcFields.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colCalcSelected,
             this.colIsCalculated,
             this.gridColumn1,
             this.gridColumn4,
@@ -1515,6 +1559,7 @@ namespace Fme.Database.Verification
             this.viewCalcFields.GridControl = this.gridCalcFields;
             this.viewCalcFields.Name = "viewCalcFields";
             this.viewCalcFields.OptionsCustomization.AllowRowSizing = true;
+            this.viewCalcFields.OptionsCustomization.AllowSort = false;
             this.viewCalcFields.RowHeight = 50;
             this.viewCalcFields.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.GridViewMapping_RowCellStyle);
             // 
@@ -1535,8 +1580,8 @@ namespace Fme.Database.Verification
             this.gridColumn1.FieldName = "LeftSide";
             this.gridColumn1.Name = "gridColumn1";
             this.gridColumn1.Visible = true;
-            this.gridColumn1.VisibleIndex = 0;
-            this.gridColumn1.Width = 121;
+            this.gridColumn1.VisibleIndex = 1;
+            this.gridColumn1.Width = 95;
             // 
             // repositoryItemComboBox6
             // 
@@ -1551,8 +1596,8 @@ namespace Fme.Database.Verification
             this.gridColumn4.FieldName = "LeftQuery";
             this.gridColumn4.Name = "gridColumn4";
             this.gridColumn4.Visible = true;
-            this.gridColumn4.VisibleIndex = 1;
-            this.gridColumn4.Width = 339;
+            this.gridColumn4.VisibleIndex = 2;
+            this.gridColumn4.Width = 268;
             // 
             // repositoryItemMemoEdit1
             // 
@@ -1564,8 +1609,8 @@ namespace Fme.Database.Verification
             this.gridColumn5.FieldName = "RightSide";
             this.gridColumn5.Name = "gridColumn5";
             this.gridColumn5.Visible = true;
-            this.gridColumn5.VisibleIndex = 2;
-            this.gridColumn5.Width = 97;
+            this.gridColumn5.VisibleIndex = 3;
+            this.gridColumn5.Width = 76;
             // 
             // repositoryItemComboBox7
             // 
@@ -1580,8 +1625,8 @@ namespace Fme.Database.Verification
             this.gridColumn6.FieldName = "RightQuery";
             this.gridColumn6.Name = "gridColumn6";
             this.gridColumn6.Visible = true;
-            this.gridColumn6.VisibleIndex = 3;
-            this.gridColumn6.Width = 354;
+            this.gridColumn6.VisibleIndex = 4;
+            this.gridColumn6.Width = 280;
             // 
             // repositoryItemMemoEdit2
             // 
@@ -1754,7 +1799,9 @@ namespace Fme.Database.Verification
             this.bindingNavigatorMoveLastItem,
             this.bindingNavigatorSeparator2,
             this.bindingNavigatorAddNewItem,
-            this.bindingNavigatorDeleteItem});
+            this.bindingNavigatorDeleteItem,
+            this.toolStripSeparator1,
+            this.bindingNavigatorDeleteAll});
             this.bindingNavigator1.Location = new System.Drawing.Point(0, 486);
             this.bindingNavigator1.MoveFirstItem = this.bindingNavigatorMoveFirstItem;
             this.bindingNavigator1.MoveLastItem = this.bindingNavigatorMoveLastItem;
@@ -1852,6 +1899,21 @@ namespace Fme.Database.Verification
             // 
             this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator2";
             this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 27);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 27);
+            // 
+            // bindingNavigatorDeleteAll
+            // 
+            this.bindingNavigatorDeleteAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bindingNavigatorDeleteAll.Image = global::Fme.Database.Verification.Properties.Resources.deletesheetrows_16x16;
+            this.bindingNavigatorDeleteAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bindingNavigatorDeleteAll.Name = "bindingNavigatorDeleteAll";
+            this.bindingNavigatorDeleteAll.Size = new System.Drawing.Size(24, 24);
+            this.bindingNavigatorDeleteAll.ToolTipText = "Delete All";
+            this.bindingNavigatorDeleteAll.Click += new System.EventHandler(this.bindingNavigatorDeleteAll_Click);
             // 
             // groupControl6
             // 
@@ -2300,6 +2362,57 @@ namespace Fme.Database.Verification
             this.popupMenu3.Manager = this.barManager1;
             this.popupMenu3.Name = "popupMenu3";
             // 
+            // colCalcSelected
+            // 
+            this.colCalcSelected.FieldName = "Selected";
+            this.colCalcSelected.Name = "colCalcSelected";
+            this.colCalcSelected.Visible = true;
+            this.colCalcSelected.VisibleIndex = 0;
+            this.colCalcSelected.Width = 40;
+            // 
+            // cbSourceTZ
+            // 
+            this.cbSourceTZ.EditValue = "0";
+            this.cbSourceTZ.Location = new System.Drawing.Point(292, 118);
+            this.cbSourceTZ.MenuManager = this.barManager1;
+            this.cbSourceTZ.Name = "cbSourceTZ";
+            this.cbSourceTZ.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cbSourceTZ.Size = new System.Drawing.Size(57, 20);
+            this.cbSourceTZ.TabIndex = 53;
+            this.cbSourceTZ.ToolTip = "Timezone Offset for DateTime Comparisons";
+            this.cbSourceTZ.SelectedIndexChanged += new System.EventHandler(this.cbSourceTZ_SelectedIndexChanged);
+            // 
+            // labelControl11
+            // 
+            this.labelControl11.Location = new System.Drawing.Point(206, 121);
+            this.labelControl11.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.labelControl11.Name = "labelControl11";
+            this.labelControl11.Size = new System.Drawing.Size(79, 13);
+            this.labelControl11.TabIndex = 54;
+            this.labelControl11.Text = "Timezone Offset";
+            // 
+            // labelControl12
+            // 
+            this.labelControl12.Location = new System.Drawing.Point(204, 125);
+            this.labelControl12.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.labelControl12.Name = "labelControl12";
+            this.labelControl12.Size = new System.Drawing.Size(79, 13);
+            this.labelControl12.TabIndex = 56;
+            this.labelControl12.Text = "Timezone Offset";
+            // 
+            // cbTargetTZ
+            // 
+            this.cbTargetTZ.EditValue = "0";
+            this.cbTargetTZ.Location = new System.Drawing.Point(289, 122);
+            this.cbTargetTZ.MenuManager = this.barManager1;
+            this.cbTargetTZ.Name = "cbTargetTZ";
+            this.cbTargetTZ.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cbTargetTZ.Size = new System.Drawing.Size(57, 20);
+            this.cbTargetTZ.TabIndex = 55;
+            this.cbTargetTZ.SelectedIndexChanged += new System.EventHandler(this.cbTargetTZ_SelectedIndexChanged);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2319,6 +2432,7 @@ namespace Fme.Database.Verification
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Migration Verification Management";
             this.Load += new System.EventHandler(this.MainView_Load);
+            this.SystemColorsChanged += new System.EventHandler(this.MainView_SystemColorsChanged);
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).EndInit();
@@ -2359,6 +2473,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.gridMappings)).EndInit();
             this.ctxGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.viewMappings)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repo_chkSelected)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbLeftSide)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbRightSide)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbCompareType)).EndInit();
@@ -2440,6 +2555,8 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
             this.ctxLookupMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cbSourceTZ.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cbTargetTZ.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2645,6 +2762,14 @@ namespace Fme.Database.Verification
         private DevExpress.XtraEditors.SplitContainerControl splitContainerControl1;
         private DevExpress.XtraEditors.MemoEdit txtSourceQuery;
         private DevExpress.XtraEditors.MemoEdit txtTargetQuery;
+        private DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit repo_chkSelected;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripButton bindingNavigatorDeleteAll;
+        private DevExpress.XtraGrid.Columns.GridColumn colCalcSelected;
+        private DevExpress.XtraEditors.LabelControl labelControl12;
+        private DevExpress.XtraEditors.ComboBoxEdit cbTargetTZ;
+        private DevExpress.XtraEditors.LabelControl labelControl11;
+        private DevExpress.XtraEditors.ComboBoxEdit cbSourceTZ;
     }
 
 }

@@ -12,17 +12,16 @@ namespace Fme.Library.Enums
        String,
        Date,
        Datetime,
-       Integer,       
+       Integer,             
     }
     public enum OperatorEnums
     {
         Equals,
         Contains,
         EndsWidth,
-        In,
         StartsWidth,
-        
-        
+        In,        
+        Table
     }
     
 }

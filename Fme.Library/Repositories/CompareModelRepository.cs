@@ -97,25 +97,24 @@ namespace Fme.Library.Repositories
                 source.SelectedTable, side, source.MaxRows, source.Key, Model.GetIdsFromFile());
         }
 
+        public async Task ExecuteWait(CancellationTokenSource cancelToken)
+        {
+            await Execute(cancelToken);
+        }
+        //private async Task RequestExecute
         /// <summary>
         /// Executes the specified cancel token.
         /// </summary>
         /// <param name="cancelToken">The cancel token.</param>
-        public async void Execute(CancellationTokenSource cancelToken)
+        public async Task Execute(CancellationTokenSource cancelToken)
         {
+            
             try
             {
                 await Task.Run(() =>
                 {
-
-                    //  var pairs = CompareMappingHelper.GetPairs(Model.Source.SelectedSchema(), Model.Target.SelectedSchema());
-
-                    var pairs = Model.ColumnCompare.Where(w => w.IsCalculated == false).ToList();
-
+                    var pairs = Model.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected).ToList();
                     QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();
-
-                    //var sql1 = GetQueryString(Model.Source, "left", pairs.Select(s => s.LeftSide).ToArray(), pairs);
-                    //var sql2 = GetQueryString(Model.Source, "right", pairs.Select(s => s.RightSide).ToArray(), pairs);
                    
                     var select1 = query.BuildSql(Model.Source.Key,pairs.Select(s => s.LeftSide).ToArray(),
                       Model.Source.SelectedTable, "left", Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
@@ -178,7 +177,7 @@ namespace Fme.Library.Repositories
 
 
 
-                    CompareMappingHelper.CompareColumns(this, table1, pairs, cancelToken);
+                    CompareMappingHelper.CompareColumns(this, table1, Model, cancelToken);
 
                     OnCompareComplete(this, new DataTableEventArgs() { Table = table1, Pairs = null });
                 }
@@ -197,6 +196,10 @@ namespace Fme.Library.Repositories
             }
         }
 
+        private void Execute()
+        {
+
+        }
         /// <summary>
         /// Logs the query.
         /// </summary>

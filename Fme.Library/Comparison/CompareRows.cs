@@ -82,15 +82,19 @@ namespace Fme.Library.Comparison
             return value;
         }
 
+        public void CompareColumn(int currentRow, DataTable table, CompareModel model, CancellationToken cancelToken)
+        {
+
+        }
         /// <summary>
         /// Compares the columns.
         /// </summary>
         /// <param name="table">The table.</param>
-        /// <param name="model">The model.</param>
+        /// <param name="compare">The model.</param>
         /// <param name="cancelToken">The cancel token.</param>
         /// <returns>List&lt;CompareResultModel&gt;.</returns>
         /// <exception cref="System.OperationCanceledException">A cancellation token associated with this operation was canceled</exception>
-        public List<CompareResultModel> CompareColumns(int currentRow, DataTable table, CompareMappingModel model, CancellationTokenSource cancelToken)
+        public List<CompareResultModel> CompareColumns(int currentRow, DataTable table, CompareMappingModel compare, CompareModel model, CancellationTokenSource cancelToken)
         {
             // try
             {
@@ -101,11 +105,11 @@ namespace Fme.Library.Comparison
                 this.CancelToken = cancelToken;
                 DateTime startTime = DateTime.Now;
 
-                var sourceLookup = model.ToDictionary(model.LeftLookupFile);
-                var targetLookup = model.ToDictionary(model.RightLookupFile);
+                var sourceLookup = compare.ToDictionary(compare.LeftLookupFile);
+                var targetLookup = compare.ToDictionary(compare.RightLookupFile);
 
                
-                OnStatusEvent(this, NewEventStatus(table, model, currentRow, startTime));               
+                OnStatusEvent(this, NewEventStatus(table, compare, currentRow, startTime));               
 
 
                 ParallelOptions options = new ParallelOptions()
@@ -114,24 +118,30 @@ namespace Fme.Library.Comparison
 
                 options.CancellationToken = CancelToken.Token;
 
-                pairs.AddOrUpdate(model.LeftSide, 0, (existingKey, existingVal) => 0);
+                pairs.AddOrUpdate(compare.LeftSide, 0, (existingKey, existingVal) => 0);
 #if !NO_PARA
                 for (int row = 0; row < table.Rows.Count; row++)
 #else
                 Parallel.For(1, table.Rows.Count, options, row =>
 #endif
                 {
+                    #region loop
                     if (cancelToken.IsCancellationRequested)
                         throw new OperationCanceledException("A cancellation token associated with this operation was canceled");
 
-                    var sourceValue = table.Rows[row][model.LeftAlias];
-                    var targetValue = table.Rows[row][model.RightAlias];
+                    var sourceValue = table.Rows[row][compare.LeftAlias];
+                    var targetValue = table.Rows[row][compare.RightAlias];
+
+                    compare.LeftTimeZoneOffset = model.Source.TimeZoneOffset;
+                    compare.RightTimeZoneOffset = model.Target.TimeZoneOffset;
+
+                    //TODO: this is an issue if key is not a string
                     var primary_key = table.Rows[row].Field<string>("primary_key");
 
-                    if (model.CompareType == ComparisonTypeEnum.None)
+                    if (compare.CompareType == ComparisonTypeEnum.None)
                     {
                         statusMessage = "Skipped";
-                        pairs.AddOrUpdate(model.LeftSide, 1, (existingKey, existingVal) => existingVal);
+                        pairs.AddOrUpdate(compare.LeftSide, 1, (existingKey, existingVal) => existingVal);
 #if !NO_PARA
                         continue;
 #else
@@ -142,27 +152,27 @@ namespace Fme.Library.Comparison
                     var left = GetValue(ToString(sourceValue), sourceLookup);
                     var right = GetValue(ToString(targetValue), targetLookup);
                     
-                    if (!CompareCells.IsEqual(left, right, model.CompareType, model.Operator, model.IgnoreChars))
+                    if (!CompareCells.IsEqual(left, right, compare.CompareType, compare.Operator, compare.IgnoreChars, compare.LeftTimeZoneOffset, compare.RightTimeZoneOffset))
                     {
                        // string field = GetValue(ToString(sourceValue), sourceLookup).Replace("left_", "");
-                        results.Add(new CompareResultModel(primary_key, model.LeftSide,model.RightSide, left, right, row));
-
-                       
+                        results.Add(new CompareResultModel(primary_key, compare.LeftSide,compare.RightSide, left, right, row));
+                                               
                         //excelWorkSheet1.Range[sourceCol + row.ToString()].Interior.Color = 255;
                         //excelWorkSheet1.Range[targetCol + row.ToString()].Interior.Color = 5296274;
 
-                        int index = row == 1 ? 0 : 1;
-                        string key = model.LeftSide;
-                        pairs.AddOrUpdate(key, 1, (existingKey, existingVal) => existingVal + index);
+                       // int index = row == 1 ? 0 : 1;
+                        string key = compare.LeftSide;
+                        pairs.AddOrUpdate(key, 1, (existingKey, existingVal) => existingVal + 1);
                     }
+                    #endregion
                 }
 #if NO_PARA
                 );
 #endif
-                if (pairs.ContainsKey(model.LeftSide))
+                if (pairs.ContainsKey(compare.LeftSide))
                     Console.WriteLine("OK");
 
-                OnStatusEvent(this, NewEventStatus(table, model, results, currentRow, statusMessage, startTime));
+                OnStatusEvent(this, NewEventStatus(table, compare, results, currentRow, statusMessage, startTime));
 
 
                 return results;
@@ -171,6 +181,16 @@ namespace Fme.Library.Comparison
 
         }
 
+        /// <summary>
+        /// News the event status.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="results">The results.</param>
+        /// <param name="currentRow">The current row.</param>
+        /// <param name="statusMessage">The status message.</param>
+        /// <param name="startTime">The start time.</param>
+        /// <returns>CompareHelperEventArgs.</returns>
         private CompareHelperEventArgs NewEventStatus(DataTable table, CompareMappingModel model, List<CompareResultModel> results, int currentRow, string statusMessage, DateTime startTime)
         {
             return new CompareHelperEventArgs()

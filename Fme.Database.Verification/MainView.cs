@@ -42,6 +42,7 @@ using System.Reflection;
 using Fme.Database.Verification.Extensions;
 using DevExpress.XtraGrid.Views.Base.ViewInfo;
 using System.IO;
+using DevExpress.LookAndFeel;
 
 namespace Fme.Database.Verification
 {
@@ -51,6 +52,7 @@ namespace Fme.Database.Verification
     /// <seealso cref="DevExpress.XtraEditors.XtraForm" />
     public partial class MainView : DevExpress.XtraEditors.XtraForm
     {
+        PublicOptions Options = new PublicOptions();
 
         /// <summary>
         /// The model
@@ -79,6 +81,20 @@ namespace Fme.Database.Verification
         void InitializeBindings()
         {
             var fluent = mvvmContext1.OfType<MainViewModel>();
+            UserLookAndFeel.Default.StyleChanged += new EventHandler(Default_StyleChanged);
+
+
+        }
+
+        /// <summary>
+        /// Handles the StyleChanged event of the Default control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        private void Default_StyleChanged(object sender, EventArgs e)
+        {
+            bindingNavigator1.BackColor = this.BackColor;
 
         }
 
@@ -106,6 +122,11 @@ namespace Fme.Database.Verification
             lblVersion.Caption = "v" + version;
             exportToolStripMenuItem.Image = barButtonItem1.ImageOptions.Image;
             hideEmptyColumnToolStripMenuItem.Image = barButtonItem2.ImageOptions.Image;
+            for(int i = -12; i <= 12; i++)
+            {
+                cbSourceTZ.Properties.Items.Add(i.ToString());
+                cbTargetTZ.Properties.Items.Add(i.ToString());
+            }
 
         }
         
@@ -339,12 +360,22 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="EventArgs" /> instance containing the event data.</param>
         private void cbSourceTable_SelectedIndexChanged(object sender, EventArgs e)
         {
-            model.Source.SelectedTable = cbSourceTable.Text;
 
-            cbSourceTable.Properties.Items.Clear();
+            try
+            {
+             //   if (string.IsNullOrEmpty(cbSourceTable.Text)) return;
 
-            cbSourceKey.Properties.Items.AddRange(model.Source.SelectedSchema().
-                Fields.Select(s => s.Name).ToList());
+                model.Source.SelectedTable = cbSourceTable.Text;
+
+                cbSourceKey.Properties.Items.Clear();
+
+                cbSourceKey.Properties.Items.AddRange(model.Source.SelectedSchema().
+                    Fields.Select(s => s.Name).ToList());
+            }
+            catch(Exception)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -356,6 +387,8 @@ namespace Fme.Database.Verification
         {
             try
             {
+               // if (string.IsNullOrEmpty(cbTargetTable.Text)) return;
+
                 model.Target.SelectedTable = cbTargetTable.Text;
 
                 cbTargetKey.Properties.Items.Clear();
@@ -389,8 +422,7 @@ namespace Fme.Database.Verification
         {
             model.Target.Key = cbTargetKey.Text;
         }
-
-
+        
         /// <summary>
         /// Handles the RowCellStyle event of the GridViewMapping control.
         /// </summary>
@@ -700,7 +732,10 @@ namespace Fme.Database.Verification
             lblStatus.Caption = string.Format("Last Sucessful Compare {0}", DateTime.Now);
             MessageBox.Show("Comparison Completed", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Animate(false);
-            HideEmptyColumns();
+
+            if (Options.HideEmptyColumns)
+                HideEmptyColumns();
+
             SetBestWidths();
             btnExecute.Enabled = true;
             MisMatches = CompareModelRepository.GetCompareResults(model);
@@ -911,6 +946,8 @@ namespace Fme.Database.Verification
             BaseEdit[] editors = { cbSourceTable, cbTargetTable, cbSourceKey, cbTargetKey, btnSourceData, btnTargetData };
             model = new CompareModel();
 
+            
+
             editors.ToList().ForEach(editor => editor.Text = "");
 
             this.Text = "Untitled";
@@ -926,13 +963,15 @@ namespace Fme.Database.Verification
             cbTargetTable.Properties.Items.Clear();
             cbSourceKey.Properties.Items.Clear();
             cbTargetKey.Properties.Items.Clear();
+            cbSourceTZ.Text = "0";
+            cbTargetTZ.Text = "0";
+
             btnEditIdList.Text = "";
             chkSourceRandom.Checked = false;
             txtSourceMaxRows.Text = "";
 
             foreach (var grid in grids)
-                SetDataSource(grid, null);
-
+                SetDataSource(grid, null);            
         }
 
         /// <summary>
@@ -986,6 +1025,7 @@ namespace Fme.Database.Verification
 
             cbSourceTable.Text = model.Source.SelectedTable;
             cbSourceKey.Text = model.Source.Key;
+            cbSourceTZ.Text = model.Source.TimeZoneOffset.ToString();
 
         }
         /// <summary>
@@ -1002,6 +1042,7 @@ namespace Fme.Database.Verification
 
             cbTargetTable.Text = model.Target.SelectedTable;
             cbTargetKey.Text = model.Target.Key;
+            cbTargetTZ.Text = model.Target.TimeZoneOffset.ToString();
 
         }
         /// <summary>
@@ -1178,6 +1219,41 @@ namespace Fme.Database.Verification
             if (int.TryParse(txtSourceMaxRows.Text, out int value))
                 model.Source.MaxRows = value.ToString();
 
+        }
+
+        /// <summary>
+        /// Handles the Click event of the bindingNavigatorDeleteAll control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void bindingNavigatorDeleteAll_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Delete all items. Are you sure?", "Delte All",
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Hand) == DialogResult.Cancel) return;
+
+            model.ColumnCompare.Clear();
+
+            gridMappings.RefreshDataSource();
+        }
+
+        /// <summary>
+        /// Handles the SystemColorsChanged event of the MainView control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void MainView_SystemColorsChanged(object sender, EventArgs e)
+        {
+            bindingNavigator1.BackColor = this.BackColor;
+        }
+
+        private void cbSourceTZ_SelectedIndexChanged(object sender, EventArgs e)
+        {            
+            model.Source.TimeZoneOffset = int.Parse(cbSourceTZ.Text);
+        }
+
+        private void cbTargetTZ_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            model.Target.TimeZoneOffset = int.Parse(cbTargetTZ.Text);
         }
     }
 }

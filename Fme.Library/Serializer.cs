@@ -16,13 +16,13 @@ namespace Fme.Library
         /// <typeparam name="T"></typeparam>
         /// <param name="path">The path.</param>
         /// <param name="files">The files.</param>
-        public static void Serialize<T>(String path, T files)
+        public static void Serialize<T>(String path, T content)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(T));
 
             using (StreamWriter streamWriter = new StreamWriter(path))
             {
-                serializer.Serialize(streamWriter, files);
+                serializer.Serialize(streamWriter, content);
             }
         }
 
@@ -32,15 +32,15 @@ namespace Fme.Library
         /// <typeparam name="T"></typeparam>
         /// <param name="path">The path.</param>
         /// <param name="files">The files.</param>
-        public static void Serialize<T>(String path, List<T> files)
+        public static void Serialize<T>(String path, List<T> content)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
 
             using (StreamWriter streamWriter = new StreamWriter(path))
             {
-                serializer.Serialize(streamWriter, files);
+                serializer.Serialize(streamWriter, content);
             }
-        }
+        }     
 
         /// <summary>
         /// Des the serialize.

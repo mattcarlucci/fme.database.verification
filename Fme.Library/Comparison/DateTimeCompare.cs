@@ -50,11 +50,11 @@ namespace Fme.Library.Comparison
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>System.String.</returns>
-        public string Parse(string value)
+        public string Parse(string value, int offset)
         {
             DateTime dt;
             if (DateTime.TryParse(value, out dt))
-                return dt.Ticks.ToString();
+                return dt.AddHours(offset).Ticks.ToString();
             return value;
         }
 
@@ -68,7 +68,7 @@ namespace Fme.Library.Comparison
             List<string> items = new List<string>();
 
             foreach (var item in values)
-                items.Add(Parse(item));
+                items.Add(Parse(item, 0));
 
             return items.ToArray();
         }

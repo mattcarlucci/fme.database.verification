@@ -16,8 +16,10 @@ namespace Fme.Library.Comparison
         /// <param name="compareType">Type of the compare.</param>
         /// <param name="operator">The operator.</param>
         /// <returns><c>true</c> if the specified left is equal; otherwise, <c>false</c>.</returns>
-        public static bool IsEqual(string left, string right, ComparisonTypeEnum compareType, OperatorEnums @operator, string ignoreChars)
+        public static bool IsEqual(string left, string right, ComparisonTypeEnum compareType, OperatorEnums @operator, string ignoreChars, int leftTZO, int rightTZO)
         {
+
+
             right = string.IsNullOrEmpty(right) ? string.Empty : right;
             left = string.IsNullOrEmpty(left) ? string.Empty : left;
             ignoreChars = string.IsNullOrEmpty(ignoreChars) ? string.Empty : ignoreChars;
@@ -28,8 +30,11 @@ namespace Fme.Library.Comparison
             if (@operator == OperatorEnums.In)
                 return CompareIn(left, right, compareType);
 
+            if (@operator == OperatorEnums.Table)
+                return CompareTable(left, right, compareType);
+
             if (@operator == OperatorEnums.Equals)
-                return CompareEqual(left, right, compareType);
+                return CompareEqual(left, right, compareType, leftTZO, rightTZO);
 
             if (@operator == OperatorEnums.StartsWidth)
                 return right.StartsWith(left);
@@ -58,6 +63,29 @@ namespace Fme.Library.Comparison
 
             return list.Contains(left);
         }
+
+        /// <summary>
+        /// Compares the tabe.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <param name="compareType">Type of the compare.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private static bool CompareTable(string left, string right, ComparisonTypeEnum compareType)
+        {
+            var list1 = left.Split(new char[] { '|' }, StringSplitOptions.None);
+            var list2 = right.Split(new char[] { '|' }, StringSplitOptions.None);
+
+            var o1 = string.Join("|", list1.OrderBy(o => o));
+            var o2 = string.Join("|", list2.OrderBy(o => o));
+            return o1 == o2;
+
+
+           // var count1 = list1.Except(list2).Count();
+            //var count1 = list1.Except(list2).Count();
+
+            //return list1.Except(list2).Count() == 0 && list2.Except(list1).Count() == 0;            
+        }
         /// <summary>
         /// Compares the equal.
         /// </summary>
@@ -65,11 +93,15 @@ namespace Fme.Library.Comparison
         /// <param name="right">The right.</param>
         /// <param name="compareType">Type of the compare.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private static bool CompareEqual(string left, string right, ComparisonTypeEnum compareType)
+        private static bool CompareEqual(string left, string right, ComparisonTypeEnum compareType, int leftTZO, int rightTZO)
         {
             var list = right.Split(new char[] { '|' }, StringSplitOptions.None);
             if (compareType == ComparisonTypeEnum.Datetime)
-                return CompareDateTime(left, right);
+                return CompareDateTime(left, right, leftTZO, rightTZO);
+            else if (compareType == ComparisonTypeEnum.Date)
+                return CompareDate(left, right);
+            else if (compareType == ComparisonTypeEnum.Integer)
+                return CompareInteger(left, right);
 
             return left == right;
         }
@@ -95,14 +127,27 @@ namespace Fme.Library.Comparison
         /// <param name="left">The left.</param>
         /// <param name="right">The right.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private static bool CompareDateTime(string left, string right)
+        private static bool CompareDateTime(string left, string right, int leftTZO, int rightTZO)
         {
             DateTimeCompare dti = new DateTimeCompare();
-            left = dti.Parse(left);
-            right = dti.Parse(right);
+            left = dti.Parse(left, leftTZO);
+            right = dti.Parse(right, rightTZO);
             return left == right;
         }
 
+        /// <summary>
+        /// Compares the date time.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private static bool CompareDateTime(string left, string right)
+        {
+            DateTimeCompare dti = new DateTimeCompare();
+            left = dti.Parse(left, 0);
+            right = dti.Parse(right, 0);
+            return left == right;
+        }
         /// <summary>
         /// Compares the date time.
         /// </summary>
@@ -112,7 +157,7 @@ namespace Fme.Library.Comparison
         private static bool CompareDateTime(string left, string[] list)
         {
             DateTimeCompare dti = new DateTimeCompare();
-            left = dti.Parse(left);
+            left = dti.Parse(left, 0);
 
             var right = dti.Parse(list);
             return right.Contains(left);
@@ -131,6 +176,45 @@ namespace Fme.Library.Comparison
 
             var right = dti.Parse(list);
             return right.Contains(left);
+        }
+
+        /// <summary>
+        /// Compares the date.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private static bool CompareDate(string left, string right)
+        {
+            DateCompare dti = new DateCompare();
+            left = dti.Parse(left);
+            right = dti.Parse(right);
+            return left == right;            
+        }
+
+        /// <summary>
+        /// Compares the integer.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool CompareInteger(string left, string right)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(left) && string.IsNullOrEmpty(right))
+                    return true;
+
+                var l = (int)Math.Floor((float)Convert.ChangeType(left, typeof(float)));
+                var r = (int)Math.Floor((float)Convert.ChangeType(right, typeof(float)));
+
+                return l == r;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+
         }
 
     }

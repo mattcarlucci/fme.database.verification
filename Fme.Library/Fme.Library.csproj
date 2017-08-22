@@ -70,6 +70,7 @@
     <Compile Include="Models\DataSourceModel.cs" />
     <Compile Include="Models\ErrorMessageModel.cs" />
     <Compile Include="Models\FieldSchemaModel.cs" />
+    <Compile Include="Models\PublicOptions.cs" />
     <Compile Include="Models\TableSchemaModel.cs" />
     <Compile Include="DataSources\OleDbDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

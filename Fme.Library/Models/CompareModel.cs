@@ -65,6 +65,8 @@ namespace Fme.Library.Models
         /// <value>The error messages.</value>
         [XmlIgnore]
         public List<ErrorMessageModel> ErrorMessages {get;set;}
+        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CompareModel"/> class.
         /// </summary>
@@ -161,7 +163,7 @@ namespace Fme.Library.Models
         {
             try
             {
-                var calcs = ColumnCompare.Where(w => w.IsCalculated);
+                var calcs = ColumnCompare.Where(w => w.IsCalculated && w.Selected);
                 foreach (var calc in calcs)
                 {
                     if (cancelToken.IsCancellationRequested)
@@ -190,5 +192,14 @@ namespace Fme.Library.Models
 
         }
         #endregion
+        /// <summary>
+        /// Loads the specified path.
+        /// </summary>
+        /// <param name="path">The path.</param>
+        /// <returns>CompareModel.</returns>
+        public static CompareModel Load(string path)
+        {
+            return Serializer.DeSerialize<CompareModel>(path);
+        }
     }
 }
