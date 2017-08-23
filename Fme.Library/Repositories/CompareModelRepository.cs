@@ -122,29 +122,32 @@ namespace Fme.Library.Repositories
                     QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();
                    
                     var select1 = query.BuildSql(Model.Source.Key,pairs.Select(s => s.LeftSide).ToArray(),
-                      Model.Source.SelectedTable, "left", Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
+                      Model.Source.SelectedTable, "", Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
+                    LogQuery(Model.Source, select1, "");
 
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs()
                     { DataSource = Model.Source, Data = select1, StatusMessage = "Executing Query" });
 
-                    LogQuery(Model.Source, select1, "Left");
+
 
                     var ds = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
-
+                    Model.Source.DataSource.SetAliases(ds, "left");
+                    
                     if (ds.Tables == null || ds.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Source.SelectedTable);
 
                     DataTable table1 = ds.Tables[0];
 
                     var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
-                        Model.Target.SelectedTable, "right", "0", Model.Target.Key,  table1.SelectKeys<string>("primary_key"));
+                        Model.Target.SelectedTable, "", "0", Model.Target.Key,  table1.SelectKeys<string>("primary_key"));
+                    LogQuery(Model.Target, select2, "Right");
 
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs()
                     { DataSource = Model.Target, Data = select1, StatusMessage = "Executing Query" });
 
-                    LogQuery(Model.Target, select2, "Right");                                      
-
                     var ds2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);
+                    Model.Target.DataSource.SetAliases(ds2, "right");
+                  
 
                     if (ds2.Tables == null || ds2.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);

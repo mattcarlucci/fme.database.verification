@@ -54,13 +54,27 @@ namespace Fme.Library
         /// <param name="alias">The alias.</param>
         public virtual void SetAliases(DataSet dataSet, string alias)
         {
-            foreach(DataTable table in dataSet.Tables)
+            if (dataSet.Tables.Count > 0)
+                SetAliases(dataSet.Tables[0], alias);
+        }
+        /// <summary>
+        /// Sets the aliases.
+        /// </summary>
+        /// <param name="dataSet">The data set.</param>
+        /// <param name="alias">The alias.</param>
+        public virtual void SetAliases(DataTable table, string alias)
+        {
+            if (table == null || table.Columns.Count == 0) return;
+
+            for(int i = 1; i < table.Columns.Count; i++)            
             {
-                foreach(DataColumn column in table.Columns.Cast<IEnumerable>().Skip(1).ToList())
-                {
-                    column.ColumnName = alias + "_" + column.ColumnName;
-                }
+                DataColumn column = table.Columns[i];
+                if (column.ColumnName.StartsWith(alias + "_"))
+                    return;
+
+                column.ColumnName = alias + "_" + column.ColumnName;
             }
+            
         }
         /// <summary>
         /// Executes the query.

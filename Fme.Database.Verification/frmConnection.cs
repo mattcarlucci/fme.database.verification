@@ -172,7 +172,8 @@ namespace Fme.Database.Verification
         /// </summary>
         private void CreateDocumentum()
         {
-            DqlConnectionStringBuilder builder = new DqlConnectionStringBuilder(txtUserId.Text, txtPassword.Text, btnDataSource.Text);          
+            DqlConnectionStringBuilder builder = new DqlConnectionStringBuilder(txtUserId.Text, txtPassword.Text, btnDataSource.Text);
+            builder["Extended Properties"] = txtExt.Text;
             Model.DataSource = new DqlDataSource(builder.ConnectionString);
             Model.TableSchemas = Model.DataSource.GetSchemaModel();
             Model.DataSource.ProviderName = "OpenText Documentum";

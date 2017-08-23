@@ -1187,7 +1187,7 @@ namespace Fme.Database.Verification
             //    return false;
             //}
 
-            return CheckAliasLengths();
+            return true;
         }
         #endregion
 
@@ -1313,6 +1313,25 @@ namespace Fme.Database.Verification
 
                 gridControl.ResetDataSource(gridControl.DataSource);
                 gridControl.BestFitWidth(false, true);              
+            }
+        }
+
+        private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
+        {
+            GridView view = gridMappings.MainView as GridView;
+            try
+            {
+                int lastRow = view.FocusedRowHandle;
+                model.ColumnCompare.RemoveAt(view.FocusedRowHandle);
+                // gridMappings.DataSource = model.ColumnCompare;
+                gridMappings.RefreshDataSource();
+                gridMappings.Refresh();
+                if (lastRow > 1)
+                    viewMappings.MakeRowVisible(lastRow - 1);
+            }
+            catch(Exception)
+            {
+                return;
             }
         }
     }

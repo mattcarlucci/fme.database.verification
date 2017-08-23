@@ -82,10 +82,13 @@ namespace Fme.Library
         /// <param name="alias">The alias.</param>
         /// <returns>System.String.</returns>
         protected string BuildFieldAliases(string[] fields, string alias)
-        {  
-
-            alias = string.IsNullOrEmpty(alias) ? alias : " as " + alias + "_";           
-            return string.Join("\r\n,", fields.Select(s => "" + s + alias + s)); 
+        {
+            if (string.IsNullOrEmpty(alias))
+                return string.Join("\r\n,", fields);
+            else
+                return string.Join("\r\n,", fields.
+                    Select(s => s + " as " + alias + "_" + s));
+                
         }
 
         /// <summary>
@@ -122,7 +125,7 @@ namespace Fme.Library
         public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues )
         {
             if (inValues == null)            
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
+                return BuildSql(primaryKey, fields.Distinct().ToArray(), tableName, aliasPrefix, maxRows);
                 
             
             var aliases = BuildFieldAliases(fields, aliasPrefix);
@@ -162,7 +165,7 @@ namespace Fme.Library
         /// <returns>System.String.</returns>
         public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows)
         {
-            var aliases = BuildFieldAliases(fields, aliasPrefix);
+            var aliases = BuildFieldAliases(fields.Distinct().ToArray(), aliasPrefix);
             return string.Format("select {0} as primary_key, {1} from [{2}] where {0} IS NOT NULL", primaryKey, aliases, tableName);
         }
 

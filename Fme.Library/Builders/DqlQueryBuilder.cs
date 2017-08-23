@@ -11,14 +11,43 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace Fme.Library
 {
+    public class DqlQueryBuilderExtended : QueryBuilder
+    {
+        public string PrimaryKey { get; set; }
+        public string[] Fields { get; set; }
+        public string Alias { get; set; }
+        public string TableName { get; set; }
+        public int MaxRows { get; set; }
+        public string InField { get; set; }
+        public Type InFieldType { get; set; }
+        public string[] InValues { get; set; }
+        public Dictionary<string, string> ExtendedProperties { get; set; }
+        public void AddProperty(string key, string value)
+        {
+            //example would be "deleted" would tell us to add this to the query string after the table name
+            //(return_top, 10)
+            //(deleted, true);
+            ExtendedProperties.Add(key, value);
+        }
+        public DqlQueryBuilderExtended()
+        {
+            ExtendedProperties = new Dictionary<string, string>();
+        }
+    }
     /// <summary>
     /// Class DqlQueryBuilder.
     /// </summary>
     /// <seealso cref="Fme.Library.QueryBuilder" />
     public class DqlQueryBuilder : QueryBuilder
     {
+        
+
         /// <summary>
         /// Builds the SQL in.
         /// </summary>
@@ -32,7 +61,7 @@ namespace Fme.Library
         public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues)
         {
             if (inValues == null)
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
+                return BuildSql(primaryKey, fields.Distinct().ToArray(), tableName, aliasPrefix, maxRows);
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
@@ -61,7 +90,7 @@ namespace Fme.Library
         public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues)
         {
             if (inValues == null)
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
+                return BuildSql(primaryKey, fields.Distinct().ToArray(), tableName, aliasPrefix, maxRows);
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
@@ -86,7 +115,7 @@ namespace Fme.Library
         /// <returns>System.String.</returns>
         public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows)
         {
-            var aliases = BuildFieldAliases(fields, aliasPrefix);
+            var aliases = BuildFieldAliases(fields.Distinct().ToArray(), aliasPrefix);
 
             // string key = primaryKey == "r_object_id" ? " as primary_key," : ", " + primaryKey + " as primary_key,";
             // return string.Format("select r_object_id{0} {1} from {2}", key, aliases, tableName);

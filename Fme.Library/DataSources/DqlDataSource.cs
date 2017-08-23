@@ -21,6 +21,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Data.Common;
+using System.Collections;
 
 namespace Fme.Library
 {
@@ -46,7 +47,24 @@ namespace Fme.Library
         {
         }
 
-        
+        /// <summary>
+        /// Sets the aliases.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="alias">The alias.</param>
+        public override void SetAliases(DataTable table, string alias)
+        {
+            if (table == null || table.Columns.Count == 0) return;
+            
+            for (int i = 2; i < table.Columns.Count; i++)
+            {
+                DataColumn column = table.Columns[i];
+                if (column.ColumnName.StartsWith(alias + "_"))
+                    return;
+
+                column.ColumnName = alias + "_" + column.ColumnName;
+            }
+        }
         /// <summary>
         /// Executes the query.
         /// </summary>
