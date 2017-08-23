@@ -161,6 +161,7 @@ namespace Fme.Library.Models
         /// <param name="target">The target.</param>
         public void ExecuteCalculatedFields(DataTable source, DataTable target, CancellationTokenSource cancelToken)
         {
+            int index = 0;
             try
             {
                 var calcs = ColumnCompare.Where(w => w.IsCalculated && w.Selected);
@@ -170,15 +171,21 @@ namespace Fme.Library.Models
                         throw new OperationCanceledException("A cancellation token associated with this operation was canceled");
                     try
                     {
+                        index = 1;
                         MergeCalculatedData(source, "left", calc.LeftSide, calc.LeftQuery, 
                             source.SelectKeys<string>("primary_key"), Source.DataSource, cancelToken);
 
+                        index = 2;
                         MergeCalculatedData(target, "right", calc.RightSide, calc.RightQuery, 
                             target.SelectKeys<string>("primary_key"), Target.DataSource, cancelToken);
                     }
                     catch (Exception ex)
                     {
-                        this.ErrorMessages.Add(new ErrorMessageModel(ex.Message, ex?.InnerException?.Message));
+                        string query = index == 1 ? calc.LeftQuery : calc.RightQuery;
+                        string field = index == 1 ? calc.LeftSide : calc.RightSide;
+
+                        this.ErrorMessages.Add(new ErrorMessageModel("Calculated Query", field + " - " + query.Replace(Environment.NewLine, ""), ex.Message));
+                        
                         //TODO: Log Calc error;
                         continue;
                     }
@@ -186,7 +193,7 @@ namespace Fme.Library.Models
             }
             catch (Exception ex)
             {
-                this.ErrorMessages.Add(new ErrorMessageModel(ex.Message, ex?.InnerException?.Message));
+                this.ErrorMessages.Add(new ErrorMessageModel("Calculated Fields", ex.Message, ex?.InnerException?.Message));
                 return;
             }
 

@@ -43,6 +43,7 @@ using Fme.Database.Verification.Extensions;
 using DevExpress.XtraGrid.Views.Base.ViewInfo;
 using System.IO;
 using DevExpress.LookAndFeel;
+using DevExpress.XtraGrid.Views.Card;
 
 namespace Fme.Database.Verification
 {
@@ -94,7 +95,7 @@ namespace Fme.Database.Verification
         /// <exception cref="NotImplementedException"></exception>
         private void Default_StyleChanged(object sender, EventArgs e)
         {
-            bindingNavigator1.BackColor = this.BackColor;
+            navGridMappings.BackColor = this.BackColor;
 
         }
 
@@ -106,6 +107,29 @@ namespace Fme.Database.Verification
             InitializeComponent();
             if (!mvvmContext1.IsDesignMode)
                 InitializeBindings();
+
+            AppDomain.CurrentDomain.UnhandledException += new 
+                UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
+        }
+
+        /// <summary>
+        /// Handles the UnhandledException event of the CurrentDomain control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="UnhandledExceptionEventArgs"/> instance containing the event data.</param>
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                string error = string.Format(e.ExceptionObject.ToString());
+                if (model != null && model.ErrorMessages != null)
+                    model.ErrorMessages.Add(new ErrorMessageModel("Global Exception Handler", "Current Domain", error));
+            }
+            catch(Exception)
+            {
+                return;
+            }
 
         }
 
@@ -515,7 +539,7 @@ namespace Fme.Database.Verification
             {
                 var last = model.ColumnCompare.Last();
                 last.IsCalculated = true;
-                bindingNavigator1.Refresh();
+                navGridMappings.Refresh();
                 gridMappings.RefreshDataSource();
                 var items = bsMappings.DataSource as List<CompareMappingModel>;
                 items.Last().IsCalculated = true;
@@ -737,6 +761,7 @@ namespace Fme.Database.Verification
             SetBestWidths();
             btnExecute.Enabled = true;
             SetDataSource(gridMessages, model.ErrorMessages);
+            
             lblStatus.Caption = "Idle";
             LoadQueries();
 
@@ -978,8 +1003,6 @@ namespace Fme.Database.Verification
             BaseEdit[] editors = { cbSourceTable, cbTargetTable, cbSourceKey, cbTargetKey, btnSourceData, btnTargetData };
             model = new CompareModel();
 
-            
-
             editors.ToList().ForEach(editor => editor.Text = "");
 
             this.Text = "Untitled";
@@ -997,6 +1020,13 @@ namespace Fme.Database.Verification
             cbTargetKey.Properties.Items.Clear();
             cbSourceTZ.Text = "0";
             cbTargetTZ.Text = "0";
+
+            this.chkSourceVersions.Checked = false;
+            this.chkTargetVersions.Checked = false;
+
+
+            chkSourceVersions.Visible = false;
+            chkTargetVersions.Visible = false;
 
             btnEditIdList.Text = "";
             chkSourceRandom.Checked = false;
@@ -1059,6 +1089,10 @@ namespace Fme.Database.Verification
             cbSourceKey.Text = model.Source.Key;
             cbSourceTZ.Text = model.Source.TimeZoneOffset.ToString();
 
+            chkSourceVersions.Checked = model.Source.IncludeVersions;            
+            chkSourceVersions.Visible = model.Source.DataSource is DqlDataSource;
+            
+
         }
         /// <summary>
         /// Sets the target model.
@@ -1075,6 +1109,9 @@ namespace Fme.Database.Verification
             cbTargetTable.Text = model.Target.SelectedTable;
             cbTargetKey.Text = model.Target.Key;
             cbTargetTZ.Text = model.Target.TimeZoneOffset.ToString();
+
+            chkTargetVersions.Checked = model.Target.IncludeVersions;
+            chkTargetVersions.Visible = model.Target.DataSource is DqlDataSource;
 
         }
         /// <summary>
@@ -1201,9 +1238,19 @@ namespace Fme.Database.Verification
             ContextMenuStrip strip = sender as ContextMenuStrip;
             if (strip.SourceControl is GridControl)            
             {
+                BaseView view = null;
+
                 GridControl gridControl = (GridControl)strip.SourceControl;
                 var p = gridControl.PointToClient(Cursor.Position);
-                GridView view = (GridView)gridControl.FocusedView;
+                view = gridControl.FocusedView as GridView;
+                if (view == null)
+                    return;
+
+                //    view = gridControl.FocusedView as CardView;
+
+                if (view == null)
+                    return;
+
                 BaseHitInfo baseHI = view.CalcHitInfo(p);
                 GridHitInfo gridHI = baseHI as GridHitInfo;
                 Debug.Print(gridHI.RowHandle.ToString());
@@ -1253,21 +1300,7 @@ namespace Fme.Database.Verification
 
         }
 
-        /// <summary>
-        /// Handles the Click event of the bindingNavigatorDeleteAll control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
-        private void bindingNavigatorDeleteAll_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("Delete all items. Are you sure?", "Delte All",
-                MessageBoxButtons.OKCancel, MessageBoxIcon.Hand) == DialogResult.Cancel) return;
-
-            model.ColumnCompare.Clear();
-
-            gridMappings.RefreshDataSource();
-        }
-
+      
         /// <summary>
         /// Handles the SystemColorsChanged event of the MainView control.
         /// </summary>
@@ -1275,7 +1308,7 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void MainView_SystemColorsChanged(object sender, EventArgs e)
         {
-            bindingNavigator1.BackColor = this.BackColor;
+            navGridMappings.BackColor = this.BackColor;
         }
 
         /// <summary>
@@ -1316,23 +1349,161 @@ namespace Fme.Database.Verification
             }
         }
 
+        private void gridControl_ProcessGridKey(object sender, KeyEventArgs e)
+        {
+            return;
+            var grid = sender as GridControl;
+            var view = grid.FocusedView as GridView;
+            if (e.KeyData == Keys.Delete)
+            {
+                view.DeleteSelectedRows();
+                e.Handled = true;
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of the bindingNavigatorDeleteAll control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void bindingNavigatorDeleteAll_Click(object sender, EventArgs e)
+        {
+            if (xtraTabControl2.SelectedTabPage == xtraTabLookup) return;
+
+            if (MessageBox.Show("Delete all items. Are you sure?", "Delete All",
+                MessageBoxButtons.OKCancel, MessageBoxIcon.Hand) == DialogResult.Cancel) return;
+            bool isCalcTab = false;
+
+            GridView view = gridMappings.MainView as GridView;
+            if (xtraTabControl2.SelectedTabPage == xtraTabCalcFields)
+            {
+                view = gridCalcFields.MainView as GridView;
+                isCalcTab = true;
+            }
+
+            var items = model.ColumnCompare.Where(w => w.IsCalculated == isCalcTab);
+
+            foreach (var item in items)
+                model.ColumnCompare.Remove(item);
+
+            view.GridControl.RefreshDataSource();
+
+
+        }
+
+        /// <summary>
+        /// Handles the Click event of the bindingNavigatorDeleteItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void bindingNavigatorDeleteItem_Click(object sender, EventArgs e)
         {
+            if (xtraTabControl2.SelectedTabPage == xtraTabLookup) return;
+
             GridView view = gridMappings.MainView as GridView;
+            if (xtraTabControl2.SelectedTabPage == xtraTabCalcFields)
+                view = gridCalcFields.MainView as GridView;
+
+
             try
             {
                 int lastRow = view.FocusedRowHandle;
-                model.ColumnCompare.RemoveAt(view.FocusedRowHandle);
+                if (lastRow < 0) return;
+
+                view.DeleteSelectedRows();
+
+                //model.ColumnCompare.RemoveAt(view.FocusedRowHandle);
                 // gridMappings.DataSource = model.ColumnCompare;
-                gridMappings.RefreshDataSource();
-                gridMappings.Refresh();
+                //gridMappings.RefreshDataSource();
+                //gridMappings.Refresh();
                 if (lastRow > 1)
-                    viewMappings.MakeRowVisible(lastRow - 1);
+                    view.MakeRowVisible(lastRow - 1);
             }
             catch(Exception)
             {
                 return;
             }
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event of the chkSourceVersions control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void chkSourceVersions_CheckedChanged(object sender, EventArgs e)
+        {
+            model.Source.IncludeVersions = chkSourceVersions.Checked;
+        }
+
+        /// <summary>
+        /// Handles the CheckedChanged event of the chkTargetVersions control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void chkTargetVersions_CheckedChanged(object sender, EventArgs e)
+        {
+            model.Target.IncludeVersions = chkTargetVersions.Checked;
+        }
+
+        /// <summary>
+        /// Handles the DataSourceChanged event of the gridMessages control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void gridMessages_DataSourceChanged(object sender, EventArgs e)
+        {
+            cardViewMessages.CardWidth = (cardViewMessages.GridControl.Width - 90) / 2;
+            //cardViewMessages.OptionsBehavior.AutoHorzWidth = true;
+            cardViewMessages.OptionsBehavior.FieldAutoHeight = true;
+            cardViewMessages.Columns["StackTrace"].ColumnEdit = repoItemMemo;
+
+            cardViewMessages.RefreshData();
+
+        }
+
+        private void viewCalcFields_FocusedColumnChanged(object sender, FocusedColumnChangedEventArgs e)
+        {
+            
+            //int row = viewCalcFields.FocusedRowHandle;
+            //var value = viewCalcFields.GetRowCellValue(row, e.PrevFocusedColumn);
+            //var name = e.PrevFocusedColumn.FieldName;
+            //var left = viewCalcFields.GetRowCellValue(row, "LeftSide");
+
+            //if (name == "RightQuery" && string.IsNullOrEmpty(value?.ToString()))
+            //{
+            //    var query = viewCalcFields.GetRowCellValue(row, "LeftQuery");
+            //    viewCalcFields.SetRowCellValue(row, "RightQuery", query);
+            //}
+            //if (name == "RightSide" && string.IsNullOrEmpty(value?.ToString()))
+            //{
+            //    var query = viewCalcFields.GetRowCellValue(row, "LeftSide");
+            //    viewCalcFields.SetRowCellValue(row, "RightSide", query);
+            //}
+
+            //   if (name == "RigthQuery" && value == null )
+            ////viewCalcFields.FocusedValue = viewCalcFields.GetFocusedRow()
+            //            if (e.FocusedColumn.FieldName == "RightSide" & viewCalcFields.FocusedValue)
+        }
+
+        /// <summary>
+        /// Handles the RowCellClick event of the viewCalcFields control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RowCellClickEventArgs"/> instance containing the event data.</param>
+        private void viewCalcFields_RowCellClick(object sender, RowCellClickEventArgs e)
+        {
+            
+            if (e.Column.FieldName == "RightQuery" && string.IsNullOrEmpty(e.CellValue?.ToString()))
+            {
+                var query = viewCalcFields.GetRowCellValue(e.RowHandle, "LeftQuery");
+                viewCalcFields.SetRowCellValue(e.RowHandle, "RightQuery", query);
+            }
+            if (e.Column.FieldName == "RightSide" && string.IsNullOrEmpty(e.CellValue?.ToString()))
+            {
+                var query = viewCalcFields.GetRowCellValue(e.RowHandle, "LeftSide");
+                viewCalcFields.SetRowCellValue(e.RowHandle, "RightSide", query);
+            }
+
         }
     }
 }

@@ -6,19 +6,18 @@ namespace Fme.Library.Models
     [Serializable]
     public class ErrorMessageModel
     {
-       
 
-        public ErrorMessageModel(string Message, string StackTrace)
+        public ErrorMessageModel(string source, string message, string stackTrace)
         {
+            this.Source = source;
             this.TimeStamp = DateTime.Now;
-            this.Message = Message;
-            this.StackTrace = StackTrace;
+            this.Message = message;
+            this.StackTrace = stackTrace;
         }
 
-        public DateTime TimeStamp { get; set; }
-       // [XmlElement("CDataElement")]
-        public string Message { get; set; }
-       // [XmlElement("CDataElement")]
+        public DateTime TimeStamp { get; set; }  
+        public string Source { get; set; }
+        public string Message { get; set; }       
         public string StackTrace { get; set; }
     }
 }

@@ -47,7 +47,7 @@ namespace Fme.Library
     public class DqlQueryBuilder : QueryBuilder
     {
         
-
+        
         /// <summary>
         /// Builds the SQL in.
         /// </summary>
@@ -69,7 +69,7 @@ namespace Fme.Library
             //string enabletop = string.Format("enable(return_top {0})", maxRows);
             //enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows) > 0 ? maxRows : "";
             var enabletop = "";
-
+            tableName = IncludeVersion ? tableName + " (deleted) " : tableName;
             return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", primaryKey, aliases, tableName, inCaluse, enabletop);
 
            /// var key = primaryKey == "r_object_id" ? "," : ", " + primaryKey + " as primary_key,";
@@ -102,6 +102,7 @@ namespace Fme.Library
             //string enabletop = string.Format("enable(return_top {0})", maxRows);
             //enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows) > 0 ? maxRows : "";
             var enabletop = "";
+            tableName = IncludeVersion ? tableName + " (deleted) " : tableName;
 
             return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", primaryKey, aliases, tableName, inCaluse, enabletop);
         }
@@ -123,6 +124,7 @@ namespace Fme.Library
             //string enabletop = string.Format("enable(return_top {0})", maxRows);
             //enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows) > 0 ? maxRows : "";
             var enabletop = "";
+            tableName = IncludeVersion ? tableName + " (deleted) " : tableName;
             return string.Format("select r_object_id, {0} as primary_key, {1} from {2} {3}", primaryKey, aliases, tableName, enabletop);
         }
     }

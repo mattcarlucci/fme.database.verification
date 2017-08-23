@@ -52,6 +52,7 @@ namespace Fme.Database.Verification.Extensions
         public static void BestFitWidth(this GridControl grid, bool columnAutoWidth  = true, bool bestFitColumns  = false)
         {
             GridView view = grid.MainView as GridView;
+            if (view == null) return;
             view.OptionsView.ColumnAutoWidth = columnAutoWidth;
             view.BestFitColumns(bestFitColumns);
         }

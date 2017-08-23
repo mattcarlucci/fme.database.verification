@@ -21,7 +21,7 @@ namespace Fme.Library.Models
         public string IdListFile { get; set; }
         public string SelectedTable { get; set; }
 
-        public bool IncludeAllVersion { get; set; }
+        public bool IncludeVersions { get; set; }
         public bool IncludeDeletedVersions { get; set; }
         public int TimeZoneOffset { get; set; }
 

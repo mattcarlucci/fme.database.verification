@@ -26,6 +26,12 @@ namespace Fme.Library
     public class QueryBuilder
     {
         /// <summary>
+        /// Gets or sets a value indicating whether [include version].
+        /// </summary>
+        /// <value><c>true</c> if [include version]; otherwise, <c>false</c>.</value>
+        public virtual bool IncludeVersion { get; set; }
+
+        /// <summary>
         /// Creates the in clause.
         /// </summary>
         /// <param name="field">The field.</param>

@@ -32,14 +32,14 @@ namespace Fme.Database.Verification
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.Utils.SuperToolTip superToolTip7 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem7 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip8 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem8 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip5 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem5 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip6 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem6 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip11 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem11 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip12 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem12 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip9 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem9 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip10 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem10 = new DevExpress.Utils.ToolTipTitleItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
             this.compareMappingModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
@@ -89,6 +89,7 @@ namespace Fme.Database.Verification
             this.tabConfiguration = new DevExpress.XtraTab.XtraTabPage();
             this.xtraTabControl4 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage8 = new DevExpress.XtraTab.XtraTabPage();
+            this.chkTargetVersions = new System.Windows.Forms.CheckBox();
             this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
             this.cbTargetTZ = new DevExpress.XtraEditors.ComboBoxEdit();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
@@ -101,6 +102,7 @@ namespace Fme.Database.Verification
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.xtraTabControl3 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage6 = new DevExpress.XtraTab.XtraTabPage();
+            this.chkSourceVersions = new System.Windows.Forms.CheckBox();
             this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
             this.cbSourceTZ = new DevExpress.XtraEditors.ComboBoxEdit();
             this.btnDCTM = new DevExpress.XtraEditors.SimpleButton();
@@ -183,10 +185,9 @@ namespace Fme.Database.Verification
             this.viewComparison = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.dataNavigator1 = new DevExpress.XtraEditors.DataNavigator();
             this.bsMappings = new System.Windows.Forms.BindingSource(this.components);
-            this.bindingNavigator1 = new System.Windows.Forms.BindingNavigator(this.components);
+            this.navGridMappings = new System.Windows.Forms.BindingNavigator(this.components);
             this.bindingNavigatorAddNewItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorCountItem = new System.Windows.Forms.ToolStripLabel();
-            this.bindingNavigatorDeleteItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMoveFirstItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMovePreviousItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator = new System.Windows.Forms.ToolStripSeparator();
@@ -195,6 +196,7 @@ namespace Fme.Database.Verification
             this.bindingNavigatorMoveNextItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorMoveLastItem = new System.Windows.Forms.ToolStripButton();
             this.bindingNavigatorSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.bindingNavigatorDeleteItem = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.bindingNavigatorDeleteAll = new System.Windows.Forms.ToolStripButton();
             this.groupControl6 = new DevExpress.XtraEditors.GroupControl();
@@ -227,6 +229,8 @@ namespace Fme.Database.Verification
             this.txtTargetQuery = new DevExpress.XtraEditors.MemoEdit();
             this.tabMessages = new DevExpress.XtraTab.XtraTabPage();
             this.gridMessages = new DevExpress.XtraGrid.GridControl();
+            this.cardViewMessages = new DevExpress.XtraGrid.Views.Card.CardView();
+            this.repoItemMemo = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
             this.viewMessages = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.fieldSchemaModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tableSchemaModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -319,8 +323,8 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.gridComparison)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewComparison)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsMappings)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).BeginInit();
-            this.bindingNavigator1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.navGridMappings)).BeginInit();
+            this.navGridMappings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl6)).BeginInit();
             this.groupControl6.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.listBoxControl2)).BeginInit();
@@ -353,6 +357,8 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.txtTargetQuery.Properties)).BeginInit();
             this.tabMessages.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardViewMessages)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repoItemMemo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableSchemaModelBindingSource)).BeginInit();
@@ -474,9 +480,9 @@ namespace Fme.Database.Verification
             this.btnExecute.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnExecute.ImageOptions.LargeImage")));
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem7.Text = "Execute a Compare";
-            superToolTip7.Items.Add(toolTipTitleItem7);
-            this.btnExecute.SuperTip = superToolTip7;
+            toolTipTitleItem11.Text = "Execute a Compare";
+            superToolTip11.Items.Add(toolTipTitleItem11);
+            this.btnExecute.SuperTip = superToolTip11;
             this.btnExecute.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnExecute_ItemClick);
             // 
             // btnCancel
@@ -487,9 +493,9 @@ namespace Fme.Database.Verification
             this.btnCancel.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.ImageOptions.LargeImage")));
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem8.Text = "Cancel Execution";
-            superToolTip8.Items.Add(toolTipTitleItem8);
-            this.btnCancel.SuperTip = superToolTip8;
+            toolTipTitleItem12.Text = "Cancel Execution";
+            superToolTip12.Items.Add(toolTipTitleItem12);
+            this.btnCancel.SuperTip = superToolTip12;
             this.btnCancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnCancel_ItemClick);
             // 
             // btnRefresh
@@ -643,9 +649,9 @@ namespace Fme.Database.Verification
             this.barButtonItem4.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem4.ImageOptions.LargeImage")));
             this.barButtonItem4.Name = "barButtonItem4";
             this.barButtonItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem5.Text = "Select the Source Data";
-            superToolTip5.Items.Add(toolTipTitleItem5);
-            this.barButtonItem4.SuperTip = superToolTip5;
+            toolTipTitleItem9.Text = "Select the Source Data";
+            superToolTip9.Items.Add(toolTipTitleItem9);
+            this.barButtonItem4.SuperTip = superToolTip9;
             // 
             // popupMenu1
             // 
@@ -681,9 +687,9 @@ namespace Fme.Database.Verification
             this.barButtonItem5.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem5.ImageOptions.LargeImage")));
             this.barButtonItem5.Name = "barButtonItem5";
             this.barButtonItem5.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem6.Text = "Select the Target Data";
-            superToolTip6.Items.Add(toolTipTitleItem6);
-            this.barButtonItem5.SuperTip = superToolTip6;
+            toolTipTitleItem10.Text = "Select the Target Data";
+            superToolTip10.Items.Add(toolTipTitleItem10);
+            this.barButtonItem5.SuperTip = superToolTip10;
             // 
             // popupMenu2
             // 
@@ -850,7 +856,7 @@ namespace Fme.Database.Verification
             this.tabConfiguration.Controls.Add(this.xtraTabControl3);
             this.tabConfiguration.Controls.Add(this.xtraTabControl2);
             this.tabConfiguration.Controls.Add(this.dataNavigator1);
-            this.tabConfiguration.Controls.Add(this.bindingNavigator1);
+            this.tabConfiguration.Controls.Add(this.navGridMappings);
             this.tabConfiguration.Controls.Add(this.groupControl6);
             this.tabConfiguration.Controls.Add(this.groupControl4);
             this.tabConfiguration.Controls.Add(this.groupControl3);
@@ -872,6 +878,7 @@ namespace Fme.Database.Verification
             // 
             // xtraTabPage8
             // 
+            this.xtraTabPage8.Controls.Add(this.chkTargetVersions);
             this.xtraTabPage8.Controls.Add(this.labelControl12);
             this.xtraTabPage8.Controls.Add(this.cbTargetTZ);
             this.xtraTabPage8.Controls.Add(this.simpleButton2);
@@ -886,6 +893,19 @@ namespace Fme.Database.Verification
             this.xtraTabPage8.Name = "xtraTabPage8";
             this.xtraTabPage8.Size = new System.Drawing.Size(382, 150);
             this.xtraTabPage8.Text = "Source";
+            // 
+            // chkTargetVersions
+            // 
+            this.chkTargetVersions.AutoSize = true;
+            this.chkTargetVersions.Location = new System.Drawing.Point(24, 125);
+            this.chkTargetVersions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chkTargetVersions.Name = "chkTargetVersions";
+            this.chkTargetVersions.Size = new System.Drawing.Size(113, 17);
+            this.chkTargetVersions.TabIndex = 57;
+            this.chkTargetVersions.Text = "Include All Version";
+            this.chkTargetVersions.UseVisualStyleBackColor = true;
+            this.chkTargetVersions.Visible = false;
+            this.chkTargetVersions.CheckedChanged += new System.EventHandler(this.chkTargetVersions_CheckedChanged);
             // 
             // labelControl12
             // 
@@ -1011,6 +1031,7 @@ namespace Fme.Database.Verification
             // 
             // xtraTabPage6
             // 
+            this.xtraTabPage6.Controls.Add(this.chkSourceVersions);
             this.xtraTabPage6.Controls.Add(this.labelControl11);
             this.xtraTabPage6.Controls.Add(this.cbSourceTZ);
             this.xtraTabPage6.Controls.Add(this.btnDCTM);
@@ -1025,6 +1046,19 @@ namespace Fme.Database.Verification
             this.xtraTabPage6.Name = "xtraTabPage6";
             this.xtraTabPage6.Size = new System.Drawing.Size(392, 150);
             this.xtraTabPage6.Text = "Target";
+            // 
+            // chkSourceVersions
+            // 
+            this.chkSourceVersions.AutoSize = true;
+            this.chkSourceVersions.Location = new System.Drawing.Point(24, 122);
+            this.chkSourceVersions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.chkSourceVersions.Name = "chkSourceVersions";
+            this.chkSourceVersions.Size = new System.Drawing.Size(113, 17);
+            this.chkSourceVersions.TabIndex = 55;
+            this.chkSourceVersions.Text = "Include All Version";
+            this.chkSourceVersions.UseVisualStyleBackColor = true;
+            this.chkSourceVersions.Visible = false;
+            this.chkSourceVersions.CheckedChanged += new System.EventHandler(this.chkSourceVersions_CheckedChanged);
             // 
             // labelControl11
             // 
@@ -1259,6 +1293,7 @@ namespace Fme.Database.Verification
             this.gridMappings.TabIndex = 0;
             this.gridMappings.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewMappings});
+            this.gridMappings.ProcessGridKey += new System.Windows.Forms.KeyEventHandler(this.gridControl_ProcessGridKey);
             this.gridMappings.Enter += new System.EventHandler(this.GridMappings_Enter);
             // 
             // ctxGrid
@@ -1623,7 +1658,9 @@ namespace Fme.Database.Verification
             this.viewCalcFields.OptionsCustomization.AllowRowSizing = true;
             this.viewCalcFields.OptionsCustomization.AllowSort = false;
             this.viewCalcFields.RowHeight = 50;
+            this.viewCalcFields.RowCellClick += new DevExpress.XtraGrid.Views.Grid.RowCellClickEventHandler(this.viewCalcFields_RowCellClick);
             this.viewCalcFields.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.GridViewMapping_RowCellStyle);
+            this.viewCalcFields.FocusedColumnChanged += new DevExpress.XtraGrid.Views.Base.FocusedColumnChangedEventHandler(this.viewCalcFields_FocusedColumnChanged);
             // 
             // colCalcSelected
             // 
@@ -1671,6 +1708,7 @@ namespace Fme.Database.Verification
             // 
             // repositoryItemMemoEdit1
             // 
+            this.repositoryItemMemoEdit1.AcceptsReturn = false;
             this.repositoryItemMemoEdit1.Name = "repositoryItemMemoEdit1";
             // 
             // gridColumn5
@@ -1700,6 +1738,7 @@ namespace Fme.Database.Verification
             // 
             // repositoryItemMemoEdit2
             // 
+            this.repositoryItemMemoEdit2.AcceptsReturn = false;
             this.repositoryItemMemoEdit2.Name = "repositoryItemMemoEdit2";
             // 
             // repositoryItemComboBox8
@@ -1850,15 +1889,15 @@ namespace Fme.Database.Verification
             // 
             this.bsMappings.DataSource = this.compareMappingModelBindingSource;
             // 
-            // bindingNavigator1
+            // navGridMappings
             // 
-            this.bindingNavigator1.AddNewItem = this.bindingNavigatorAddNewItem;
-            this.bindingNavigator1.BindingSource = this.bsMappings;
-            this.bindingNavigator1.CountItem = this.bindingNavigatorCountItem;
-            this.bindingNavigator1.DeleteItem = null;
-            this.bindingNavigator1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.bindingNavigator1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.bindingNavigator1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.navGridMappings.AddNewItem = this.bindingNavigatorAddNewItem;
+            this.navGridMappings.BindingSource = this.bsMappings;
+            this.navGridMappings.CountItem = this.bindingNavigatorCountItem;
+            this.navGridMappings.DeleteItem = null;
+            this.navGridMappings.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.navGridMappings.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.navGridMappings.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bindingNavigatorMoveFirstItem,
             this.bindingNavigatorMovePreviousItem,
             this.bindingNavigatorSeparator,
@@ -1872,17 +1911,17 @@ namespace Fme.Database.Verification
             this.bindingNavigatorDeleteItem,
             this.toolStripSeparator1,
             this.bindingNavigatorDeleteAll});
-            this.bindingNavigator1.Location = new System.Drawing.Point(0, 486);
-            this.bindingNavigator1.MoveFirstItem = this.bindingNavigatorMoveFirstItem;
-            this.bindingNavigator1.MoveLastItem = this.bindingNavigatorMoveLastItem;
-            this.bindingNavigator1.MoveNextItem = this.bindingNavigatorMoveNextItem;
-            this.bindingNavigator1.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
-            this.bindingNavigator1.Name = "bindingNavigator1";
-            this.bindingNavigator1.PositionItem = this.bindingNavigatorPositionItem;
-            this.bindingNavigator1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.bindingNavigator1.Size = new System.Drawing.Size(856, 27);
-            this.bindingNavigator1.TabIndex = 25;
-            this.bindingNavigator1.Text = "bindingNavigator1";
+            this.navGridMappings.Location = new System.Drawing.Point(0, 486);
+            this.navGridMappings.MoveFirstItem = this.bindingNavigatorMoveFirstItem;
+            this.navGridMappings.MoveLastItem = this.bindingNavigatorMoveLastItem;
+            this.navGridMappings.MoveNextItem = this.bindingNavigatorMoveNextItem;
+            this.navGridMappings.MovePreviousItem = this.bindingNavigatorMovePreviousItem;
+            this.navGridMappings.Name = "navGridMappings";
+            this.navGridMappings.PositionItem = this.bindingNavigatorPositionItem;
+            this.navGridMappings.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.navGridMappings.Size = new System.Drawing.Size(856, 27);
+            this.navGridMappings.TabIndex = 25;
+            this.navGridMappings.Text = "bindingNavigator1";
             // 
             // bindingNavigatorAddNewItem
             // 
@@ -1900,16 +1939,6 @@ namespace Fme.Database.Verification
             this.bindingNavigatorCountItem.Size = new System.Drawing.Size(35, 24);
             this.bindingNavigatorCountItem.Text = "of {0}";
             this.bindingNavigatorCountItem.ToolTipText = "Total number of items";
-            // 
-            // bindingNavigatorDeleteItem
-            // 
-            this.bindingNavigatorDeleteItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.bindingNavigatorDeleteItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorDeleteItem.Image")));
-            this.bindingNavigatorDeleteItem.Name = "bindingNavigatorDeleteItem";
-            this.bindingNavigatorDeleteItem.RightToLeftAutoMirrorImage = true;
-            this.bindingNavigatorDeleteItem.Size = new System.Drawing.Size(24, 24);
-            this.bindingNavigatorDeleteItem.Text = "Delete";
-            this.bindingNavigatorDeleteItem.Click += new System.EventHandler(this.bindingNavigatorDeleteItem_Click);
             // 
             // bindingNavigatorMoveFirstItem
             // 
@@ -1970,6 +1999,16 @@ namespace Fme.Database.Verification
             // 
             this.bindingNavigatorSeparator2.Name = "bindingNavigatorSeparator2";
             this.bindingNavigatorSeparator2.Size = new System.Drawing.Size(6, 27);
+            // 
+            // bindingNavigatorDeleteItem
+            // 
+            this.bindingNavigatorDeleteItem.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bindingNavigatorDeleteItem.Image = ((System.Drawing.Image)(resources.GetObject("bindingNavigatorDeleteItem.Image")));
+            this.bindingNavigatorDeleteItem.Name = "bindingNavigatorDeleteItem";
+            this.bindingNavigatorDeleteItem.RightToLeftAutoMirrorImage = true;
+            this.bindingNavigatorDeleteItem.Size = new System.Drawing.Size(24, 24);
+            this.bindingNavigatorDeleteItem.Text = "Delete";
+            this.bindingNavigatorDeleteItem.Click += new System.EventHandler(this.bindingNavigatorDeleteItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -2317,13 +2356,27 @@ namespace Fme.Database.Verification
             this.gridMessages.ContextMenuStrip = this.ctxGrid;
             this.gridMessages.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridMessages.Location = new System.Drawing.Point(0, 0);
-            this.gridMessages.MainView = this.viewMessages;
+            this.gridMessages.MainView = this.cardViewMessages;
             this.gridMessages.MenuManager = this.barManager1;
             this.gridMessages.Name = "gridMessages";
+            this.gridMessages.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.repoItemMemo});
             this.gridMessages.Size = new System.Drawing.Size(856, 513);
             this.gridMessages.TabIndex = 0;
             this.gridMessages.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.cardViewMessages,
             this.viewMessages});
+            this.gridMessages.DataSourceChanged += new System.EventHandler(this.gridMessages_DataSourceChanged);
+            // 
+            // cardViewMessages
+            // 
+            this.cardViewMessages.FocusedCardTopFieldIndex = 0;
+            this.cardViewMessages.GridControl = this.gridMessages;
+            this.cardViewMessages.Name = "cardViewMessages";
+            // 
+            // repoItemMemo
+            // 
+            this.repoItemMemo.Name = "repoItemMemo";
             // 
             // viewMessages
             // 
@@ -2532,9 +2585,9 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.gridComparison)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewComparison)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.bsMappings)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.bindingNavigator1)).EndInit();
-            this.bindingNavigator1.ResumeLayout(false);
-            this.bindingNavigator1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.navGridMappings)).EndInit();
+            this.navGridMappings.ResumeLayout(false);
+            this.navGridMappings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl6)).EndInit();
             this.groupControl6.ResumeLayout(false);
             this.groupControl6.PerformLayout();
@@ -2568,6 +2621,8 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.txtTargetQuery.Properties)).EndInit();
             this.tabMessages.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardViewMessages)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repoItemMemo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableSchemaModelBindingSource)).EndInit();
@@ -2653,7 +2708,7 @@ namespace Fme.Database.Verification
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox cbRightSide;
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox cbCompareType;
         private DevExpress.XtraEditors.Repository.RepositoryItemComboBox cbOperator;
-        private System.Windows.Forms.BindingNavigator bindingNavigator1;
+        private System.Windows.Forms.BindingNavigator navGridMappings;
         private System.Windows.Forms.ToolStripButton bindingNavigatorAddNewItem;
         private System.Windows.Forms.BindingSource bsMappings;
         private System.Windows.Forms.ToolStripLabel bindingNavigatorCountItem;
@@ -2793,6 +2848,10 @@ namespace Fme.Database.Verification
         private DevExpress.XtraEditors.ComboBoxEdit cbSourceTZ;
         private ToolStripMenuItem showHiddenColumnsToolStripMenuItem;
         private DevExpress.XtraBars.BarButtonItem barButtonItem8;
+        private CheckBox chkTargetVersions;
+        private CheckBox chkSourceVersions;
+        private DevExpress.XtraGrid.Views.Card.CardView cardViewMessages;
+        private DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit repoItemMemo;
     }
 
 }

@@ -124,6 +124,8 @@ namespace Fme.Library.Repositories
                     ///////////////////////////////////////////////////////////////
                     #region Construct Source, Fetch Data and set Aliases
 
+                    query.IncludeVersion = Model.Source.IncludeVersions;
+
                     var select1 = query.BuildSql(Model.Source.Key,pairs.Select(s => s.LeftSide).ToArray(),
                       Model.Source.SelectedTable, "", Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
 
@@ -143,6 +145,7 @@ namespace Fme.Library.Repositories
                     DataTable table1 = ds.Tables[0];
 
                     #region Construct Target, Fetch Data and set Aliases
+                    query.IncludeVersion = Model.Target.IncludeVersions;
 
                     var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
                         Model.Target.SelectedTable, "", "0", Model.Target.Key,  table1.SelectKeys<string>("primary_key"));
@@ -170,6 +173,13 @@ namespace Fme.Library.Repositories
                     table1.InnerJoin<string>("primary_key", table2);
                     var dupset1 = table1.RemoveDuplicates<string>("primary_key");
                     var dupset2 = table2.RemoveDuplicates<string>("primary_key");
+
+                    if (string.IsNullOrEmpty(dupset1) == false)
+                        Model.ErrorMessages.Add(new ErrorMessageModel("Left Query has duplicate Keys", dupset1, ""));
+
+                    if (string.IsNullOrEmpty(dupset2) == false)
+                        Model.ErrorMessages.Add(new ErrorMessageModel("Right Query has duplicate Keys", dupset2, ""));
+
                     table1.SetPrimaryKey("primary_key", table2);
                                         
                     Model.ExecuteCalculatedFields(table1, table2, cancelToken);
