@@ -120,26 +120,33 @@ namespace Fme.Library.Repositories
                 {
                     var pairs = Model.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected).ToList();
                     QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();
-                   
+
+                    ///////////////////////////////////////////////////////////////
+                    #region Construct Source, Fetch Data and set Aliases
+
                     var select1 = query.BuildSql(Model.Source.Key,pairs.Select(s => s.LeftSide).ToArray(),
                       Model.Source.SelectedTable, "", Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
-                    LogQuery(Model.Source, select1, "");
+
+                    LogQuery(Model.Source, select1, "Left");
 
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs()
                     { DataSource = Model.Source, Data = select1, StatusMessage = "Executing Query" });
-
-
-
+                    
                     var ds = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
                     Model.Source.DataSource.SetAliases(ds, "left");
-                    
+
                     if (ds.Tables == null || ds.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Source.SelectedTable);
+                    #endregion
+                    ///////////////////////////////////////////////////////////////
 
                     DataTable table1 = ds.Tables[0];
 
+                    #region Construct Target, Fetch Data and set Aliases
+
                     var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
                         Model.Target.SelectedTable, "", "0", Model.Target.Key,  table1.SelectKeys<string>("primary_key"));
+
                     LogQuery(Model.Target, select2, "Right");
 
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs()
@@ -148,43 +155,35 @@ namespace Fme.Library.Repositories
                     var ds2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);
                     Model.Target.DataSource.SetAliases(ds2, "right");
                   
-
                     if (ds2.Tables == null || ds2.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
+                    #endregion
 
+                    #region Check for matching records
                     DataTable table2 = ds2.Tables[0];
-                    if (ds2 == null || ds2.Tables.Count == 0)
-                        throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
-
-
+                 
                     if (table1.Rows.Count == 0 || table2.Rows.Count == 0)
                         throw new DataException("No matching records found to complete the request");
+                    #endregion
+
 
                     table1.InnerJoin<string>("primary_key", table2);
-
                     var dupset1 = table1.RemoveDuplicates<string>("primary_key");
                     var dupset2 = table2.RemoveDuplicates<string>("primary_key");
-
                     table1.SetPrimaryKey("primary_key", table2);
                                         
                     Model.ExecuteCalculatedFields(table1, table2, cancelToken);
 
                     var sourceData = table1.AsEnumerable().CopyToDataTable();
-                    // sourceData.RemoveEmptyColumns();
-
                     var targetData = table2.AsEnumerable().CopyToDataTable();
-                    // targetData.RemoveEmptyColumns();
-
+                    
                     table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
                     CompareMappingHelper.OrderColumns(table1, pairs);
-
-
+                    
                     OnCompareStart(this, new CompareStartEventArgs() { Pairs = null });
                     OnSourceLoadComplete(this, new DataTableEventArgs() { Table = sourceData });
                     OnTargetLoadComplete(this, new DataTableEventArgs() { Table = targetData });
-
-
-
+                    
                     CompareMappingHelper.CompareColumns(this, table1, Model, cancelToken);
 
                     OnCompareComplete(this, new DataTableEventArgs() { Table = table1, Pairs = null });
