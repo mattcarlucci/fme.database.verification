@@ -72,7 +72,10 @@ namespace Fme.Database.Verification
                 btnDataSource.Text = value as string;
 
                 builder.TryGetValue("Extended Properties", out value);
-                txtExt.Text = value as string;
+                if (string.IsNullOrEmpty(value as string) == false)
+                    txtExt.Text = string.Format("'{0}'", value);
+                else
+                    txtExt.Text = value as string;
             }
             Cursor = Cursors.Default;
         }
@@ -86,12 +89,15 @@ namespace Fme.Database.Verification
         {
             pbar.Text = "Retrieving Schema...";
             pbar.Visible = true;
-          //  this.Enabled = false;
+            //  this.Enabled = false;
 
-          //  await Task.Run(() =>
-          //  {
-                if (CreateDataSource())
-                    Close();
+            //  await Task.Run(() =>
+            //  {
+            if (CreateDataSource())
+            {
+                this.DialogResult = DialogResult.OK;
+                Close();
+            }
           //  });
          //   this.Enabled = true;
             pbar.Visible = false;

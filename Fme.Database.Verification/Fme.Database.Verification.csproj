@@ -124,6 +124,8 @@
   <ItemGroup>
     <None Include="Resources\deletesheetrows_16x16.png" />
     <None Include="Resources\deletesheetrows_32x32.png" />
+    <None Include="Resources\show_16x16.png" />
+    <None Include="Resources\show_32x32.png" />
     <Content Include="ScriptFile.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -78,6 +78,7 @@ namespace Fme.Database.Verification
             this.barButtonItem1 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem2 = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem7 = new DevExpress.XtraBars.BarButtonItem();
+            this.barButtonItem8 = new DevExpress.XtraBars.BarButtonItem();
             this.commandBarGalleryDropDown2 = new DevExpress.XtraBars.Commands.CommandBarGalleryDropDown(this.components);
             this.commandBarGalleryDropDown3 = new DevExpress.XtraBars.Commands.CommandBarGalleryDropDown(this.components);
             this.commandBarGalleryDropDown4 = new DevExpress.XtraBars.Commands.CommandBarGalleryDropDown(this.components);
@@ -88,6 +89,8 @@ namespace Fme.Database.Verification
             this.tabConfiguration = new DevExpress.XtraTab.XtraTabPage();
             this.xtraTabControl4 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage8 = new DevExpress.XtraTab.XtraTabPage();
+            this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
+            this.cbTargetTZ = new DevExpress.XtraEditors.ComboBoxEdit();
             this.simpleButton2 = new DevExpress.XtraEditors.SimpleButton();
             this.simpleButton1 = new DevExpress.XtraEditors.SimpleButton();
             this.cbTargetKey = new DevExpress.XtraEditors.ComboBoxEdit();
@@ -98,6 +101,8 @@ namespace Fme.Database.Verification
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.xtraTabControl3 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage6 = new DevExpress.XtraTab.XtraTabPage();
+            this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
+            this.cbSourceTZ = new DevExpress.XtraEditors.ComboBoxEdit();
             this.btnDCTM = new DevExpress.XtraEditors.SimpleButton();
             this.btnGetSchema = new DevExpress.XtraEditors.SimpleButton();
             this.cbSourceKey = new DevExpress.XtraEditors.ComboBoxEdit();
@@ -119,6 +124,7 @@ namespace Fme.Database.Verification
             this.exportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.hideEmptyColumnToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showHiddenColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewMappings = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.colSelected = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repo_chkSelected = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
@@ -151,6 +157,7 @@ namespace Fme.Database.Verification
             this.xtraTabCalcFields = new DevExpress.XtraTab.XtraTabPage();
             this.gridCalcFields = new DevExpress.XtraGrid.GridControl();
             this.viewCalcFields = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.colCalcSelected = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colIsCalculated = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemCheckEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
             this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
@@ -238,11 +245,6 @@ namespace Fme.Database.Verification
             this.viewErrorDetailReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.colRightLookupFile = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu3 = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.colCalcSelected = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.cbSourceTZ = new DevExpress.XtraEditors.ComboBoxEdit();
-            this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
-            this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
-            this.cbTargetTZ = new DevExpress.XtraEditors.ComboBoxEdit();
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).BeginInit();
@@ -261,12 +263,14 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl4)).BeginInit();
             this.xtraTabControl4.SuspendLayout();
             this.xtraTabPage8.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cbTargetTZ.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbTargetKey.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbTargetTable.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnTargetData.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl3)).BeginInit();
             this.xtraTabControl3.SuspendLayout();
             this.xtraTabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cbSourceTZ.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSourceKey.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSourceTable.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnSourceData.Properties)).BeginInit();
@@ -359,8 +363,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
             this.ctxLookupMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cbSourceTZ.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cbTargetTZ.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // compareMappingModelBindingSource
@@ -402,8 +404,9 @@ namespace Fme.Database.Verification
             this.btnExport,
             this.barButtonItem1,
             this.barButtonItem2,
-            this.barButtonItem7});
-            this.barManager1.MaxItemId = 199;
+            this.barButtonItem7,
+            this.barButtonItem8});
+            this.barManager1.MaxItemId = 200;
             this.barManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.pbStatus,
             this.mbStatus});
@@ -743,6 +746,14 @@ namespace Fme.Database.Verification
             this.barButtonItem7.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem7.ImageOptions.LargeImage")));
             this.barButtonItem7.Name = "barButtonItem7";
             // 
+            // barButtonItem8
+            // 
+            this.barButtonItem8.Caption = "Show Hidden Columns";
+            this.barButtonItem8.Id = 199;
+            this.barButtonItem8.ImageOptions.Image = global::Fme.Database.Verification.Properties.Resources.show_16x16;
+            this.barButtonItem8.ImageOptions.LargeImage = global::Fme.Database.Verification.Properties.Resources.show_32x32;
+            this.barButtonItem8.Name = "barButtonItem8";
+            // 
             // commandBarGalleryDropDown2
             // 
             // 
@@ -876,6 +887,27 @@ namespace Fme.Database.Verification
             this.xtraTabPage8.Size = new System.Drawing.Size(382, 150);
             this.xtraTabPage8.Text = "Source";
             // 
+            // labelControl12
+            // 
+            this.labelControl12.Location = new System.Drawing.Point(204, 125);
+            this.labelControl12.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.labelControl12.Name = "labelControl12";
+            this.labelControl12.Size = new System.Drawing.Size(79, 13);
+            this.labelControl12.TabIndex = 56;
+            this.labelControl12.Text = "Timezone Offset";
+            // 
+            // cbTargetTZ
+            // 
+            this.cbTargetTZ.EditValue = "0";
+            this.cbTargetTZ.Location = new System.Drawing.Point(289, 122);
+            this.cbTargetTZ.MenuManager = this.barManager1;
+            this.cbTargetTZ.Name = "cbTargetTZ";
+            this.cbTargetTZ.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cbTargetTZ.Size = new System.Drawing.Size(57, 20);
+            this.cbTargetTZ.TabIndex = 55;
+            this.cbTargetTZ.SelectedIndexChanged += new System.EventHandler(this.cbTargetTZ_SelectedIndexChanged);
+            // 
             // simpleButton2
             // 
             this.simpleButton2.Location = new System.Drawing.Point(347, 36);
@@ -993,6 +1025,28 @@ namespace Fme.Database.Verification
             this.xtraTabPage6.Name = "xtraTabPage6";
             this.xtraTabPage6.Size = new System.Drawing.Size(392, 150);
             this.xtraTabPage6.Text = "Target";
+            // 
+            // labelControl11
+            // 
+            this.labelControl11.Location = new System.Drawing.Point(206, 121);
+            this.labelControl11.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.labelControl11.Name = "labelControl11";
+            this.labelControl11.Size = new System.Drawing.Size(79, 13);
+            this.labelControl11.TabIndex = 54;
+            this.labelControl11.Text = "Timezone Offset";
+            // 
+            // cbSourceTZ
+            // 
+            this.cbSourceTZ.EditValue = "0";
+            this.cbSourceTZ.Location = new System.Drawing.Point(292, 118);
+            this.cbSourceTZ.MenuManager = this.barManager1;
+            this.cbSourceTZ.Name = "cbSourceTZ";
+            this.cbSourceTZ.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.cbSourceTZ.Size = new System.Drawing.Size(57, 20);
+            this.cbSourceTZ.TabIndex = 53;
+            this.cbSourceTZ.ToolTip = "Timezone Offset for DateTime Comparisons";
+            this.cbSourceTZ.SelectedIndexChanged += new System.EventHandler(this.cbSourceTZ_SelectedIndexChanged);
             // 
             // btnDCTM
             // 
@@ -1212,29 +1266,37 @@ namespace Fme.Database.Verification
             this.ctxGrid.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportToolStripMenuItem,
             this.toolStripMenuItem2,
-            this.hideEmptyColumnToolStripMenuItem});
+            this.hideEmptyColumnToolStripMenuItem,
+            this.showHiddenColumnsToolStripMenuItem});
             this.ctxGrid.Name = "ctxGrid";
-            this.ctxGrid.Size = new System.Drawing.Size(183, 54);
+            this.ctxGrid.Size = new System.Drawing.Size(197, 76);
             this.ctxGrid.Opening += new System.ComponentModel.CancelEventHandler(this.ctxGrid_Opening);
             // 
             // exportToolStripMenuItem
             // 
             this.exportToolStripMenuItem.Name = "exportToolStripMenuItem";
-            this.exportToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.exportToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
             this.exportToolStripMenuItem.Text = "Print/Export Data";
             this.exportToolStripMenuItem.Click += new System.EventHandler(this.ExportToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(179, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(193, 6);
             // 
             // hideEmptyColumnToolStripMenuItem
             // 
             this.hideEmptyColumnToolStripMenuItem.Name = "hideEmptyColumnToolStripMenuItem";
-            this.hideEmptyColumnToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.hideEmptyColumnToolStripMenuItem.Text = "Hide Empty Column";
+            this.hideEmptyColumnToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.hideEmptyColumnToolStripMenuItem.Text = "Hide Empty Columns";
             this.hideEmptyColumnToolStripMenuItem.Click += new System.EventHandler(this.HideEmptyColumnToolStripMenuItem_Click);
+            // 
+            // showHiddenColumnsToolStripMenuItem
+            // 
+            this.showHiddenColumnsToolStripMenuItem.Name = "showHiddenColumnsToolStripMenuItem";
+            this.showHiddenColumnsToolStripMenuItem.Size = new System.Drawing.Size(196, 22);
+            this.showHiddenColumnsToolStripMenuItem.Text = "Show Hidden Columns";
+            this.showHiddenColumnsToolStripMenuItem.Click += new System.EventHandler(this.showHiddenColumnsToolStripMenuItem_Click);
             // 
             // viewMappings
             // 
@@ -1562,6 +1624,14 @@ namespace Fme.Database.Verification
             this.viewCalcFields.OptionsCustomization.AllowSort = false;
             this.viewCalcFields.RowHeight = 50;
             this.viewCalcFields.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.GridViewMapping_RowCellStyle);
+            // 
+            // colCalcSelected
+            // 
+            this.colCalcSelected.FieldName = "Selected";
+            this.colCalcSelected.Name = "colCalcSelected";
+            this.colCalcSelected.Visible = true;
+            this.colCalcSelected.VisibleIndex = 0;
+            this.colCalcSelected.Width = 40;
             // 
             // colIsCalculated
             // 
@@ -2239,7 +2309,7 @@ namespace Fme.Database.Verification
             this.tabMessages.Image = ((System.Drawing.Image)(resources.GetObject("tabMessages.Image")));
             this.tabMessages.Name = "tabMessages";
             this.tabMessages.Size = new System.Drawing.Size(856, 513);
-            this.tabMessages.Text = "Messaages";
+            this.tabMessages.Text = "System Messages";
             // 
             // gridMessages
             // 
@@ -2358,60 +2428,10 @@ namespace Fme.Database.Verification
             this.popupMenu3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem1),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem2, true),
-            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem7)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem7),
+            new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem8)});
             this.popupMenu3.Manager = this.barManager1;
             this.popupMenu3.Name = "popupMenu3";
-            // 
-            // colCalcSelected
-            // 
-            this.colCalcSelected.FieldName = "Selected";
-            this.colCalcSelected.Name = "colCalcSelected";
-            this.colCalcSelected.Visible = true;
-            this.colCalcSelected.VisibleIndex = 0;
-            this.colCalcSelected.Width = 40;
-            // 
-            // cbSourceTZ
-            // 
-            this.cbSourceTZ.EditValue = "0";
-            this.cbSourceTZ.Location = new System.Drawing.Point(292, 118);
-            this.cbSourceTZ.MenuManager = this.barManager1;
-            this.cbSourceTZ.Name = "cbSourceTZ";
-            this.cbSourceTZ.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.cbSourceTZ.Size = new System.Drawing.Size(57, 20);
-            this.cbSourceTZ.TabIndex = 53;
-            this.cbSourceTZ.ToolTip = "Timezone Offset for DateTime Comparisons";
-            this.cbSourceTZ.SelectedIndexChanged += new System.EventHandler(this.cbSourceTZ_SelectedIndexChanged);
-            // 
-            // labelControl11
-            // 
-            this.labelControl11.Location = new System.Drawing.Point(206, 121);
-            this.labelControl11.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.labelControl11.Name = "labelControl11";
-            this.labelControl11.Size = new System.Drawing.Size(79, 13);
-            this.labelControl11.TabIndex = 54;
-            this.labelControl11.Text = "Timezone Offset";
-            // 
-            // labelControl12
-            // 
-            this.labelControl12.Location = new System.Drawing.Point(204, 125);
-            this.labelControl12.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.labelControl12.Name = "labelControl12";
-            this.labelControl12.Size = new System.Drawing.Size(79, 13);
-            this.labelControl12.TabIndex = 56;
-            this.labelControl12.Text = "Timezone Offset";
-            // 
-            // cbTargetTZ
-            // 
-            this.cbTargetTZ.EditValue = "0";
-            this.cbTargetTZ.Location = new System.Drawing.Point(289, 122);
-            this.cbTargetTZ.MenuManager = this.barManager1;
-            this.cbTargetTZ.Name = "cbTargetTZ";
-            this.cbTargetTZ.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.cbTargetTZ.Size = new System.Drawing.Size(57, 20);
-            this.cbTargetTZ.TabIndex = 55;
-            this.cbTargetTZ.SelectedIndexChanged += new System.EventHandler(this.cbTargetTZ_SelectedIndexChanged);
             // 
             // MainView
             // 
@@ -2453,6 +2473,7 @@ namespace Fme.Database.Verification
             this.xtraTabControl4.ResumeLayout(false);
             this.xtraTabPage8.ResumeLayout(false);
             this.xtraTabPage8.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cbTargetTZ.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbTargetKey.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbTargetTable.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnTargetData.Properties)).EndInit();
@@ -2460,6 +2481,7 @@ namespace Fme.Database.Verification
             this.xtraTabControl3.ResumeLayout(false);
             this.xtraTabPage6.ResumeLayout(false);
             this.xtraTabPage6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cbSourceTZ.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSourceKey.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbSourceTable.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnSourceData.Properties)).EndInit();
@@ -2555,8 +2577,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
             this.ctxLookupMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cbSourceTZ.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cbTargetTZ.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2770,6 +2790,8 @@ namespace Fme.Database.Verification
         private DevExpress.XtraEditors.ComboBoxEdit cbTargetTZ;
         private DevExpress.XtraEditors.LabelControl labelControl11;
         private DevExpress.XtraEditors.ComboBoxEdit cbSourceTZ;
+        private ToolStripMenuItem showHiddenColumnsToolStripMenuItem;
+        private DevExpress.XtraBars.BarButtonItem barButtonItem8;
     }
 
 }

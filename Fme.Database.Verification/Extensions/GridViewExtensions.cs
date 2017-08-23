@@ -1,4 +1,5 @@
 ﻿using DevExpress.XtraGrid;
+using DevExpress.XtraGrid.Columns;
 using DevExpress.XtraGrid.Views.Grid;
 using System;
 using System.Collections.Generic;
@@ -18,25 +19,13 @@ namespace Fme.Database.Verification.Extensions
         /// </summary>
         /// <param name="view">The view.</param>
         /// <param name="fields">The fields.</param>
-        public static void HideColumns(this GridView view, IEnumerable<string> fields)
+        public static void HideEmptyColumn(this GridView view, IEnumerable<string> fields)
         {
             view.Columns.
                 Where(s => fields.Contains(s.FieldName)).
-                ToList().ForEach(item => item.Visible = false);
+                ToList().ForEach(item => item.Visible = false );            
         }
-        /// <summary>
-        /// Hides the columns.
-        /// </summary>
-        /// <param name="grid">The grid.</param>
-        /// <param name="fields">The fields.</param>
-        public static void HideColumns(this GridControl grid, IEnumerable<string> fields)
-        {
-            GridView view = grid.MainView as GridView;
-
-            view.Columns.
-                Where(s => fields.Contains(s.FieldName)).
-                ToList().ForEach(item => item.Visible = false);
-        }
+      
         /// <summary>
         /// Resets the data source.
         /// </summary>
@@ -46,6 +35,7 @@ namespace Fme.Database.Verification.Extensions
         {
             grid.BeginUpdate();
             GridView view = grid.MainView as GridView;
+
             view?.Columns.Clear();
             grid.DataSource = null;
             grid.RefreshDataSource();

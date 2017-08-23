@@ -374,8 +374,7 @@ namespace Fme.Library.Tests
 
             CancellationTokenSource token = new CancellationTokenSource();
             Task task = repo.ExecuteWait(token);
-            token.Cancel();
-
+            
             repo.CompareComplete += (o, e) =>
                {
                    var errors = model.ColumnCompare.Where(w => w.Errors != "0" && !string.IsNullOrEmpty(w.Errors)).Count();

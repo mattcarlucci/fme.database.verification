@@ -97,6 +97,11 @@ namespace Fme.Library.Repositories
                 source.SelectedTable, side, source.MaxRows, source.Key, Model.GetIdsFromFile());
         }
 
+        /// <summary>
+        /// Executes the wait.
+        /// </summary>
+        /// <param name="cancelToken">The cancel token.</param>
+        /// <returns>Task.</returns>
         public async Task ExecuteWait(CancellationTokenSource cancelToken)
         {
             await Execute(cancelToken);
@@ -196,10 +201,6 @@ namespace Fme.Library.Repositories
             }
         }
 
-        private void Execute()
-        {
-
-        }
         /// <summary>
         /// Logs the query.
         /// </summary>

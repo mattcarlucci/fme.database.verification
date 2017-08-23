@@ -87,9 +87,11 @@ namespace Fme.Library.Models
             var items = model.ColumnCompare.Where(w => w.IsPair() && w.Selected);
             foreach (var item in items)
             {
-                var currentRow = model.ColumnCompare.IndexOf(item);
-                var results = comparer.CompareColumns(currentRow, table, item, model, token);
-               // item.CompareResults.AddRange(results);
+                if (table.Columns.Contains(item.LeftAlias) && table.Columns.Contains(item.RightAlias))
+                {
+                    var currentRow = model.ColumnCompare.IndexOf(item);
+                    var results = comparer.CompareColumns(currentRow, table, item, model, token);
+                }               
             }
         }
 

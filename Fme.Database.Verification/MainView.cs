@@ -122,7 +122,8 @@ namespace Fme.Database.Verification
             lblVersion.Caption = "v" + version;
             exportToolStripMenuItem.Image = barButtonItem1.ImageOptions.Image;
             hideEmptyColumnToolStripMenuItem.Image = barButtonItem2.ImageOptions.Image;
-            for(int i = -12; i <= 12; i++)
+            showHiddenColumnsToolStripMenuItem.Image = barButtonItem8.ImageOptions.Image;
+            for (int i = -12; i <= 12; i++)
             {
                 cbSourceTZ.Properties.Items.Add(i.ToString());
                 cbTargetTZ.Properties.Items.Add(i.ToString());
@@ -371,6 +372,7 @@ namespace Fme.Database.Verification
 
                 cbSourceKey.Properties.Items.AddRange(model.Source.SelectedSchema().
                     Fields.Select(s => s.Name).ToList());
+                gridMappings.RefreshDataSource();
             }
             catch(Exception)
             {
@@ -395,6 +397,8 @@ namespace Fme.Database.Verification
 
                 cbTargetKey.Properties.Items.AddRange(model.Target.SelectedSchema().
                     Fields.Select(s => s.Name).ToList());
+
+                gridMappings.RefreshDataSource();
             }
             catch (Exception)
             {
@@ -432,6 +436,7 @@ namespace Fme.Database.Verification
         {
             try
             {
+                GridViewMapping_MarkMissingFields(sender, e);
                 //this is ugly
                 GridView view = sender as GridView;
                 if (view.IsRowVisible(e.RowHandle) == RowVisibleState.Hidden)
@@ -474,6 +479,31 @@ namespace Fme.Database.Verification
             }
         }
 
+        /// <summary>
+        /// Handles the MarkMissingFields event of the GridViewMapping control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RowCellStyleEventArgs"/> instance containing the event data.</param>
+        private void GridViewMapping_MarkMissingFields(object sender, RowCellStyleEventArgs e)
+        {
+            GridView view = sender as GridView;
+            if (e.Column.Name == "colLeftSide" && model.ColumnCompare[e.RowHandle].IsCalculated == false)
+            {
+                if (model.Source.SelectedSchema().Fields.Where(w => w.Name == model.ColumnCompare[e.RowHandle].LeftSide).Count() == 0)
+                    //e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Strikeout);
+                    e.Appearance.ForeColor = Color.DimGray;
+                else
+                    e.Appearance.ForeColor = Color.DarkBlue;
+            }
+            else if (e.Column.Name == "colRightSide" && model.ColumnCompare[e.RowHandle].IsCalculated == false)
+            {
+                if (model.Target.SelectedSchema().Fields.Where(w => w.Name == model.ColumnCompare[e.RowHandle].RightSide).Count() == 0)
+                    //e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Strikeout);
+                    e.Appearance.ForeColor = Color.DimGray;
+                else
+                    e.Appearance.ForeColor = Color.DarkBlue;
+            }
+        }
         /// <summary>
         /// Handles the Click event of the bindingNavigatorAddNewItem control.
         /// </summary>
@@ -847,8 +877,10 @@ namespace Fme.Database.Verification
             {
                 GridView view = (GridView)gridControl.FocusedView;
                 var table = gridControl.DataSource as DataTable;
+                if (table == null) return;
                 var cols = table.RemoveEmptyColumns(false).Select(s => s.ColumnName).ToList();
-                view.HideColumns(cols);
+                view.HideEmptyColumn(cols);
+                view.RefreshData();
             }
         }
 
@@ -901,7 +933,7 @@ namespace Fme.Database.Verification
                 if (table != null)
                 {
                     var cols = table.RemoveEmptyColumns(false).Select(s => s.ColumnName).ToList();
-                    view.HideColumns(cols);
+                    view.HideEmptyColumn(cols);
                 }
             }
         }
@@ -1246,14 +1278,42 @@ namespace Fme.Database.Verification
             bindingNavigator1.BackColor = this.BackColor;
         }
 
+        /// <summary>
+        /// Handles the SelectedIndexChanged event of the cbSourceTZ control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void cbSourceTZ_SelectedIndexChanged(object sender, EventArgs e)
         {            
             model.Source.TimeZoneOffset = int.Parse(cbSourceTZ.Text);
         }
 
+        /// <summary>
+        /// Handles the SelectedIndexChanged event of the cbTargetTZ control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void cbTargetTZ_SelectedIndexChanged(object sender, EventArgs e)
         {
             model.Target.TimeZoneOffset = int.Parse(cbTargetTZ.Text);
+        }
+
+        /// <summary>
+        /// Handles the Click event of the showHiddenColumnsToolStripMenuItem control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void showHiddenColumnsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var gridControl = ((ToolStripMenuItem)sender).GetMenuContextOwner<GridControl>();
+            if (gridControl != null)
+            {                
+                var table = gridControl.DataSource as DataTable;
+                if (table == null) return;
+
+                gridControl.ResetDataSource(gridControl.DataSource);
+                gridControl.BestFitWidth(false, true);              
+            }
         }
     }
 }
