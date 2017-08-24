@@ -43,6 +43,7 @@ namespace Fme.Library.Models
         /// <returns>List&lt;CompareMappingModel&gt;.</returns>
         public static List<CompareMappingModel> GetPairs(TableSchemaModel source, TableSchemaModel target)
         {
+
             var exceptions = IgnoreList();
 
             return source.Fields.Where(w=> exceptions.Contains(w.Name) == false).

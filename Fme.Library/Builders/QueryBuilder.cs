@@ -89,10 +89,18 @@ namespace Fme.Library
         /// <returns>System.String.</returns>
         protected string BuildFieldAliases(string[] fields, string alias)
         {
+            List<string> formatted = new List<string>();
+            fields.ToList().ForEach(item =>
+            {
+                var x = item.Contains(" ") ? "[" + item + "]" : item;
+                formatted.Add(x);
+              
+            });
+            
             if (string.IsNullOrEmpty(alias))
-                return string.Join("\r\n,", fields);
+                return string.Join("\r\n,", formatted);
             else
-                return string.Join("\r\n,", fields.
+                return string.Join("\r\n,", formatted.
                     Select(s => s + " as " + alias + "_" + s));
                 
         }

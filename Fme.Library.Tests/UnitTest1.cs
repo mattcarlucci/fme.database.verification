@@ -26,6 +26,8 @@ using Fme.DqlProvider;
 using Fme.Library.Repositories;
 using System.IO;
 using System.Threading.Tasks;
+using Fme.Library.Comparison;
+using Fme.Library.Enums;
 
 namespace Fme.Library.Tests
 {
@@ -391,6 +393,12 @@ namespace Fme.Library.Tests
             task.Wait(token.Token);
         }
 
+        [TestMethod]
+        public void Test_ComparisonOperations()
+        {
+          //  CompareCell cell = new CompareCell();
+         //   cell[ComparisonTypeEnum.Datetime][OperatorEnums.Table]("8/24/2017 9:30:00 AM", "8/24/2017 12:30:00 PM", new int[] { 2, 0 });
+        }
 
     }
 }

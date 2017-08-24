@@ -110,7 +110,7 @@ namespace Fme.Database.Verification
 
             AppDomain.CurrentDomain.UnhandledException += new 
                 UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-
+            OnCreateNewModel();
         }
 
         /// <summary>
@@ -300,14 +300,27 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="DevExpress.XtraBars.ItemClickEventArgs" /> instance containing the event data.</param>
         private void btnAutoGenerate_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            model.ColumnCompare = CompareMappingHelper.
-                GetPairs(model.Source.SelectedSchema(), model.Target.SelectedSchema());
+            try
+            {
+                if (model.Source == null || model.Target == null)
+                {
+                    MessageBox.Show("Can't generate mapping until both source and target tables have been selected.", "Error", 
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    return;
+                }
+                model.ColumnCompare = CompareMappingHelper.
+                    GetPairs(model.Source.SelectedSchema(), model.Target.SelectedSchema());
 
-            bsMappings.DataSource = model.ColumnCompare;
-            gridMappings.DataSource = bsMappings;
-            gridFieldLookup.DataSource = bsMappings;
-            gridCalcFields.DataSource = bsMappings;
-            gridMappings.RefreshDataSource();
+                bsMappings.DataSource = model.ColumnCompare;
+                gridMappings.DataSource = bsMappings;
+                gridFieldLookup.DataSource = bsMappings;
+                gridCalcFields.DataSource = bsMappings;
+                gridMappings.RefreshDataSource();
+            }
+            catch(Exception ex)
+            {
+
+            }
         }
 
         /// <summary>
@@ -346,6 +359,7 @@ namespace Fme.Database.Verification
 
                 cbSourceTable.Properties.Items.
                     AddRange(model.Source.TableSchemas.Select(s => s.TableName).ToArray());
+                
             }
             Cursor = Cursors.Default;
         }
@@ -396,6 +410,11 @@ namespace Fme.Database.Verification
 
                 cbSourceKey.Properties.Items.AddRange(model.Source.SelectedSchema().
                     Fields.Select(s => s.Name).ToList());
+
+                cbLeftSide.Items.AddRange(cbSourceKey.Properties.Items);
+              
+
+
                 gridMappings.RefreshDataSource();
             }
             catch(Exception)
@@ -423,6 +442,7 @@ namespace Fme.Database.Verification
                     Fields.Select(s => s.Name).ToList());
 
                 gridMappings.RefreshDataSource();
+                cbRightSide.Items.AddRange(cbTargetKey.Properties.Items);
             }
             catch (Exception)
             {
@@ -1005,6 +1025,7 @@ namespace Fme.Database.Verification
 
             editors.ToList().ForEach(editor => editor.Text = "");
 
+            
             this.Text = "Untitled";
 
             bsMappings.DataSource = model.ColumnCompare;
@@ -1136,13 +1157,19 @@ namespace Fme.Database.Verification
 
             ComboBoxItemCollection[] gridBoxes = { cbLeftSide.Items, cbRightSide.Items, cbCompareType.Items, cbOperator.Items };
             gridBoxes.ToList().ForEach(item => item.Clear());
+            SetupGridMappings();
 
-
+           
+        }
+        public void SetupGridMappings()
+        {
+           
             cbLeftSide.Items.AddRange(cbSourceKey.Properties.Items);
             cbRightSide.Items.AddRange(cbTargetKey.Properties.Items);
 
             cbCompareType.Items.AddRange(Enum.GetNames(typeof(ComparisonTypeEnum)));
             cbOperator.Items.AddRange(Enum.GetNames(typeof(OperatorEnums)));
+
         }
         /// <summary>
         /// Shows the error.
@@ -1503,6 +1530,26 @@ namespace Fme.Database.Verification
                 var query = viewCalcFields.GetRowCellValue(e.RowHandle, "LeftSide");
                 viewCalcFields.SetRowCellValue(e.RowHandle, "RightSide", query);
             }
+
+        }
+
+        private void cbSourceTable_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbSourceKey_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbTargetTable_Leave(object sender, EventArgs e)
+        {
+
+        }
+
+        private void cbTargetKey_Leave(object sender, EventArgs e)
+        {
 
         }
     }

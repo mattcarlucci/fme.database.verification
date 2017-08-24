@@ -44,11 +44,13 @@
     <Compile Include="Builders\AccessDbConnectionStringBuilder.cs" />
     <Compile Include="Builders\AceDbConnectionStringBuilder.cs" />
     <Compile Include="Comparison\AggregateComparer.cs" />
+    <Compile Include="Comparison\CompareCell.cs" />
     <Compile Include="Comparison\CompareCells.cs" />
     <Compile Include="Comparison\CompareHelperEventArgs.cs" />
     <Compile Include="Comparison\CompareRows.cs" />
     <Compile Include="Comparison\DateCompare.cs" />
     <Compile Include="Comparison\DateTimeCompare.cs" />
+    <Compile Include="Comparison\OperatorDictionary.cs" />
     <Compile Include="DataSources\AccessDataSource.cs" />
     <Compile Include="DataSources\DataSourceBase.cs" />
     <Compile Include="DataSources\DqlDataSource.cs" />

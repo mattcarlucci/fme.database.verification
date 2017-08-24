@@ -1,11 +1,14 @@
 ﻿using Fme.Library.Enums;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Fme.Library.Comparison
 {
+
+
     public class CompareCells
     {
         /// <summary>
@@ -16,7 +19,7 @@ namespace Fme.Library.Comparison
         /// <param name="compareType">Type of the compare.</param>
         /// <param name="operator">The operator.</param>
         /// <returns><c>true</c> if the specified left is equal; otherwise, <c>false</c>.</returns>
-        public static bool IsEqual(string left, string right, ComparisonTypeEnum compareType, OperatorEnums @operator, string ignoreChars, int leftTZO, int rightTZO)
+        public static bool IsEqual(string left, string right, ComparisonTypeEnum compareType, OperatorEnums @operator, string ignoreChars, int leftZone, int rightZone)
         {
 
 
@@ -31,10 +34,10 @@ namespace Fme.Library.Comparison
                 return CompareIn(left, right, compareType);
 
             if (@operator == OperatorEnums.Table)
-                return CompareTable(left, right, compareType);
+                return CompareTable(left, right, compareType, leftZone, rightZone);
 
             if (@operator == OperatorEnums.Equals)
-                return CompareEqual(left, right, compareType, leftTZO, rightTZO);
+                return CompareEqual(left, right, compareType, leftZone, rightZone);
 
             if (@operator == OperatorEnums.StartsWidth)
                 return right.StartsWith(left);
@@ -71,10 +74,31 @@ namespace Fme.Library.Comparison
         /// <param name="right">The right.</param>
         /// <param name="compareType">Type of the compare.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private static bool CompareTable(string left, string right, ComparisonTypeEnum compareType)
+        private static bool CompareTable(string left, string right, ComparisonTypeEnum compareType, int leftZone, int rightZone)
         {
+            List<string> date1 = new List<string>();
+            List<string> date2 = new List<string>();
+
             var list1 = left.Split(new char[] { '|' }, StringSplitOptions.None);
             var list2 = right.Split(new char[] { '|' }, StringSplitOptions.None);
+            if (compareType == ComparisonTypeEnum.Datetime)
+            {
+                foreach (var item in list1)
+                {
+                    DateTime.TryParse(item, out DateTime d1);
+                    date1.Add(d1.AddHours(leftZone).ToString());
+                }
+                foreach (var item in list2)
+                {
+                    DateTime.TryParse(item, out DateTime d2);
+                    date2.Add(d2.AddHours(rightZone).ToString());
+                }
+                left = string.Join("|", date1.ToArray());
+                right = string.Join("|", date2.ToArray());
+                list1 = left.Split(new char[] { '|' }, StringSplitOptions.None);
+                list2 = right.Split(new char[] { '|' }, StringSplitOptions.None);
+
+            }
 
             var o1 = string.Join("|", list1.OrderBy(o => o));
             var o2 = string.Join("|", list2.OrderBy(o => o));
@@ -93,16 +117,17 @@ namespace Fme.Library.Comparison
         /// <param name="right">The right.</param>
         /// <param name="compareType">Type of the compare.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private static bool CompareEqual(string left, string right, ComparisonTypeEnum compareType, int leftTZO, int rightTZO)
+        private static bool CompareEqual(string left, string right, ComparisonTypeEnum compareType, int leftZone, int rightZone)
         {
             var list = right.Split(new char[] { '|' }, StringSplitOptions.None);
             if (compareType == ComparisonTypeEnum.Datetime)
-                return CompareDateTime(left, right, leftTZO, rightTZO);
+                return CompareDateTime(left, right, leftZone, rightZone);
             else if (compareType == ComparisonTypeEnum.Date)
                 return CompareDate(left, right);
             else if (compareType == ComparisonTypeEnum.Integer)
                 return CompareInteger(left, right);
-
+            
+                
             return left == right;
         }
         /// <summary>
@@ -118,6 +143,7 @@ namespace Fme.Library.Comparison
             if (compareType == ComparisonTypeEnum.Datetime)
                 return CompareDateTime(left, right);
 
+            throw new NotImplementedException("Compare option not implimented.");
             return left == right;
         }
 
@@ -127,11 +153,11 @@ namespace Fme.Library.Comparison
         /// <param name="left">The left.</param>
         /// <param name="right">The right.</param>
         /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private static bool CompareDateTime(string left, string right, int leftTZO, int rightTZO)
+        private static bool CompareDateTime(string left, string right, int leftZone, int rightZone)
         {
             DateTimeCompare dti = new DateTimeCompare();
-            left = dti.Parse(left, leftTZO);
-            right = dti.Parse(right, rightTZO);
+            left = dti.Parse(left, leftZone);
+            right = dti.Parse(right, rightZone);
             return left == right;
         }
 
