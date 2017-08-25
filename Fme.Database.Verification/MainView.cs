@@ -74,7 +74,7 @@ namespace Fme.Database.Verification
         /// <summary>
         /// The mis matches
         /// </summary>
-        Dictionary<string, int> MisMatches = new Dictionary<string, int>();
+        Dictionary<string, string> MisMatches = new Dictionary<string, string>();
 
         /// <summary>
         /// Initializes the bindings.
@@ -227,6 +227,8 @@ namespace Fme.Database.Verification
         {
             if (ValidateRequiredFields() == false)
                 return;
+
+            model.ErrorMessages.Clear();
 
             var fallback = model;
             btnExecute.Enabled = false;
@@ -784,7 +786,9 @@ namespace Fme.Database.Verification
             
             lblStatus.Caption = "Idle";
             LoadQueries();
-
+            model.ErrorMessages.Add(new 
+                ErrorMessageModel("Compare.Execute", ((Exception)sender).Message, sender.ToString()));
+            gridMessages.ResetDataSource(model.ErrorMessages);
         }
 
         /// <summary>
@@ -865,11 +869,12 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="RowCellStyleEventArgs"/> instance containing the event data.</param>
         private void ViewResults_RowCellStyle(object sender, RowCellStyleEventArgs e)
         {
+           
 
-            if (MisMatches != null && MisMatches.ContainsKey(e.RowHandle + e.Column.FieldName.Replace("left_", "")))
-                e.Appearance.BackColor = Color.Red;
-            if (MisMatches != null && MisMatches.ContainsKey(e.RowHandle + e.Column.FieldName.Replace("right_", "")))
-                e.Appearance.BackColor = Color.LightGreen;
+            if (MisMatches != null && MisMatches.ContainsKey(e.RowHandle + e.Column.FieldName))
+                e.Appearance.BackColor = Color.FromName(MisMatches[e.RowHandle + e.Column.FieldName]); //red
+            else if (MisMatches != null && MisMatches.ContainsKey(e.RowHandle + e.Column.FieldName))
+                e.Appearance.BackColor = Color.FromName(MisMatches[e.RowHandle + e.Column.FieldName]); //light green
 
 
 
@@ -1485,6 +1490,15 @@ namespace Fme.Database.Verification
             cardViewMessages.Columns["StackTrace"].ColumnEdit = repoItemMemo;
 
             cardViewMessages.RefreshData();
+            try
+            {
+                if (model.ErrorMessages.Count() > 0)
+                    tabMessages.Text = string.Format("System Messages - {0} Error(s)", model.ErrorMessages.Count());
+            }
+            catch(Exception)
+            {
+                return;
+            }
 
         }
 
@@ -1551,6 +1565,38 @@ namespace Fme.Database.Verification
         private void cbTargetKey_Leave(object sender, EventArgs e)
         {
 
+        }
+
+        /// <summary>
+        /// Handles the Tick event of the tmrMonitor control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void tmrMonitor_Tick(object sender, EventArgs e)
+        {
+            try
+            {
+                if (model.ErrorMessages.Count > 0)
+                {
+                    if (tabMessages.Appearance.Header.BackColor == Color.LightPink)
+                        tabMessages.Appearance.Header.BackColor = (Color)tabMessages.Tag;
+                    else
+                    {
+                        tabMessages.Tag = tabMessages.Appearance.Header.BackColor;
+                        tabMessages.Appearance.Header.BackColor = Color.LightPink;
+                    }
+
+                }
+                else
+                {
+                    tabMessages.Appearance.Header.BackColor = Color.Transparent;
+                    tabMessages.Text = "System Messages";
+                }
+            }
+            catch(Exception)
+            {
+                return;
+            }
         }
     }
 }

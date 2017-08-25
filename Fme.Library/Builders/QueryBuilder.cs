@@ -90,13 +90,16 @@ namespace Fme.Library
         protected string BuildFieldAliases(string[] fields, string alias)
         {
             List<string> formatted = new List<string>();
-            fields.ToList().ForEach(item =>
+            fields.Where(w=> string.IsNullOrEmpty(w) == false).ToList().ForEach(item =>
             {
                 var x = item.Contains(" ") ? "[" + item + "]" : item;
                 formatted.Add(x);
               
             });
-            
+
+            if (formatted.Count == 0)
+                return string.Empty;
+
             if (string.IsNullOrEmpty(alias))
                 return string.Join("\r\n,", formatted);
             else

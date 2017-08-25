@@ -123,7 +123,7 @@ namespace Fme.Library.Models
                 Where(w => !string.IsNullOrEmpty(w)).ToList();
 
             if (Source.IsRandom && !string.IsNullOrEmpty(Source.MaxRows))
-                list = list.PickRandom(int.Parse(Source.MaxRows)).ToList();
+                list = list.Distinct().ToList().PickRandom(int.Parse(Source.MaxRows)).ToList();
 
             return list.ToArray();
         }

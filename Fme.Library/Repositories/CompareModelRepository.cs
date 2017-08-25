@@ -242,14 +242,27 @@ namespace Fme.Library.Repositories
         /// </summary>
         /// <param name="model">The model.</param>
         /// <returns>Dictionary&lt;System.String, System.Int32&gt;.</returns>
-        public static  Dictionary<string, int> GetCompareResults(CompareModel model)
+        public static  Dictionary<string, string> GetCompareResults(CompareModel model)
         {
-            Dictionary<string, int> keys = new Dictionary<string, int>();
+            Dictionary<string, string> keys = new Dictionary<string, string>();
 
             var results = model.ColumnCompare.SelectMany(s => s.CompareResults).ToList();
             foreach (var item in results)
             {
-                keys.Add(item.Row + item.LeftSide, 0);               
+                string key1 = item.Row + "left_" + item.LeftSide;
+                string key2 = item.Row + "right_" + item.RightSide;
+
+                if (keys.ContainsKey(key1))
+                    model.ErrorMessages.Add(new
+                        ErrorMessageModel("Get Compare Results", string.Format("The left key {0} already exists", key1), "Please report this error"));
+
+                if (keys.ContainsKey(key2))
+                    model.ErrorMessages.Add(new
+                        ErrorMessageModel("Get Compare Results", string.Format("The right key {0} already exists", key2), "Please report this error"));
+
+             
+                if (keys.ContainsKey(key1)== false) keys.Add(key1, "Red");
+                if (keys.ContainsKey(key2) == false)  keys.Add(key2, "LightGreen");
             }
             return keys;
         }
