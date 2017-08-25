@@ -145,10 +145,12 @@ namespace Fme.Library.Repositories
                     DataTable table1 = ds.Tables[0];
 
                     #region Construct Target, Fetch Data and set Aliases
+                    
+                    query = Model.Target.DataSource.GetQueryBuilder();
                     query.IncludeVersion = Model.Target.IncludeVersions;
 
                     var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
-                        Model.Target.SelectedTable, "", "0", Model.Target.Key,  table1.SelectKeys<string>("primary_key"));
+                        Model.Target.SelectedTable, "", Model.Target.MaxRows, Model.Target.Key,  table1.SelectKeys<string>("primary_key"));
 
                     LogQuery(Model.Target, select2, "Right");
 

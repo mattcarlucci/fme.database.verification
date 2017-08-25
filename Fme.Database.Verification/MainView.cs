@@ -44,6 +44,7 @@ using DevExpress.XtraGrid.Views.Base.ViewInfo;
 using System.IO;
 using DevExpress.LookAndFeel;
 using DevExpress.XtraGrid.Views.Card;
+using DevExpress.XtraTab;
 
 namespace Fme.Database.Verification
 {
@@ -229,6 +230,7 @@ namespace Fme.Database.Verification
                 return;
 
             model.ErrorMessages.Clear();
+            LockControls(true);
 
             var fallback = model;
             btnExecute.Enabled = false;
@@ -258,6 +260,7 @@ namespace Fme.Database.Verification
             catch (OperationCanceledException ex)
             {
                 timerElapsed.Stop();
+                LockControls(false);
                 MessageBox.Show(ex.Message, "Cancellation Requested", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
             catch (Exception ex)
@@ -266,6 +269,40 @@ namespace Fme.Database.Verification
                 ShowError(ex);
                 model = fallback;
             }
+        }
+
+        /// <summary>
+        /// Locks the controls.
+        /// </summary>
+        /// <param name="value">if set to <c>true</c> [value].</param>
+        private void LockControls(bool value)
+        {
+            cbTargetKey.Enabled = !value;
+            cbTargetTable.Enabled = !value;
+            cbSourceKey.Enabled = !value;
+            cbSourceTable.Enabled = !value;
+            cbSourceTZ.Enabled = !value;
+            cbTargetTZ.Enabled = !value;
+            btnSourceData.Enabled = !value;
+            btnTargetData.Enabled = !value;
+            btnEditIdList.Enabled = !value;
+            txtSourceMaxRows.Enabled = !value;
+            chkSourceRandom.Enabled = !value;
+            chkSourceVersions.Enabled = !value;
+            chkTargetVersions.Enabled = !value;
+
+            GridControl[] configGrids = { gridMappings ,gridCalcFields, gridFieldLookup };
+
+            GridView[] views = { viewMappings, viewCalcFields, viewFieldLookup };
+            foreach (GridView view in views)
+                view.OptionsBehavior.ReadOnly = value;
+
+
+            btnOpen.Enabled = !value;
+            btnAutoGenerate.Enabled = !value;
+            btnNew.Enabled = !value;
+            btnRefresh.Enabled = !value;
+            btnSave.Enabled = !value;
         }
 
         /// <summary>
@@ -341,6 +378,8 @@ namespace Fme.Database.Verification
 
                 cbTargetTable.Properties.Items.
                     AddRange(model.Target.TableSchemas.Select(s => s.TableName).ToArray());
+
+                chkTargetVersions.Visible = model.Target.DataSource is DqlDataSource;
             }
         }
 
@@ -361,7 +400,12 @@ namespace Fme.Database.Verification
 
                 cbSourceTable.Properties.Items.
                     AddRange(model.Source.TableSchemas.Select(s => s.TableName).ToArray());
-                
+
+                chkSourceVersions.Visible = model.Source.DataSource is DqlDataSource;
+                chkTargetVersions.Visible = model.Target.DataSource is DqlDataSource;
+
+
+
             }
             Cursor = Cursors.Default;
         }
@@ -413,10 +457,11 @@ namespace Fme.Database.Verification
                 cbSourceKey.Properties.Items.AddRange(model.Source.SelectedSchema().
                     Fields.Select(s => s.Name).ToList());
 
+                cbLeftSide.Items.Clear();
                 cbLeftSide.Items.AddRange(cbSourceKey.Properties.Items);
-              
 
-
+                gridSourcehSchema.DataSource = model.Source.SelectedSchema().Fields;
+                
                 gridMappings.RefreshDataSource();
             }
             catch(Exception)
@@ -444,7 +489,9 @@ namespace Fme.Database.Verification
                     Fields.Select(s => s.Name).ToList());
 
                 gridMappings.RefreshDataSource();
+                cbRightSide.Items.Clear();
                 cbRightSide.Items.AddRange(cbTargetKey.Properties.Items);
+                gridTargetSchema.DataSource = model.Target.SelectedSchema().Fields;
             }
             catch (Exception)
             {
@@ -776,6 +823,7 @@ namespace Fme.Database.Verification
                 Invoke(handler, sender, e);
                 return;
             }
+            LockControls(false);
             timerElapsed.Stop();
 
             ShowError(sender as Exception);
@@ -804,6 +852,7 @@ namespace Fme.Database.Verification
                 Invoke(handler, sender, e);
                 return;
             }
+            LockControls(false);
             SetDataSource(gridResults, e.Table);
             SetDataSource(gridReport, model.ColumnCompare.SelectMany(many => many.CompareResults).ToList());
 
@@ -1349,8 +1398,15 @@ namespace Fme.Database.Verification
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void cbSourceTZ_SelectedIndexChanged(object sender, EventArgs e)
-        {            
-            model.Source.TimeZoneOffset = int.Parse(cbSourceTZ.Text);
+        {
+            try
+            {
+                model.Source.TimeZoneOffset = int.Parse(cbSourceTZ.Text);
+            }
+            catch(Exception)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -1413,7 +1469,7 @@ namespace Fme.Database.Verification
                 isCalcTab = true;
             }
 
-            var items = model.ColumnCompare.Where(w => w.IsCalculated == isCalcTab);
+            var items = model.ColumnCompare.Where(w => w.IsCalculated == isCalcTab).ToList();
 
             foreach (var item in items)
                 model.ColumnCompare.Remove(item);
@@ -1549,12 +1605,12 @@ namespace Fme.Database.Verification
 
         private void cbSourceTable_Leave(object sender, EventArgs e)
         {
-
+            
         }
 
         private void cbSourceKey_Leave(object sender, EventArgs e)
         {
-
+            model.Source.Key = cbSourceKey.Text;
         }
 
         private void cbTargetTable_Leave(object sender, EventArgs e)
@@ -1564,7 +1620,7 @@ namespace Fme.Database.Verification
 
         private void cbTargetKey_Leave(object sender, EventArgs e)
         {
-
+            model.Target.Key = cbTargetKey.Text;
         }
 
         /// <summary>

@@ -55,6 +55,7 @@
     <Compile Include="DataSources\DataSourceBase.cs" />
     <Compile Include="DataSources\DqlDataSource.cs" />
     <Compile Include="Builders\DqlQueryBuilder.cs" />
+    <Compile Include="Enums\OleDbDatatypeMapping.cs" />
     <Compile Include="EventArgs\CompareModelEventArgs.cs" />
     <Compile Include="Extensions\DataSetExtensions.cs" />
     <Compile Include="Extensions\DataTableExtensions.cs" />

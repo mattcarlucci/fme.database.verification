@@ -77,6 +77,7 @@ namespace Fme.Library
             return ExecuteQuery(select, new CancellationToken());
         }
       
+       
         /// <summary>
         /// Fills the schema model.
         /// </summary>
@@ -84,12 +85,14 @@ namespace Fme.Library
         /// <param name="item">The item.</param>
         private void FillSchemaModel(TableSchemaModel table, IGrouping<string, DataRow> item)
         {
+            OleDbDataTypeMapping map = OleDbDataTypeMapping.Instance;
+
             table.TableName = item.Key;
             table.Fields.AddRange(item.Select(s => new FieldSchemaModel()
             {
                 Name = s.Field<string>("COLUMN_NAME"),
                 Ordinal = s.Field<Int64>("ORDINAL_POSITION"),
-                Type = Enum.GetName(typeof(DataTypeEnums), s.Field<object>("DATA_TYPE")),
+                Type = map.GetDataType(s.Field<object>("DATA_TYPE")), // Enum.GetName(typeof(DataTypeEnums), s.Field<object>("DATA_TYPE")),
                 MaxLength = s.Field<Int64?>("CHARACTER_MAXIMUM_LENGTH"),
                 TableName = item.Key
             }).ToArray());

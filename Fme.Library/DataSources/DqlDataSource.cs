@@ -131,6 +131,7 @@ namespace Fme.Library
                 Ordinal = ordinal++,
                 Type = map[(int)s["attr_type"]].ToString(),
                 MaxLength = (int)s["attr_length"],
+                IsRepeating = Convert.ToBoolean(s["attr_repeating"]),
                 TableName = item.Key
             }).ToArray());
         }
