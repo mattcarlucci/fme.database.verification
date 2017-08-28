@@ -86,6 +86,61 @@ namespace Fme.Library.Comparison
         {
 
         }
+
+        /// <summary>
+        /// Compares the columns.
+        /// </summary>
+        /// <param name="currentRow">The current row.</param>
+        /// <param name="table">The table.</param>
+        /// <param name="compare">The compare.</param>
+        /// <param name="model">The model.</param>
+        /// <param name="cancelToken">The cancel token.</param>
+        /// <returns>List&lt;CompareResultModel&gt;.</returns>
+        public List<CompareResultModel> CompareColumns2(int currentRow, DataTable table, CompareMappingModel compare, CompareModel model, CancellationTokenSource cancelToken)
+        {
+            List<CompareResultModel> results = new List<CompareResultModel>();
+            GenericCompare comparer = new GenericCompare();
+
+            string statusMessage = "Completed";
+            this.CancelToken = cancelToken;
+            DateTime startTime = DateTime.Now;
+
+            CompareParameters parms = new CompareParameters(compare.Operator);
+            parms.Add(model.Source.TimeZoneOffset, model.Target.TimeZoneOffset, compare.ToDictionary(compare.LeftLookupFile), compare.ToDictionary(compare.RightLookupFile));            
+
+            OnStatusEvent(this, NewEventStatus(table, compare, currentRow, startTime));
+            pairs.AddOrUpdate(compare.LeftSide, 0, (existingKey, existingVal) => 0);
+            
+            for (int row = 0; row < table.Rows.Count; row++)
+            {
+                var sourceValue = ToString(table.Rows[row][compare.LeftAlias]);
+                var targetValue = ToString(table.Rows[row][compare.RightAlias]);
+                
+                if (comparer.ContainsKey(compare.CompareType))
+                {
+                    if (!comparer[compare.CompareType](sourceValue, targetValue, parms.Operator, parms))
+                    {
+                        var primary_key = table.Rows[row].Field<string>("primary_key");
+                        results.Add(new CompareResultModel(primary_key, compare.LeftSide, compare.RightSide, sourceValue, targetValue, row));
+                        var detail = string.Format("{0} {1} {2} Values {3} {1} {4}", compare.LeftAlias, compare.Operator, compare.RightAlias, sourceValue, targetValue);
+
+                        if (parms.Exception != null)
+                            model.ErrorMessages.Add(new ErrorMessageModel("Comparison", detail, parms.GetException()));
+
+                        string key = compare.LeftSide;
+                        pairs.AddOrUpdate(key, 1, (existingKey, existingVal) => existingVal + 1);
+                    }
+                }
+                else
+                {
+                    statusMessage = "Skipped";
+                    pairs.AddOrUpdate(compare.LeftSide, 1, (existingKey, existingVal) => existingVal);
+                }
+            }
+            OnStatusEvent(this, NewEventStatus(table, compare, results, currentRow, statusMessage, startTime));
+            return results;
+
+        }
         /// <summary>
         /// Compares the columns.
         /// </summary>
@@ -173,7 +228,6 @@ namespace Fme.Library.Comparison
                     Console.WriteLine("OK");
 
                 OnStatusEvent(this, NewEventStatus(table, compare, results, currentRow, statusMessage, startTime));
-
 
                 return results;
 

@@ -81,6 +81,7 @@ namespace Fme.Library
             return stack;
         }
 
+        
         /// <summary>
         /// Builds the field aliases.
         /// </summary>
@@ -92,9 +93,11 @@ namespace Fme.Library
             List<string> formatted = new List<string>();
             fields.Where(w=> string.IsNullOrEmpty(w) == false).ToList().ForEach(item =>
             {
-                var x = item.Contains(" ") ? "[" + item + "]" : item;
-                formatted.Add(x);
-              
+                var x = item.Contains(" ") && item.Contains("[") == false 
+                    ? "[" + item + "]" 
+                    : item;
+
+                formatted.Add(x);              
             });
 
             if (formatted.Count == 0)
@@ -140,13 +143,13 @@ namespace Fme.Library
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
         public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues )
-        {
+        {           
             if (inValues == null)            
-                return BuildSql(primaryKey, fields.Distinct().ToArray(), tableName, aliasPrefix, maxRows);
+                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
                 
             
             var aliases = BuildFieldAliases(fields, aliasPrefix);
-            var inCaluse = BuildInValues(inField, inValues);
+            var inCaluse = BuildInValues(inField, inValues.Distinct().ToArray());
 
             return string.Format("select {0} as primary_key, {1} from [{2}] where {3}", primaryKey, aliases, tableName, inCaluse);
         }
@@ -163,6 +166,8 @@ namespace Fme.Library
         /// <returns>System.String.</returns>
         public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues)
         {
+          
+
             if (inValues == null)
                 return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
 
@@ -181,8 +186,8 @@ namespace Fme.Library
         /// <param name="aliasPrefix">The alias prefix.</param>
         /// <returns>System.String.</returns>
         public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows)
-        {
-            var aliases = BuildFieldAliases(fields.Distinct().ToArray(), aliasPrefix);
+        {           
+            var aliases = BuildFieldAliases(fields, aliasPrefix);
             return string.Format("select {0} as primary_key, {1} from [{2}] where {0} IS NOT NULL", primaryKey, aliases, tableName);
         }
 

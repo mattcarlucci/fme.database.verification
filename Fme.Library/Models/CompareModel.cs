@@ -138,7 +138,7 @@ namespace Fme.Library.Models
         /// <param name="query">The query.</param>
         /// <param name="in">The in.</param>
         /// <param name="dataSource">The data source.</param>
-        private void MergeCalculatedData(DataTable table, string side, string field, string query, string[] @in, 
+        private DataTable MergeCalculatedData(DataTable table, string side, string field, string query, string[] @in, 
             DataSourceBase dataSource, CancellationTokenSource cancelToken)
         {
             //lblStatus.Caption = "Executing Calculated Queries: " + side + " " + field;
@@ -152,6 +152,8 @@ namespace Fme.Library.Models
             data.PrimaryKey = new[] { data.Columns[0] };
             table.InnerJoin<string>("primary_key", data);
             data.Columns[1].ColumnName = side + "_" + field;
+            return data;
+
             table.Merge(data, false, MissingSchemaAction.AddWithKey);
         }
         /// <summary>
@@ -172,12 +174,16 @@ namespace Fme.Library.Models
                     try
                     {
                         index = 1;
-                        MergeCalculatedData(source, "left", calc.LeftSide, calc.LeftQuery, 
+                        var data1 = MergeCalculatedData(source, "left", calc.LeftSide, calc.LeftQuery, 
                             source.SelectKeys<string>("primary_key"), Source.DataSource, cancelToken);
 
                         index = 2;
-                        MergeCalculatedData(target, "right", calc.RightSide, calc.RightQuery, 
+                        var data2 = MergeCalculatedData(target, "right", calc.RightSide, calc.RightQuery, 
                             target.SelectKeys<string>("primary_key"), Target.DataSource, cancelToken);
+
+                        //only merge if the queries execute.
+                        source.Merge(data1, false, MissingSchemaAction.AddWithKey);
+                        target.Merge(data2, false, MissingSchemaAction.AddWithKey);
                     }
                     catch (Exception ex)
                     {

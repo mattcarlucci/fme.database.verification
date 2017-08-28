@@ -32,15 +32,15 @@ namespace Fme.Database.Verification
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            DevExpress.Utils.SuperToolTip superToolTip7 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem7 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip8 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem8 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip5 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem5 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip6 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem6 = new DevExpress.Utils.ToolTipTitleItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
-            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem1 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem2 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip3 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem3 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip4 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem4 = new DevExpress.Utils.ToolTipTitleItem();
             this.compareMappingModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar1 = new DevExpress.XtraBars.Bar();
@@ -250,6 +250,7 @@ namespace Fme.Database.Verification
             this.colRightLookupFile = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu3 = new DevExpress.XtraBars.PopupMenu(this.components);
             this.tmrMonitor = new System.Windows.Forms.Timer(this.components);
+            this.repoSpinEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).BeginInit();
@@ -370,6 +371,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
             this.ctxLookupMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repoSpinEdit1)).BeginInit();
             this.SuspendLayout();
             // 
             // compareMappingModelBindingSource
@@ -481,9 +483,9 @@ namespace Fme.Database.Verification
             this.btnExecute.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnExecute.ImageOptions.LargeImage")));
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem1.Text = "Execute a Compare";
-            superToolTip1.Items.Add(toolTipTitleItem1);
-            this.btnExecute.SuperTip = superToolTip1;
+            toolTipTitleItem7.Text = "Execute a Compare";
+            superToolTip7.Items.Add(toolTipTitleItem7);
+            this.btnExecute.SuperTip = superToolTip7;
             this.btnExecute.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnExecute_ItemClick);
             // 
             // btnCancel
@@ -494,9 +496,9 @@ namespace Fme.Database.Verification
             this.btnCancel.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.ImageOptions.LargeImage")));
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem2.Text = "Cancel Execution";
-            superToolTip2.Items.Add(toolTipTitleItem2);
-            this.btnCancel.SuperTip = superToolTip2;
+            toolTipTitleItem8.Text = "Cancel Execution";
+            superToolTip8.Items.Add(toolTipTitleItem8);
+            this.btnCancel.SuperTip = superToolTip8;
             this.btnCancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnCancel_ItemClick);
             // 
             // btnRefresh
@@ -650,9 +652,9 @@ namespace Fme.Database.Verification
             this.barButtonItem4.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem4.ImageOptions.LargeImage")));
             this.barButtonItem4.Name = "barButtonItem4";
             this.barButtonItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem3.Text = "Select the Source Data";
-            superToolTip3.Items.Add(toolTipTitleItem3);
-            this.barButtonItem4.SuperTip = superToolTip3;
+            toolTipTitleItem5.Text = "Select the Source Data";
+            superToolTip5.Items.Add(toolTipTitleItem5);
+            this.barButtonItem4.SuperTip = superToolTip5;
             // 
             // popupMenu1
             // 
@@ -688,9 +690,9 @@ namespace Fme.Database.Verification
             this.barButtonItem5.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem5.ImageOptions.LargeImage")));
             this.barButtonItem5.Name = "barButtonItem5";
             this.barButtonItem5.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem4.Text = "Select the Target Data";
-            superToolTip4.Items.Add(toolTipTitleItem4);
-            this.barButtonItem5.SuperTip = superToolTip4;
+            toolTipTitleItem6.Text = "Select the Target Data";
+            superToolTip6.Items.Add(toolTipTitleItem6);
+            this.barButtonItem5.SuperTip = superToolTip6;
             // 
             // popupMenu2
             // 
@@ -850,6 +852,7 @@ namespace Fme.Database.Verification
             this.tabCompareResults,
             this.tabQueries,
             this.tabMessages});
+            this.xtraTabControl1.SelectedPageChanged += new DevExpress.XtraTab.TabPageChangedEventHandler(this.xtraTabControl1_SelectedPageChanged);
             // 
             // tabConfiguration
             // 
@@ -1268,6 +1271,7 @@ namespace Fme.Database.Verification
             this.xtraTabPage4,
             this.xtraTabPage5,
             this.xtraTabComparison});
+            this.xtraTabControl2.Click += new System.EventHandler(this.xtraTabControl2_Click);
             // 
             // xtraTabFieldMappings
             // 
@@ -1295,7 +1299,8 @@ namespace Fme.Database.Verification
             this.cbRightSide,
             this.cbCompareType,
             this.cbOperator,
-            this.repo_chkSelected});
+            this.repo_chkSelected,
+            this.repoSpinEdit1});
             this.gridMappings.Size = new System.Drawing.Size(798, 231);
             this.gridMappings.TabIndex = 0;
             this.gridMappings.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -1441,16 +1446,30 @@ namespace Fme.Database.Verification
             // 
             // colErrors
             // 
+            this.colErrors.AppearanceCell.BackColor = System.Drawing.Color.Ivory;
+            this.colErrors.AppearanceCell.Options.UseBackColor = true;
+            this.colErrors.AppearanceCell.Options.UseTextOptions = true;
+            this.colErrors.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Center;
+            this.colErrors.AppearanceCell.TextOptions.VAlignment = DevExpress.Utils.VertAlignment.Center;
+            this.colErrors.ColumnEdit = this.repoSpinEdit1;
             this.colErrors.FieldName = "Errors";
             this.colErrors.Name = "colErrors";
+            this.colErrors.OptionsColumn.AllowEdit = false;
+            this.colErrors.OptionsColumn.ReadOnly = true;
             this.colErrors.Visible = true;
             this.colErrors.VisibleIndex = 6;
             this.colErrors.Width = 70;
             // 
             // colStatus
             // 
+            this.colStatus.AppearanceCell.BackColor = System.Drawing.Color.Ivory;
+            this.colStatus.AppearanceCell.Options.UseBackColor = true;
+            this.colStatus.AppearanceHeader.BackColor = System.Drawing.Color.Ivory;
+            this.colStatus.AppearanceHeader.Options.UseBackColor = true;
             this.colStatus.FieldName = "Status";
             this.colStatus.Name = "colStatus";
+            this.colStatus.OptionsColumn.AllowEdit = false;
+            this.colStatus.OptionsColumn.ReadOnly = true;
             this.colStatus.Visible = true;
             this.colStatus.VisibleIndex = 7;
             this.colStatus.Width = 70;
@@ -1476,14 +1495,20 @@ namespace Fme.Database.Verification
             // 
             this.colSelection.FieldName = "Selection";
             this.colSelection.Name = "colSelection";
+            this.colSelection.OptionsColumn.AllowEdit = false;
+            this.colSelection.OptionsColumn.ReadOnly = true;
             this.colSelection.Width = 62;
             // 
             // colStartTime
             // 
+            this.colStartTime.AppearanceCell.BackColor = System.Drawing.Color.Ivory;
+            this.colStartTime.AppearanceCell.Options.UseBackColor = true;
             this.colStartTime.DisplayFormat.FormatString = "MM/dd/yy hh:mm:ss";
             this.colStartTime.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
             this.colStartTime.FieldName = "StartTime";
             this.colStartTime.Name = "colStartTime";
+            this.colStartTime.OptionsColumn.AllowEdit = false;
+            this.colStartTime.OptionsColumn.ReadOnly = true;
             this.colStartTime.Visible = true;
             this.colStartTime.VisibleIndex = 8;
             this.colStartTime.Width = 105;
@@ -2504,6 +2529,13 @@ namespace Fme.Database.Verification
             this.tmrMonitor.Interval = 1000;
             this.tmrMonitor.Tick += new System.EventHandler(this.tmrMonitor_Tick);
             // 
+            // repoSpinEdit1
+            // 
+            this.repoSpinEdit1.AutoHeight = false;
+            this.repoSpinEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repoSpinEdit1.Name = "repoSpinEdit1";
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2650,6 +2682,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
             this.ctxLookupMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repoSpinEdit1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2870,6 +2903,7 @@ namespace Fme.Database.Verification
         private DevExpress.XtraGrid.Views.Card.CardView cardViewMessages;
         private DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit repoItemMemo;
         private Timer tmrMonitor;
+        private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repoSpinEdit1;
     }
 
 }

@@ -59,9 +59,10 @@ namespace Fme.Library
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
         public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues)
-        {
+        {          
+
             if (inValues == null)
-                return BuildSql(primaryKey, fields.Distinct().ToArray(), tableName, aliasPrefix, maxRows);
+                return BuildSql(primaryKey, fields.ToArray(), tableName, aliasPrefix, maxRows);
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
@@ -115,7 +116,7 @@ namespace Fme.Library
         /// <param name="aliasPrefix">The alias prefix.</param>
         /// <returns>System.String.</returns>
         public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows)
-        {
+        {            
             var aliases = BuildFieldAliases(fields.Distinct().ToArray(), aliasPrefix);
 
             // string key = primaryKey == "r_object_id" ? " as primary_key," : ", " + primaryKey + " as primary_key,";

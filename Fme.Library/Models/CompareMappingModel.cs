@@ -27,7 +27,7 @@ namespace Fme.Library.Models
     [Serializable]
     public class CompareMappingModel
     {
-
+        
         /// <summary>
         /// Gets or sets a value indicating whether this <see cref="CompareMappingModel"/> is selected.
         /// </summary>
@@ -235,7 +235,14 @@ namespace Fme.Library.Models
             while (reader.Peek() >= 0)
             {
                 string line = reader.ReadLine();
-                items.Add(line.Split('\t')[0], line.Split('\t')[1]);
+                try
+                {
+                    items.Add(line.Split('\t')[0], line.Split('\t')[1]);
+                }
+                catch(Exception)
+                {
+                    continue;
+                }
             }
             return items;
         }

@@ -13,7 +13,7 @@ using System.IO;
 
 namespace Fme.Library.Repositories
 {
-    public class CompareModelRepository : CompareRows
+    public class CompareModelRepository : CompareExecuter
     {
         //CancellationTokenSource CancelToken { get; set; }
         CompareModel Model { get; set; }
@@ -64,7 +64,7 @@ namespace Fme.Library.Repositories
         /// <param name="e">The <see cref="CompareHelperEventArgs" /> instance containing the event data.</param>
         public override void OnStatusEvent(object sender, CompareHelperEventArgs e)
         {
-            Debug.Print("Current Row is " + e.CurrentRow);
+           // Debug.Print("Current Row is " + e.CurrentRow);
 
             var col = Model.ColumnCompare[e.CurrentRow];
             col.CompareResults = e.Results;
@@ -77,7 +77,7 @@ namespace Fme.Library.Repositories
             base.OnStatusEvent(sender, e);
         }
 
-        public CompareModelRepository(CompareModel model)
+        public CompareModelRepository(CompareModel model) 
         {
             this.Model = model;
         }
@@ -137,6 +137,10 @@ namespace Fme.Library.Repositories
                     var ds = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
                     Model.Source.DataSource.SetAliases(ds, "left");
 
+                    //for (int i = 1; i < ds.Tables[0].Columns.Count; i++)
+                    //    ds.Tables[0].Columns[i].SetHeading(Model.ColumnCompare[i - 1].LeftAlias);
+
+
                     if (ds.Tables == null || ds.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Source.SelectedTable);
                     #endregion
@@ -159,7 +163,10 @@ namespace Fme.Library.Repositories
 
                     var ds2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);
                     Model.Target.DataSource.SetAliases(ds2, "right");
-                  
+
+                  //  for (int i = 1; i < ds2.Tables[0].Columns.Count; i++)
+                  //      ds2.Tables[0].Columns[i].SetHeading(Model.ColumnCompare[i - 1].RightAlias);
+                    
                     if (ds2.Tables == null || ds2.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
                     #endregion
@@ -190,13 +197,14 @@ namespace Fme.Library.Repositories
                     var targetData = table2.AsEnumerable().CopyToDataTable();
                     
                     table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
-                    CompareMappingHelper.OrderColumns(table1, pairs);
+                    CompareMappingHelper.OrderColumns(table1, Model.ColumnCompare.Where(w=> w.Selected).ToList());
                     
                     OnCompareStart(this, new CompareStartEventArgs() { Pairs = null });
                     OnSourceLoadComplete(this, new DataTableEventArgs() { Table = sourceData });
                     OnTargetLoadComplete(this, new DataTableEventArgs() { Table = targetData });
                     
                     CompareMappingHelper.CompareColumns(this, table1, Model, cancelToken);
+                    
 
                     OnCompareComplete(this, new DataTableEventArgs() { Table = table1, Pairs = null });
                 }

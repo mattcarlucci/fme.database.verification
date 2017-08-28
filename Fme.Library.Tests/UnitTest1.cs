@@ -28,6 +28,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Fme.Library.Comparison;
 using Fme.Library.Enums;
+using System.Runtime.Serialization;
+using System.Collections.Generic;
 
 namespace Fme.Library.Tests
 {
@@ -396,8 +398,54 @@ namespace Fme.Library.Tests
         [TestMethod]
         public void Test_ComparisonOperations()
         {
-          //  CompareCell cell = new CompareCell();
-         //   cell[ComparisonTypeEnum.Datetime][OperatorEnums.Table]("8/24/2017 9:30:00 AM", "8/24/2017 12:30:00 PM", new int[] { 2, 0 });
+          //  FormatterConverter c = new FormatterConverter();
+          //  object x = c.Convert("2/12/2015 11:00:00", typeof(DateTime));
+
+          //  GenericConverter<DateTime> gnc = new GenericConverter<DateTime>();
+          //  var gvalue1 = gnc.Transform("2/12/2015 11:00:30|2/14/15 10:00:00", (dt) => dt.AddHours(3));
+          //  var gvalue2 = gnc.Transform("2/12/2015 14:00:30|2/14/15 13:00:00", (dt) => dt.AddHours(0));
+
+          
+          //  Dictionary<string, string> lookup = new Dictionary<string, string>();
+          //  lookup.Add("Original Value", "Replaced Value");
+
+          //  string leftString = "Original Value";
+          //  string rightString = "Replaced Value";
+
+          //  GenericCompare comp = new GenericCompare();
+
+          //  gvalue1 = "2/12/2015 11:00:30|2/14/15 10:00:00";
+          //  gvalue2 = "2/12/2015 14:00:30|2/14/15 13:00:00";
+
+          // // var gres = comp[ComparisonTypeEnum.Date](gvalue1, gvalue2, OperatorEnums.Equals, 3, 0);
+
+          // // var result = comp.CompareString(leftString, rightString, OperatorEnums.Equals, lookup, new Dictionary<string, string>());
+
+          //  string leftInt = "1.01";
+          //  string rightInt = "1";
+          //  result = comp.CompareInteger(leftInt, rightInt, OperatorEnums.Equals, 0, 0);
+
+
+          //  GenericConverter<string> snc = new GenericConverter<string>();
+          //  var gvalue = snc.Transform("2/12/2015 11:00:30|2/14/15 10:00:00", (dt) => dt);
+
+          //  DateTimeConverter dtc = new DateTimeConverter();
+          //  var newValue = dtc.Transform("2/12/2015 11:00:30|2/14/15 10:00:00", 3);
+
+          //  StringConverter stc = new StringConverter();
+          //  newValue = stc.Transform("2/12/2015 11:00:30|2/14/15 10:00:00", 4);
+          //  var value2 = gvalue;
+
+          //  var rr = stc.Equals(newValue, gvalue);
+
+          //  var date = new GenericConverter<DateTime>();
+          ////  var ww = date.ConvertX("2/12/2015 11:00:00");
+
+          //  List<DateTime> wow = date.Convert(new string[] { "2/12/2014 11:00:00", "2/14/2015 10:00:00" });
+          // // var sw = date.Join(wow.ToArray(),3);
+
+          ////  CompareCell cell = new CompareCell();
+          ////   cell[ComparisonTypeEnum.Datetime][OperatorEnums.Table]("8/24/2017 9:30:00 AM", "8/24/2017 12:30:00 PM", new int[] { 2, 0 });
         }
 
     }

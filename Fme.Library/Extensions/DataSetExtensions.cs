@@ -115,7 +115,50 @@ namespace Fme.Library.Extensions
             return remove.ToArray();
         }
 
-     
+        /// <summary>
+        /// Sets the heading.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="value">The value.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public static bool SetHeading(this DataColumn column, string value)
+        {
+            try
+            {
+                column.ColumnName = value;
+                column.Caption = value;
+                return true;
+            }
+            catch(Exception ex)
+            {
+                int index = 1;
+                while (SetHeading(column, value, ref index) == false) ;
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Sets the heading.
+        /// </summary>
+        /// <param name="column">The column.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="index">The index.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        private static bool SetHeading(this DataColumn column, string value, ref int index)
+        {
+            try
+            {
+                column.ColumnName = string.Format("{0}{1}", value, index);
+                column.Caption = column.ColumnName;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                index++;
+                return false;
+            }
+        }
+
 
 
     }

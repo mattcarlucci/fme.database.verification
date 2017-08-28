@@ -12,7 +12,9 @@ namespace Fme.Library.Enums
        String,
        Date,
        Datetime,
-       Integer,             
+       Integer,
+       Float,
+       Boolean,
     }
     public enum OperatorEnums
     {

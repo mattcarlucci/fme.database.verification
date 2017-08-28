@@ -47,6 +47,26 @@ namespace Fme.Library
         /// <returns>DataSet.</returns>
         public abstract DataSet ExecuteQuery(string select);
 
+        public string[] Map(string[] fields)
+        {
+            Dictionary<string, int> map = new Dictionary<string, int>();
+            List<string> @new = new List<string>();
+            foreach (var field in fields)
+            {
+                if (map.ContainsKey(field) == false)
+                {
+                    map.Add(field, 0);
+                    @new.Add(field);
+                }
+                else
+                {
+                    map[field] += map[field];
+                    @new.Add(string.Format("{0} as {0}{1}", field, map[field]));
+                }
+
+            }
+            return @new.ToArray();
+        }
         /// <summary>
         /// Sets the aliases.
         /// </summary>

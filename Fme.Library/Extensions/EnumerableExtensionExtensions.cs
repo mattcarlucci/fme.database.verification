@@ -114,5 +114,20 @@ namespace Fme.Library.Extensions
         {
             return string.Join(seperator, items);
         }
+        /// <summary>
+        /// Swaps the specified index a.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list">The list.</param>
+        /// <param name="indexA">The index a.</param>
+        /// <param name="indexB">The index b.</param>
+        /// <returns>IList&lt;T&gt;.</returns>
+        public static IList<T> Swap<T>(this IList<T> list, int indexA, int indexB)
+        {
+            T tmp = list[indexA];
+            list[indexA] = list[indexB];
+            list[indexB] = tmp;
+            return list;
+        }
     }
 }

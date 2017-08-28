@@ -229,6 +229,7 @@ namespace Fme.Database.Verification
             if (ValidateRequiredFields() == false)
                 return;
 
+            tmrMonitor.Start();
             model.ErrorMessages.Clear();
             LockControls(true);
 
@@ -354,6 +355,7 @@ namespace Fme.Database.Verification
                 gridMappings.DataSource = bsMappings;
                 gridFieldLookup.DataSource = bsMappings;
                 gridCalcFields.DataSource = bsMappings;
+                model.SetCompareOrdinal();
                 gridMappings.RefreshDataSource();
             }
             catch(Exception ex)
@@ -541,7 +543,7 @@ namespace Fme.Database.Verification
                     e.Appearance.ForeColor = Color.DarkRed;
                     e.Appearance.BackColor = Color.Ivory;
 
-                    Debug.Print(e.Column.FieldName);
+                   // Debug.Print(e.Column.FieldName);
                     //  if (e.Column.FieldName == "LeftSide" || e.Column.Name == "RightSide")
                     //      e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Bold);
 
@@ -614,6 +616,7 @@ namespace Fme.Database.Verification
                 items.Last().IsCalculated = true;
                 viewCalcFields.RefreshData();
             }
+            model.SetCompareOrdinal();
         }
 
         /// <summary>
@@ -733,10 +736,7 @@ namespace Fme.Database.Verification
             if (sourceRow == targetRow)
                 return;
 
-            GridView view = viewMappings;
-            var temp = model.ColumnCompare[sourceRow];
-            model.ColumnCompare.Remove(temp);
-            model.ColumnCompare.Insert(targetRow, temp);
+            model.ColumnCompare.Swap(sourceRow, targetRow);           
             gridMappings.RefreshDataSource();
         }
         #endregion
@@ -789,7 +789,8 @@ namespace Fme.Database.Verification
                 Invoke(handler, sender, e);
                 return;
             }
-            SetDataSource(gridSourceData, e.Table);
+            SetDataSource(gridSourceData, e.Table);           
+
         }
 
         /// <summary>
@@ -868,6 +869,7 @@ namespace Fme.Database.Verification
             btnExecute.Enabled = true;
             MisMatches = CompareModelRepository.GetCompareResults(model);
             LoadQueries();
+            TryFixHeadings();
         }
         /// <summary>
         /// Loads the queries.
@@ -1298,6 +1300,28 @@ namespace Fme.Database.Verification
                 return false;
             }
 
+            Dictionary<string, int> testDuplicates = new Dictionary<string, int>();
+            foreach(var key in model.ColumnCompare.
+                Where(w=> w.Selected == true && w.LeftSide != w.RightSide).Select(s => s.LeftSide + " <=> " + s.RightSide))
+            {
+                if (testDuplicates.ContainsKey(key))
+                {
+                    MessageBox.Show("Duplicate mappings are not allow. Please correct the error and try again.\r\n" + key);                    
+                    return false;
+                }
+                testDuplicates.Add(key, 0);
+            }
+            foreach (var key in model.ColumnCompare.
+                Where(w => w.Selected == true).Select(s => s.RightSide + " <=> " + s.LeftSide))
+            {
+                if (testDuplicates.ContainsKey(key))
+                {
+                    MessageBox.Show("Duplicate mappings are not allow. Please correct the error and try again.\r\n" + key);
+                    return false;
+                }
+                testDuplicates.Add(key, 0);
+            }
+
             //if (GetIdList() == null || GetIdList().Count == 0)
             //{                
             //    MessageBox.Show("Please enter a valid ID List File.");
@@ -1334,7 +1358,7 @@ namespace Fme.Database.Verification
 
                 BaseHitInfo baseHI = view.CalcHitInfo(p);
                 GridHitInfo gridHI = baseHI as GridHitInfo;
-                Debug.Print(gridHI.RowHandle.ToString());
+                //Debug.Print(gridHI.RowHandle.ToString());
                 if (gridHI.RowHandle < 0)
                     e.Cancel = true;
                
@@ -1437,16 +1461,49 @@ namespace Fme.Database.Verification
             }
         }
 
+        /// <summary>
+        /// Handles the ProcessGridKey event of the gridControl control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="KeyEventArgs"/> instance containing the event data.</param>
         private void gridControl_ProcessGridKey(object sender, KeyEventArgs e)
         {
-            return;
-            var grid = sender as GridControl;
-            var view = grid.FocusedView as GridView;
-            if (e.KeyData == Keys.Delete)
+
+            GridControl grid = sender as GridControl;
+            GridView view = grid.MainView as GridView;
+            view.GridControl.Focus();
+            int index = view.FocusedRowHandle;
+                        
+            if (grid != gridMappings) return;
+            if (view.FocusedColumn.OptionsColumn.AllowEdit == true) return;            
+            if (e.KeyCode == Keys.Up && e.Modifiers == Keys.Control ) 
             {
-                view.DeleteSelectedRows();
-                e.Handled = true;
+                Debug.Print("Move Up");               
+               
+                if (index <= 0) return;
+                model.ColumnCompare.Swap(index - 1, index);
+                view.FocusedRowHandle = index;               
+
             }
+            if (e.KeyCode == Keys.Down && e.Modifiers == Keys.Control)
+            {
+                Debug.Print("Move Down");
+               
+                if (index >= view.DataRowCount - 1) return;
+                model.ColumnCompare.Swap(index + 1, index);                
+                view.FocusedRowHandle = index ;               
+            }
+            model.SetCompareOrdinal();
+           
+            //grid.RefreshDataSource();
+
+            //var grid = sender as GridControl;
+            //var view = grid.FocusedView as GridView;
+            //if (e.KeyData == Keys.Delete)
+            //{
+            //    view.DeleteSelectedRows();
+            //    e.Handled = true;
+            //}
         }
 
         /// <summary>
@@ -1498,14 +1555,11 @@ namespace Fme.Database.Verification
                 int lastRow = view.FocusedRowHandle;
                 if (lastRow < 0) return;
 
-                view.DeleteSelectedRows();
-
-                //model.ColumnCompare.RemoveAt(view.FocusedRowHandle);
-                // gridMappings.DataSource = model.ColumnCompare;
-                //gridMappings.RefreshDataSource();
-                //gridMappings.Refresh();
+                view.DeleteSelectedRows();               
                 if (lastRow > 1)
                     view.MakeRowVisible(lastRow - 1);
+
+                model.SetCompareOrdinal();
             }
             catch(Exception)
             {
@@ -1540,7 +1594,7 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void gridMessages_DataSourceChanged(object sender, EventArgs e)
         {
-            cardViewMessages.CardWidth = (cardViewMessages.GridControl.Width - 90) / 2;
+            cardViewMessages.CardWidth = (cardViewMessages.GridControl.Width - 75) / 2;
             //cardViewMessages.OptionsBehavior.AutoHorzWidth = true;
             cardViewMessages.OptionsBehavior.FieldAutoHeight = true;
             cardViewMessages.Columns["StackTrace"].ColumnEdit = repoItemMemo;
@@ -1623,6 +1677,19 @@ namespace Fme.Database.Verification
             model.Target.Key = cbTargetKey.Text;
         }
 
+        private void TryFixHeadings()
+        {
+            //DataTable table = gridResults.DataSource as DataTable;
+            //foreach(DataColumn col in table.Columns)
+            //{
+            //    var items = model.ColumnCompare.Where(w => w.LeftAlias != col.ColumnName  w.RightAlias == col.ColumnName);
+            //    {
+            //        foreach(var item in items)
+            //            Debug.Print(col.ColumnName);
+            //        //can we rename this or not!
+            //    }
+            //}
+        }
         /// <summary>
         /// Handles the Tick event of the tmrMonitor control.
         /// </summary>
@@ -1634,6 +1701,7 @@ namespace Fme.Database.Verification
             {
                 if (model.ErrorMessages.Count > 0)
                 {
+                    tabMessages.Text = string.Format("System Messages - {0} Error(s)", model.ErrorMessages.Count());
                     if (tabMessages.Appearance.Header.BackColor == Color.LightPink)
                         tabMessages.Appearance.Header.BackColor = (Color)tabMessages.Tag;
                     else
@@ -1653,6 +1721,19 @@ namespace Fme.Database.Verification
             {
                 return;
             }
+        }
+
+        private void xtraTabControl1_SelectedPageChanged(object sender, TabPageChangedEventArgs e)
+        {
+            if (e.Page == tabMessages)
+                tmrMonitor.Stop();
+
+            tabMessages.Appearance.Header.BackColor = Color.Transparent;
+        }
+
+        private void xtraTabControl2_Click(object sender, EventArgs e)
+        {
+            gridCalcFields.RefreshDataSource();
         }
     }
 }
