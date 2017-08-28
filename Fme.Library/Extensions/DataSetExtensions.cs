@@ -77,6 +77,10 @@ namespace Fme.Library.Extensions
                 target.PrimaryKey = new[] { target.Columns[columnName] };
         }
 
+        public static DataTable Table(this DataSet ds, int index = 0)
+        {
+            return ds.Tables[index];
+        }
         /// <summary>
         /// Selects the keys.
         /// </summary>
@@ -125,7 +129,7 @@ namespace Fme.Library.Extensions
         {
             try
             {
-                column.ColumnName = value;
+              //  column.ColumnName = value;
                 column.Caption = value;
                 return true;
             }

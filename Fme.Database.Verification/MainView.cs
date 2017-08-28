@@ -1110,7 +1110,12 @@ namespace Fme.Database.Verification
             txtSourceMaxRows.Text = "";
 
             foreach (var grid in grids)
-                SetDataSource(grid, null);            
+                SetDataSource(grid, null);
+
+            tmrMonitor.Stop();
+            tabMessages.Text = "System Messages";
+
+            SetupGridMappings();
         }
 
         /// <summary>
@@ -1595,12 +1600,15 @@ namespace Fme.Database.Verification
         private void gridMessages_DataSourceChanged(object sender, EventArgs e)
         {
             cardViewMessages.CardWidth = (cardViewMessages.GridControl.Width - 75) / 2;
-            //cardViewMessages.OptionsBehavior.AutoHorzWidth = true;
+          //cardViewMessages.OptionsBehavior.AutoHorzWidth = true;
             cardViewMessages.OptionsBehavior.FieldAutoHeight = true;
             cardViewMessages.Columns["StackTrace"].ColumnEdit = repoItemMemo;
+            cardViewMessages.Columns["Message"].ColumnEdit = repoItemMessage;
+
 
             cardViewMessages.RefreshData();
-            try
+
+                        try
             {
                 if (model.ErrorMessages.Count() > 0)
                     tabMessages.Text = string.Format("System Messages - {0} Error(s)", model.ErrorMessages.Count());
@@ -1662,6 +1670,11 @@ namespace Fme.Database.Verification
             
         }
 
+        /// <summary>
+        /// Handles the Leave event of the cbSourceKey control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void cbSourceKey_Leave(object sender, EventArgs e)
         {
             model.Source.Key = cbSourceKey.Text;
@@ -1672,6 +1685,11 @@ namespace Fme.Database.Verification
 
         }
 
+        /// <summary>
+        /// Handles the Leave event of the cbTargetKey control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void cbTargetKey_Leave(object sender, EventArgs e)
         {
             model.Target.Key = cbTargetKey.Text;
@@ -1709,7 +1727,6 @@ namespace Fme.Database.Verification
                         tabMessages.Tag = tabMessages.Appearance.Header.BackColor;
                         tabMessages.Appearance.Header.BackColor = Color.LightPink;
                     }
-
                 }
                 else
                 {
@@ -1723,6 +1740,11 @@ namespace Fme.Database.Verification
             }
         }
 
+        /// <summary>
+        /// Handles the SelectedPageChanged event of the xtraTabControl1 control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="TabPageChangedEventArgs"/> instance containing the event data.</param>
         private void xtraTabControl1_SelectedPageChanged(object sender, TabPageChangedEventArgs e)
         {
             if (e.Page == tabMessages)
@@ -1731,9 +1753,63 @@ namespace Fme.Database.Verification
             tabMessages.Appearance.Header.BackColor = Color.Transparent;
         }
 
+        /// <summary>
+        /// Handles the Click event of the xtraTabControl2 control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void xtraTabControl2_Click(object sender, EventArgs e)
         {
             gridCalcFields.RefreshDataSource();
+        }
+
+        private void xtraTabControl1_Click(object sender, EventArgs e)
+        {
+            if (xtraTabControl1.SelectedTabPage == tabMessages)
+                gridMessages.RefreshDataSource();
+        }
+
+        private void viewMessages_RowStyle(object sender, RowStyleEventArgs e)
+        {
+           
+        }
+
+        private void viewMessages_RowCellStyle(object sender, RowCellStyleEventArgs e)
+        {
+
+            if (e.Column.FieldName.Contains("Message"))
+            {
+                e.Appearance.ForeColor = Color.DarkBlue;
+                //e.Appearance.Font = new Font("Courier New", e.Appearance.Font.Size);
+            }
+
+        }
+
+        private void cardViewMessages_CustomDrawCardField(object sender, RowCellCustomDrawEventArgs e)
+        {
+            
+
+        }
+
+        private void cardViewMessages_CustomDrawCardFieldValue(object sender, RowCellCustomDrawEventArgs e)
+        {
+            if (e.Column.FieldName.Contains("Message"))
+            {
+                e.Appearance.ForeColor = Color.DarkBlue;
+                //e.Appearance.Font = new Font("Courier New", e.Appearance.Font.Size);
+            }
+
+            if (e.Column.FieldName.Contains("StackTrace"))
+            {
+                e.Appearance.ForeColor = Color.DarkRed;
+                //e.Appearance.Font = new Font("Courier New", e.Appearance.Font.Size);
+            }
+        }
+
+        private void viewMappings_LostFocus(object sender, EventArgs e)
+        {           
+            viewMappings.PostEditor();
+            viewMappings.UpdateCurrentRow();            
         }
     }
 }

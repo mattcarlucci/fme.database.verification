@@ -32,15 +32,15 @@ namespace Fme.Database.Verification
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.Utils.SuperToolTip superToolTip7 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem7 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip8 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem8 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip5 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem5 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip6 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem6 = new DevExpress.Utils.ToolTipTitleItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
+            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem1 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem2 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip3 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem3 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip4 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem4 = new DevExpress.Utils.ToolTipTitleItem();
             this.compareMappingModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar1 = new DevExpress.XtraBars.Bar();
@@ -138,6 +138,7 @@ namespace Fme.Database.Verification
             this.cbCompareType = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.colIgnoreChars = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colErrors = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repoSpinEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             this.colStatus = new DevExpress.XtraGrid.Columns.GridColumn();
             this.colOperator = new DevExpress.XtraGrid.Columns.GridColumn();
             this.cbOperator = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
@@ -231,6 +232,7 @@ namespace Fme.Database.Verification
             this.gridMessages = new DevExpress.XtraGrid.GridControl();
             this.cardViewMessages = new DevExpress.XtraGrid.Views.Card.CardView();
             this.repoItemMemo = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
+            this.repoItemMessage = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
             this.viewMessages = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.fieldSchemaModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tableSchemaModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
@@ -250,7 +252,6 @@ namespace Fme.Database.Verification
             this.colRightLookupFile = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu3 = new DevExpress.XtraBars.PopupMenu(this.components);
             this.tmrMonitor = new System.Windows.Forms.Timer(this.components);
-            this.repoSpinEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit();
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).BeginInit();
@@ -293,6 +294,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.cbLeftSide)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbRightSide)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbCompareType)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repoSpinEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbOperator)).BeginInit();
             this.xtraTabLookup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridFieldLookup)).BeginInit();
@@ -361,6 +363,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardViewMessages)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repoItemMemo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repoItemMessage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableSchemaModelBindingSource)).BeginInit();
@@ -371,7 +374,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
             this.ctxLookupMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repoSpinEdit1)).BeginInit();
             this.SuspendLayout();
             // 
             // compareMappingModelBindingSource
@@ -483,9 +485,9 @@ namespace Fme.Database.Verification
             this.btnExecute.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnExecute.ImageOptions.LargeImage")));
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem7.Text = "Execute a Compare";
-            superToolTip7.Items.Add(toolTipTitleItem7);
-            this.btnExecute.SuperTip = superToolTip7;
+            toolTipTitleItem1.Text = "Execute a Compare";
+            superToolTip1.Items.Add(toolTipTitleItem1);
+            this.btnExecute.SuperTip = superToolTip1;
             this.btnExecute.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnExecute_ItemClick);
             // 
             // btnCancel
@@ -496,9 +498,9 @@ namespace Fme.Database.Verification
             this.btnCancel.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.ImageOptions.LargeImage")));
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem8.Text = "Cancel Execution";
-            superToolTip8.Items.Add(toolTipTitleItem8);
-            this.btnCancel.SuperTip = superToolTip8;
+            toolTipTitleItem2.Text = "Cancel Execution";
+            superToolTip2.Items.Add(toolTipTitleItem2);
+            this.btnCancel.SuperTip = superToolTip2;
             this.btnCancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnCancel_ItemClick);
             // 
             // btnRefresh
@@ -652,9 +654,9 @@ namespace Fme.Database.Verification
             this.barButtonItem4.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem4.ImageOptions.LargeImage")));
             this.barButtonItem4.Name = "barButtonItem4";
             this.barButtonItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem5.Text = "Select the Source Data";
-            superToolTip5.Items.Add(toolTipTitleItem5);
-            this.barButtonItem4.SuperTip = superToolTip5;
+            toolTipTitleItem3.Text = "Select the Source Data";
+            superToolTip3.Items.Add(toolTipTitleItem3);
+            this.barButtonItem4.SuperTip = superToolTip3;
             // 
             // popupMenu1
             // 
@@ -690,9 +692,9 @@ namespace Fme.Database.Verification
             this.barButtonItem5.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem5.ImageOptions.LargeImage")));
             this.barButtonItem5.Name = "barButtonItem5";
             this.barButtonItem5.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem6.Text = "Select the Target Data";
-            superToolTip6.Items.Add(toolTipTitleItem6);
-            this.barButtonItem5.SuperTip = superToolTip6;
+            toolTipTitleItem4.Text = "Select the Target Data";
+            superToolTip4.Items.Add(toolTipTitleItem4);
+            this.barButtonItem5.SuperTip = superToolTip4;
             // 
             // popupMenu2
             // 
@@ -853,6 +855,7 @@ namespace Fme.Database.Verification
             this.tabQueries,
             this.tabMessages});
             this.xtraTabControl1.SelectedPageChanged += new DevExpress.XtraTab.TabPageChangedEventHandler(this.xtraTabControl1_SelectedPageChanged);
+            this.xtraTabControl1.Click += new System.EventHandler(this.xtraTabControl1_Click);
             // 
             // tabConfiguration
             // 
@@ -1366,6 +1369,7 @@ namespace Fme.Database.Verification
             this.viewMappings.OptionsMenu.ShowGroupSortSummaryItems = false;
             this.viewMappings.OptionsMenu.ShowGroupSummaryEditorItem = true;
             this.viewMappings.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.GridViewMapping_RowCellStyle);
+            this.viewMappings.LostFocus += new System.EventHandler(this.viewMappings_LostFocus);
             // 
             // colSelected
             // 
@@ -1459,6 +1463,13 @@ namespace Fme.Database.Verification
             this.colErrors.Visible = true;
             this.colErrors.VisibleIndex = 6;
             this.colErrors.Width = 70;
+            // 
+            // repoSpinEdit1
+            // 
+            this.repoSpinEdit1.AutoHeight = false;
+            this.repoSpinEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repoSpinEdit1.Name = "repoSpinEdit1";
             // 
             // colStatus
             // 
@@ -2396,7 +2407,8 @@ namespace Fme.Database.Verification
             this.gridMessages.MenuManager = this.barManager1;
             this.gridMessages.Name = "gridMessages";
             this.gridMessages.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
-            this.repoItemMemo});
+            this.repoItemMemo,
+            this.repoItemMessage});
             this.gridMessages.Size = new System.Drawing.Size(856, 513);
             this.gridMessages.TabIndex = 0;
             this.gridMessages.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -2409,10 +2421,16 @@ namespace Fme.Database.Verification
             this.cardViewMessages.FocusedCardTopFieldIndex = 0;
             this.cardViewMessages.GridControl = this.gridMessages;
             this.cardViewMessages.Name = "cardViewMessages";
+            this.cardViewMessages.CustomDrawCardField += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.cardViewMessages_CustomDrawCardField);
+            this.cardViewMessages.CustomDrawCardFieldValue += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.cardViewMessages_CustomDrawCardFieldValue);
             // 
             // repoItemMemo
             // 
             this.repoItemMemo.Name = "repoItemMemo";
+            // 
+            // repoItemMessage
+            // 
+            this.repoItemMessage.Name = "repoItemMessage";
             // 
             // viewMessages
             // 
@@ -2420,6 +2438,8 @@ namespace Fme.Database.Verification
             this.viewMessages.Name = "viewMessages";
             this.viewMessages.OptionsBehavior.Editable = false;
             this.viewMessages.OptionsView.RowAutoHeight = true;
+            this.viewMessages.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.viewMessages_RowCellStyle);
+            this.viewMessages.RowStyle += new DevExpress.XtraGrid.Views.Grid.RowStyleEventHandler(this.viewMessages_RowStyle);
             // 
             // repositoryItemCheckEdit1
             // 
@@ -2529,13 +2549,6 @@ namespace Fme.Database.Verification
             this.tmrMonitor.Interval = 1000;
             this.tmrMonitor.Tick += new System.EventHandler(this.tmrMonitor_Tick);
             // 
-            // repoSpinEdit1
-            // 
-            this.repoSpinEdit1.AutoHeight = false;
-            this.repoSpinEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
-            this.repoSpinEdit1.Name = "repoSpinEdit1";
-            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2602,6 +2615,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.cbLeftSide)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbRightSide)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbCompareType)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repoSpinEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbOperator)).EndInit();
             this.xtraTabLookup.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridFieldLookup)).EndInit();
@@ -2672,6 +2686,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.gridMessages)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cardViewMessages)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repoItemMemo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repoItemMessage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableSchemaModelBindingSource)).EndInit();
@@ -2682,7 +2697,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
             this.ctxLookupMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repoSpinEdit1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2904,6 +2918,7 @@ namespace Fme.Database.Verification
         private DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit repoItemMemo;
         private Timer tmrMonitor;
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repoSpinEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit repoItemMessage;
     }
 
 }

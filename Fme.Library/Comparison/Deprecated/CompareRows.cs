@@ -120,9 +120,9 @@ namespace Fme.Library.Comparison
                 {
                     if (!comparer[compare.CompareType](sourceValue, targetValue, parms.Operator, parms))
                     {
-                        var primary_key = table.Rows[row].Field<string>("primary_key");
+                        var primary_key = table.Rows[row].Field<string>(Alias.Primary_Key);
                         results.Add(new CompareResultModel(primary_key, compare.LeftSide, compare.RightSide, sourceValue, targetValue, row));
-                        var detail = string.Format("{0} {1} {2} Values {3} {1} {4}", compare.LeftAlias, compare.Operator, compare.RightAlias, sourceValue, targetValue);
+                        var detail = string.Format("{0} {1} {2}\r\n\t   Values {3} {1} {4}", compare.LeftAlias, compare.Operator, compare.RightAlias, sourceValue, targetValue);
 
                         if (parms.Exception != null)
                             model.ErrorMessages.Add(new ErrorMessageModel("Comparison", detail, parms.GetException()));
@@ -191,7 +191,7 @@ namespace Fme.Library.Comparison
                     compare.RightTimeZoneOffset = model.Target.TimeZoneOffset;
 
                     //TODO: this is an issue if key is not a string
-                    var primary_key = table.Rows[row].Field<string>("primary_key");
+                    var primary_key = table.Rows[row].Field<string>(Alias.Primary_Key);
 
                     if (compare.CompareType == ComparisonTypeEnum.None)
                     {

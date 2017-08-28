@@ -130,6 +130,12 @@ namespace Fme.Library.Models
         public string RightQuery { get;set; }
 
         /// <summary>
+        /// Gets or sets the name of the column from the table. Requires a mapping after query exection
+        /// </summary>
+        /// <value>The name of the column.</value>
+        public string ColumnName { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [time zone offset].
         /// </summary>
         /// <value><c>true</c> if [time zone offset]; otherwise, <c>false</c>.</value>
@@ -194,6 +200,8 @@ namespace Fme.Library.Models
                 return string.Format("[{0}] as [{1}]", RightSide, RightAlias);
             }
         }
+                
+
         //public string LeftSql()
         //{
         //    List<string> fields = new List<string>();

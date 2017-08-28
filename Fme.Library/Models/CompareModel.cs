@@ -12,6 +12,7 @@
 // <summary></summary>
 // ***********************************************************************
 
+using Fme.Library.Enums;
 using Fme.Library.Extensions;
 using System;
 using System.Collections.Generic;
@@ -79,6 +80,45 @@ namespace Fme.Library.Models
         }
 
 
+        /// <summary>
+        /// Maps the table columns.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="target">The target.</param>
+        public void MapTableColumns(DataSet source, DataSet target)
+        {
+            MapTableColumns(source.Tables[0], (map, index) => map[index].LeftAlias);
+            MapTableColumns(target.Tables[0], (map, index) => map[index].RightAlias);            
+        }
+
+        /// <summary>
+        /// Maps the table columns.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="selector">The selector.</param>
+        public void MapTableColumns(DataSet data, Func<List<CompareMappingModel>, int, string> selector)
+        {
+            MapTableColumns(data.Tables[0], selector);
+        }
+
+        /// <summary>
+        /// Maps the table columns.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="selector">The selector.</param>
+        public void MapTableColumns(DataTable table, Func<List<CompareMappingModel>, int , string> selector)
+        {
+            var f1 = this.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected == true).
+                OrderBy(o => o.Ordinal).ToList();
+
+            for (int i = 1; i < table.Columns.Count; i++)
+                table.Columns[i].SetHeading(selector(f1, i -1));
+        }
+
+
+        
+
+       
         /// <summary>
         /// Sets the compare ordinal.
         /// </summary>
@@ -148,9 +188,9 @@ namespace Fme.Library.Models
             var sql = string.Format(" {0} HAVING {1} ", query, having);
 
             var data = dataSource.ExecuteQuery(sql, cancelToken.Token).Tables[0];
-            data.Columns[0].ColumnName = "primary_key";
+            data.Columns[0].ColumnName = Alias.Primary_Key;
             data.PrimaryKey = new[] { data.Columns[0] };
-            table.InnerJoin<string>("primary_key", data);
+            table.InnerJoin<string>(Alias.Primary_Key, data);
             data.Columns[1].ColumnName = side + "_" + field;
             return data;
 
@@ -175,11 +215,11 @@ namespace Fme.Library.Models
                     {
                         index = 1;
                         var data1 = MergeCalculatedData(source, "left", calc.LeftSide, calc.LeftQuery, 
-                            source.SelectKeys<string>("primary_key"), Source.DataSource, cancelToken);
+                            source.SelectKeys<string>(Alias.Primary_Key), Source.DataSource, cancelToken);
 
                         index = 2;
                         var data2 = MergeCalculatedData(target, "right", calc.RightSide, calc.RightQuery, 
-                            target.SelectKeys<string>("primary_key"), Target.DataSource, cancelToken);
+                            target.SelectKeys<string>(Alias.Primary_Key), Target.DataSource, cancelToken);
 
                         //only merge if the queries execute.
                         source.Merge(data1, false, MissingSchemaAction.AddWithKey);

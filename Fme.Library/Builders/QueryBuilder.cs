@@ -110,6 +110,22 @@ namespace Fme.Library
                     Select(s => s + " as " + alias + "_" + s));
                 
         }
+        /// <summary>
+        /// Builds the key alaises.
+        /// </summary>
+        /// <param name="fields">The fields.</param>
+        /// <returns>System.String[].</returns>
+        protected string[] BuildKeyAlaises(List<CompareMappingModel> fields)
+        {
+            List<string> aliases = new List<string>();
+            for(int i = 0; i < fields.Count(); i++)
+            {
+                string key = string.Format("C{0}", i);
+                //fields[i].ColumnKey = key;
+                aliases.Add(key);
+            }
+            return aliases.ToArray();
+        }
 
         /// <summary>
         /// Builds the in values.

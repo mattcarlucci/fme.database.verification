@@ -10,6 +10,7 @@ using System.Threading;
 using Fme.Library.Comparison;
 using System.Diagnostics;
 using System.IO;
+using Fme.Library.Enums;
 
 namespace Fme.Library.Repositories
 {
@@ -126,7 +127,7 @@ namespace Fme.Library.Repositories
 
                     query.IncludeVersion = Model.Source.IncludeVersions;
 
-                    var select1 = query.BuildSql(Model.Source.Key,pairs.Select(s => s.LeftSide).ToArray(),
+                    var select1 = query.BuildSql(Model.Source.Key, pairs.Select(s => s.LeftSide).ToArray(),
                       Model.Source.SelectedTable, "", Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
 
                     LogQuery(Model.Source, select1, "Left");
@@ -134,19 +135,17 @@ namespace Fme.Library.Repositories
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs()
                     { DataSource = Model.Source, Data = select1, StatusMessage = "Executing Query" });
                     
-                    var ds = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
-                    Model.Source.DataSource.SetAliases(ds, "left");
-
-                    //for (int i = 1; i < ds.Tables[0].Columns.Count; i++)
-                    //    ds.Tables[0].Columns[i].SetHeading(Model.ColumnCompare[i - 1].LeftAlias);
-
-
-                    if (ds.Tables == null || ds.Tables.Count == 0)
+                    var data1 = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
+                    if (data1.Tables == null || data1.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Source.SelectedTable);
+
+                    Model.Source.DataSource.SetAliases(data1, Alias.Left);                    
+                    Model.MapTableColumns(data1, (map, index) => map[index].LeftAlias);
+
                     #endregion
                     ///////////////////////////////////////////////////////////////
 
-                    DataTable table1 = ds.Tables[0];
+                    DataTable table1 = data1.Table();
 
                     #region Construct Target, Fetch Data and set Aliases
                     
@@ -154,34 +153,32 @@ namespace Fme.Library.Repositories
                     query.IncludeVersion = Model.Target.IncludeVersions;
 
                     var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
-                        Model.Target.SelectedTable, "", Model.Target.MaxRows, Model.Target.Key,  table1.SelectKeys<string>("primary_key"));
+                        Model.Target.SelectedTable, "", Model.Target.MaxRows, Model.Target.Key,  table1.SelectKeys<string>(Alias.Primary_Key));
 
-                    LogQuery(Model.Target, select2, "Right");
+                    LogQuery(Model.Target, select2, Alias.Right);
 
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs()
                     { DataSource = Model.Target, Data = select1, StatusMessage = "Executing Query" });
 
-                    var ds2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);
-                    Model.Target.DataSource.SetAliases(ds2, "right");
-
-                  //  for (int i = 1; i < ds2.Tables[0].Columns.Count; i++)
-                  //      ds2.Tables[0].Columns[i].SetHeading(Model.ColumnCompare[i - 1].RightAlias);
-                    
-                    if (ds2.Tables == null || ds2.Tables.Count == 0)
+                    var data2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);                    
+                    if (data2.Tables == null || data2.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
+
+                    Model.Target.DataSource.SetAliases(data2, Alias.Right);
+                    Model.MapTableColumns(data2, (map, index) => map[index].RightAlias);
                     #endregion
 
                     #region Check for matching records
-                    DataTable table2 = ds2.Tables[0];
+                    DataTable table2 = data2.Table();
                  
                     if (table1.Rows.Count == 0 || table2.Rows.Count == 0)
                         throw new DataException("No matching records found to complete the request");
                     #endregion
 
 
-                    table1.InnerJoin<string>("primary_key", table2);
-                    var dupset1 = table1.RemoveDuplicates<string>("primary_key");
-                    var dupset2 = table2.RemoveDuplicates<string>("primary_key");
+                    table1.InnerJoin<string>(Alias.Primary_Key, table2);
+                    var dupset1 = table1.RemoveDuplicates<string>(Alias.Primary_Key);
+                    var dupset2 = table2.RemoveDuplicates<string>(Alias.Primary_Key);
 
                     if (string.IsNullOrEmpty(dupset1) == false)
                         Model.ErrorMessages.Add(new ErrorMessageModel("Left Query has duplicate Keys", dupset1, ""));
@@ -189,19 +186,25 @@ namespace Fme.Library.Repositories
                     if (string.IsNullOrEmpty(dupset2) == false)
                         Model.ErrorMessages.Add(new ErrorMessageModel("Right Query has duplicate Keys", dupset2, ""));
 
-                    table1.SetPrimaryKey("primary_key", table2);
-                                        
+                    table1.SetPrimaryKey(Alias.Primary_Key, table2);
+                         
+                    
                     Model.ExecuteCalculatedFields(table1, table2, cancelToken);
 
-                    var sourceData = table1.AsEnumerable().CopyToDataTable();
-                    var targetData = table2.AsEnumerable().CopyToDataTable();
-                    
-                    table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
-                    CompareMappingHelper.OrderColumns(table1, Model.ColumnCompare.Where(w=> w.Selected).ToList());
-                    
+                    var sourceData = table1.CopyToDataTable();
+                    var targetData = table2.CopyToDataTable();
+
+                    //  Model.MapTableColumns(sourceData, (map, index) => map[index].LeftAlias);
+                    //   Model.MapTableColumns(targetData, (map, index) => map[index].RightAlias);
+
                     OnCompareStart(this, new CompareStartEventArgs() { Pairs = null });
                     OnSourceLoadComplete(this, new DataTableEventArgs() { Table = sourceData });
                     OnTargetLoadComplete(this, new DataTableEventArgs() { Table = targetData });
+
+                    table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
+                    CompareMappingHelper.OrderColumns(table1, Model.ColumnCompare.Where(w=> w.Selected).ToList());
+                    
+                 
                     
                     CompareMappingHelper.CompareColumns(this, table1, Model, cancelToken);
                     

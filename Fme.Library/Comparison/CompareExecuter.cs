@@ -18,6 +18,7 @@ using System.Linq;
 using Fme.Library.Models;
 using System.Threading;
 using System.Collections.Concurrent;
+using Fme.Library.Enums;
 
 namespace Fme.Library.Comparison
 {
@@ -178,9 +179,11 @@ namespace Fme.Library.Comparison
                     StatusMessage = "Completed";
                     if (!comparer[mapping.CompareType](left, right, parms.Operator, parms))
                     {
-                        var primary_key = Table.Rows[row].Field<string>("primary_key");
+                        var primary_key = Table.Rows[row].Field<string>(Alias.Primary_Key);
                         results.Add(new CompareResultModel(primary_key, mapping.LeftSide, mapping.RightSide, left, right, row));
-                        var detail = string.Format("{0} {1} {2} Values {3} {1} {4}", mapping.LeftAlias, mapping.Operator, mapping.RightAlias, left, right);
+
+                        var detail = string.Format("{0} {1} {2}\r\n\r\nValues [{3}] {1} [{4}]", 
+                            mapping.LeftAlias, mapping.Operator, mapping.RightAlias, left, right);
 
                         if (parms.Exception != null)
                             Model.ErrorMessages.Add(new ErrorMessageModel("Comparison", detail, parms.GetException()));

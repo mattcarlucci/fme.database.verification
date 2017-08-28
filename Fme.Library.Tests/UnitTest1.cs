@@ -314,7 +314,7 @@ namespace Fme.Library.Tests
 
             //var t1 = dql1.ExecuteQuery(select1).Tables[0];
             //var t2 = dql2.ExecuteQuery(select2).Tables[0];
-            //t1.SetPrimaryKey("primary_key", t2);
+            //t1.SetPrimaryKey(Alias.Primary_Key, t2);
             //t1.Merge(t2);
             //TODO: order columns
             //TODO Now we should do the compare. 
@@ -361,7 +361,7 @@ namespace Fme.Library.Tests
             var target = table2.Tables[0];
 
          
-            source.SetPrimaryKey("primary_key", target);           
+            source.SetPrimaryKey(Alias.Primary_Key, target);           
             source.Merge(target);
             
             
