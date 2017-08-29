@@ -533,40 +533,9 @@ namespace Fme.Database.Verification
             try
             {
                 GridViewMapping_MarkMissingFields(sender, e);
-                //this is ugly
-                GridView view = sender as GridView;
-                if (view.IsRowVisible(e.RowHandle) == RowVisibleState.Hidden)
-                    return;
-
-                var isCalculated = model.ColumnCompare[e.RowHandle].IsCalculated;
-                if (isCalculated)
-                {
-                    e.Appearance.ForeColor = Color.DarkRed;
-                    e.Appearance.BackColor = Color.Ivory;
-
-                   // Debug.Print(e.Column.FieldName);
-                    //  if (e.Column.FieldName == "LeftSide" || e.Column.Name == "RightSide")
-                    //      e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Bold);
-
-                    if (e.Column.FieldName.Contains("Query"))
-                    {
-                        e.Appearance.ForeColor = Color.DarkBlue;
-                        e.Appearance.Font = new Font("Courier New", e.Appearance.Font.Size);
-                    }
-                }
-                else
-                {
-                    if (view.Name == "gridView5" && e.Column.FieldName.Contains("Query"))
-                    {
-                        //e.Appearance.BackColor = this.BackColor;                        
-                        e.Appearance.ForeColor = Color.DarkRed;
-                        e.Appearance.BackColor = Color.Ivory;
-                    }
-                }
-                if (view.Name == "gridView1" && model.ColumnCompare[e.RowHandle].CompareResults?.Count > 0)
-                {
-                    e.Appearance.BackColor = Color.AntiqueWhite;
-                }
+                GridViewMapping_MarkCalculatedFields(sender, e);
+                GridViewCalculated_StyleQueries(sender, e);
+                GridLookupStyleFields(sender, e);
 
             }
             catch (Exception)
@@ -598,6 +567,62 @@ namespace Fme.Database.Verification
                     e.Appearance.ForeColor = Color.DimGray;
                 else
                     e.Appearance.ForeColor = Color.DarkBlue;
+            }
+        }
+        /// <summary>
+        /// Handles the MarkCalculatedFields event of the GridViewMapping control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RowCellStyleEventArgs"/> instance containing the event data.</param>
+        private void GridViewMapping_MarkCalculatedFields(object sender, RowCellStyleEventArgs e)
+        {
+            GridView view = sender as GridView;
+            if (view != viewMappings) return;
+
+            if(model.ColumnCompare[e.RowHandle].IsCalculated)            
+            {
+                e.Appearance.ForeColor = Color.DarkRed;
+                e.Appearance.BackColor = Color.Ivory;
+            }
+           
+        }
+        /// <summary>
+        /// Handles the RowCellStyle event of the GridViewCalculated control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="RowCellStyleEventArgs"/> instance containing the event data.</param>
+        private void GridViewCalculated_StyleQueries(object sender, RowCellStyleEventArgs e)
+        {
+            GridView view = sender as GridView;
+            if (view != viewCalcFields) return;
+
+            e.Appearance.ForeColor = Color.DarkRed;
+            e.Appearance.BackColor = Color.Ivory;
+
+            if (e.Column.FieldName.Contains("Query"))
+            {
+                e.Appearance.ForeColor = Color.DarkBlue;
+                e.Appearance.Font = new Font("Courier New", e.Appearance.Font.Size);                
+            }
+        }
+        /// <summary>
+        /// Grids the lookup style fields.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="RowCellStyleEventArgs"/> instance containing the event data.</param>
+        private void GridLookupStyleFields(object sender, RowCellStyleEventArgs e)
+        {
+            GridView view = sender as GridView;
+            //if (view != this.viewFieldLookup && view != this.viewMappings) return;
+            if (view == this.viewCalcFields) return;
+            
+            if (!string.IsNullOrEmpty(model.ColumnCompare[e.RowHandle].LeftLookupFile) && (e.Column.FieldName == "LeftSide"))
+            {
+                e.Appearance.ForeColor = Color.DarkGreen;
+            }
+            if (!string.IsNullOrEmpty(model.ColumnCompare[e.RowHandle].RightLookupFile) && (e.Column.FieldName == "RightSide"))
+            {
+                e.Appearance.ForeColor = Color.DarkGreen;
             }
         }
         /// <summary>
