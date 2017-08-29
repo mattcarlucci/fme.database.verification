@@ -143,10 +143,10 @@ namespace Fme.Library.Models
         public int LeftTimeZoneOffset { get; set; }
         public int RightTimeZoneOffset { get; set; }
 
-        [XmlIgnore]
+       // [XmlIgnore]
         public string LeftKey { get; set; }
 
-        [XmlIgnore]
+       // [XmlIgnore]
         public string RightKey { get; set; }
 
         /// <summary>

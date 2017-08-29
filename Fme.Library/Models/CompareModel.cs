@@ -101,9 +101,15 @@ namespace Fme.Library.Models
             var f1 = this.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected == true).
                 OrderBy(o => o.Ordinal).ToList();
 
-            for (int i = 1; i < table.Columns.Count; i++)
+            int i = 0;
+            for (i = 0; i < table.Columns.Count; i++)
+                if (table.Columns[i].ColumnName == Alias.Primary_Key)
+                    break;
+            int y = ++i;
+
+            for (; i < table.Columns.Count; i++)
             {
-                table.Columns[i].SetHeading(selector(f1, i - 1));                
+                table.Columns[i].SetHeading(selector(f1, i - y));                
             }
         }
 
@@ -118,9 +124,15 @@ namespace Fme.Library.Models
             var f1 = this.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected == true).
                 OrderBy(o => o.Ordinal).ToList();
 
-            for (int i = 1; i < table.Columns.Count; i++)
+            int i = 0;
+            for (i = 0; i < table.Columns.Count; i++)
+                if (table.Columns[i].ColumnName == Alias.Primary_Key)
+                    break;
+            int y = ++i;
+
+            for (; i < table.Columns.Count; i++)
             {
-                selector(f1, i - 1, table.Columns[i].ColumnName);                
+                selector(f1, i - y, table.Columns[i].ColumnName);                
             }
         }
 

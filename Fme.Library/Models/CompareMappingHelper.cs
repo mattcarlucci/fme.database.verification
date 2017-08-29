@@ -124,6 +124,8 @@ namespace Fme.Library.Models
             var items = model.ColumnCompare.Where(w => w.IsPair() && w.Selected);
             foreach (var item in items)
             {
+                if (item.LeftKey == null || item.RightKey == null) continue;
+
                 if (table.Columns.Contains(item.LeftKey) && table.Columns.Contains(item.RightKey))
                 {
                     var currentRow = model.ColumnCompare.IndexOf(item);
