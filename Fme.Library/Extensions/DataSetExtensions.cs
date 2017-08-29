@@ -133,7 +133,9 @@ namespace Fme.Library.Extensions
                 column.Caption = value;
                 return true;
             }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             catch(Exception ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             {
                 int index = 1;
                 while (SetHeading(column, value, ref index) == false) ;
@@ -156,7 +158,9 @@ namespace Fme.Library.Extensions
                 column.Caption = column.ColumnName;
                 return true;
             }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             catch (Exception ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             {
                 index++;
                 return false;

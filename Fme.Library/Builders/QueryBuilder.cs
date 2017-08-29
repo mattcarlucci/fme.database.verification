@@ -158,52 +158,6 @@ namespace Fme.Library
         }
 
         /// <summary>
-        /// Builds the SQL.
-        /// </summary>
-        /// <param name="primaryKey">The primary key.</param>
-        /// <param name="fields">The fields.</param>
-        /// <param name="tableName">Name of the table.</param>
-        /// <param name="aliasPrefix">The alias prefix.</param>
-        /// <param name="maxRows">The maximum rows.</param>
-        /// <param name="inField">The in field.</param>
-        /// <param name="inValues">The in values.</param>
-        /// <returns>System.String.</returns>
-        public virtual string BuildSql(string primaryKey, DataField[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues)
-        {
-            if (inValues == null)
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
-
-
-            var aliases = string.Join(",", fields.Select(s => s.GetQualifiedName() + " as C" + s.Ordinal));
-            var inCaluse = BuildInValues(inField, inValues.Distinct().ToArray());
-
-            return string.Format("select {0} as primary_key, {1} from [{2}] where {3}", primaryKey, aliases, tableName, inCaluse);
-        }
-
-        /// <summary>
-        /// Builds the SQL.
-        /// </summary>
-        /// <param name="primaryKey">The primary key.</param>
-        /// <param name="fields">The fields.</param>
-        /// <param name="tableName">Name of the table.</param>
-        /// <param name="aliasPrefix">The alias prefix.</param>
-        /// <param name="maxRows">The maximum rows.</param>
-        /// <param name="inField">The in field.</param>
-        /// <param name="inValues">The in values.</param>
-        /// <returns>System.String.</returns>
-        public virtual string BuildSql(string primaryKey, DataField[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues)
-        {
-            if (inValues == null)
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
-
-
-            var aliases = string.Join(",", fields.Select(s => s.GetQualifiedName() + " as C" + s.Ordinal));
-            var inCaluse = BuildInValues(inField, inValues.Distinct().ToArray());
-
-            return string.Format("select {0} as primary_key, {1} from [{2}] where {3}", primaryKey, aliases, tableName, inCaluse);
-        }
-
-        /// <summary>
         /// Builds the SQL in.
         /// </summary>
         /// <param name="primaryKey">The primary key.</param>
@@ -238,11 +192,7 @@ namespace Fme.Library
             return string.Format("select {0} as primary_key, {1} from [{2}] where {0} IS NOT NULL", primaryKey, aliases, tableName);
         }
 
-        public virtual string BuildSql(string primaryKey, DataField[] fields, string tableName, string aliasPrefix, string maxRows)
-        {
-            var aliases = string.Join(",", fields.Select(s => s.GetQualifiedName() + " as C" + s.Ordinal));
-            return string.Format("select {0} as primary_key, {1} from [{2}] where {0} IS NOT NULL", primaryKey, aliases, tableName);
-        }
+      
 
         /// <summary>
         /// Builds the SQL having.
@@ -254,5 +204,35 @@ namespace Fme.Library
 
         }
 
+
+        public virtual string BuildSql(string primaryKey, DataField[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues)
+        {
+            if (inValues == null)
+                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
+
+
+            var aliases = string.Join(",", fields.Select(s => s.GetQualifiedName() + " as C" + s.Ordinal));
+            var inCaluse = BuildInValues(inField, inValues.Distinct().ToArray());
+
+            return string.Format("select {0} as primary_key, {1} from [{2}] where {3}", primaryKey, aliases, tableName, inCaluse);
+        }
+        
+        public virtual string BuildSql(string primaryKey, DataField[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues)
+        {
+            if (inValues == null)
+                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
+
+
+            var aliases = string.Join(",", fields.Select(s => s.GetQualifiedName() + " as C" + s.Ordinal));
+            var inCaluse = BuildInValues(inField, inValues.Distinct().ToArray());
+
+            return string.Format("select {0} as primary_key, {1} from [{2}] where {3}", primaryKey, aliases, tableName, inCaluse);
+        }
+
+        public virtual string BuildSql(string primaryKey, DataField[] fields, string tableName, string aliasPrefix, string maxRows)
+        {
+            var aliases = string.Join(",", fields.Select(s => s.GetQualifiedName() + " as C" + s.Ordinal));
+            return string.Format("select {0} as primary_key, {1} from [{2}] where {0} IS NOT NULL", primaryKey, aliases, tableName);
+        }
     }
 }

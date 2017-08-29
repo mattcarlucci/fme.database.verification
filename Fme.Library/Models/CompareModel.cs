@@ -214,7 +214,9 @@ namespace Fme.Library.Models
             data.Columns[1].ColumnName = side + "_" + field;
             return data;
 
+#pragma warning disable CS0162 // Unreachable code detected
             table.Merge(data, false, MissingSchemaAction.AddWithKey);
+#pragma warning restore CS0162 // Unreachable code detected
         }
 
         

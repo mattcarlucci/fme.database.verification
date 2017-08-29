@@ -359,7 +359,9 @@ namespace Fme.Database.Verification
                 model.SetCompareOrdinal();
                 gridMappings.RefreshDataSource();
             }
+#pragma warning disable CS0168 // The variable 'ex' is declared but never used
             catch(Exception ex)
+#pragma warning restore CS0168 // The variable 'ex' is declared but never used
             {
 
             }

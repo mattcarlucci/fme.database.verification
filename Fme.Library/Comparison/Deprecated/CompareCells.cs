@@ -144,7 +144,9 @@ namespace Fme.Library.Comparison
                 return CompareDateTime(left, right);
 
             throw new NotImplementedException("Compare option not implimented.");
+#pragma warning disable CS0162 // Unreachable code detected
             return left == right;
+#pragma warning restore CS0162 // Unreachable code detected
         }
 
         /// <summary>
