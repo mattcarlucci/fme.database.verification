@@ -65,7 +65,7 @@
     <Compile Include="DataSources\DataSourceBase.cs" />
     <Compile Include="DataSources\DqlDataSource.cs" />
     <Compile Include="Builders\DqlQueryBuilder.cs" />
-    <Compile Include="Enums\OleDbDatatypeMapping.cs" />
+    <Compile Include="DataSources\OleDbDatatypeMapping.cs" />
     <Compile Include="EventArgs\CompareModelEventArgs.cs" />
     <Compile Include="Extensions\DataSetExtensions.cs" />
     <Compile Include="Extensions\DataTableExtensions.cs" />
@@ -76,9 +76,8 @@
     <Compile Include="DataSources\ExcelDataSource.cs" />
     <Compile Include="Builders\ExcelDbConnectionStringBuilder.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="GetConnectionProvider.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="KernelExtensions.cs" />
+    <Compile Include="Globals\GlobalSuppressions.cs" />
+    <Compile Include="Extensions\KernelExtensions.cs" />
     <Compile Include="Models\CompareMappingHelper.cs" />
     <Compile Include="Models\CompareMappingModel.cs" />
     <Compile Include="Models\CompareModel.cs" />
@@ -94,9 +93,7 @@
     <Compile Include="Repositories\CompareModelRepository.cs" />
     <Compile Include="EventArgs\CompareStartEventArgs.cs" />
     <Compile Include="EventArgs\DataTableEventArgs.cs" />
-    <Compile Include="Repositories\DataField.cs" />
-    <Compile Include="Serializer.cs" />
-    <Compile Include="SourceRepository.cs" />
+    <Compile Include="Globals\Serializer.cs" />
     <Compile Include="DataSources\SqlDataSource.cs" />
   </ItemGroup>
   <ItemGroup>

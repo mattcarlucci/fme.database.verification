@@ -62,7 +62,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionProvider.cs" />
     <Compile Include="DbProviders.cs" />
     <Compile Include="Extensions\GridViewExtensions.cs" />
     <Compile Include="Extensions\WinFormsExtensions.cs" />

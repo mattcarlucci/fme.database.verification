@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Fme.DqlProvider.Extensions;
+
 
 namespace Fme.DqlProvider
 {
@@ -31,8 +31,6 @@ namespace Fme.DqlProvider
             Add((int)tagDfValueTypes.DF_DOUBLE, typeof(double));
             Add((int)tagDfValueTypes.DF_INTEGER, typeof(int));
             Add((int)tagDfValueTypes.DF_BOOLEAN, typeof(bool));
-            
-
         }
     }
 
@@ -147,7 +145,18 @@ namespace Fme.DqlProvider
             {
                 items.Add(collection.getRepeatingString(name,index).ToString());
             }            
-            return items.ToArray().Merge(RepeatingToken);
+            return string.Join(RepeatingToken, items.ToArray());
+        }
+
+        /// <summary>
+        /// Merges the specified seperator.
+        /// </summary>
+        /// <param name="items">The items.</param>
+        /// <param name="seperator">The seperator.</param>
+        /// <returns>System.String.</returns>
+        public static string Merge(object[] items, string seperator = "|")
+        {
+            return string.Join(seperator, items);
         }
 
     }

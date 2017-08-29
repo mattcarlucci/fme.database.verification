@@ -1,7 +1,8 @@
-﻿using System;
+﻿using Fme.Library.Enums;
+using System;
 using System.Collections.Generic;
 
-namespace Fme.Library.Enums
+namespace Fme.Library
 {
     /// <summary>
     /// Class OleDbDataTypeMapping.

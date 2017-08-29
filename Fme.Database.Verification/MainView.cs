@@ -13,7 +13,6 @@
 // ***********************************************************************
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraGrid.Views.Grid;
-using Fme.DqlProvider.Extensions;
 using Fme.Library;
 using System;
 using System.Collections.Generic;
