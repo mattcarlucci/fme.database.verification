@@ -44,6 +44,7 @@ using System.IO;
 using DevExpress.LookAndFeel;
 using DevExpress.XtraGrid.Views.Card;
 using DevExpress.XtraTab;
+using DevExpress.XtraPrinting;
 
 namespace Fme.Database.Verification
 {
@@ -1266,7 +1267,15 @@ namespace Fme.Database.Verification
         {
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
-        
+        /// <summary>
+        /// Shows the message.
+        /// </summary>
+        /// <param name="ex">The ex.</param>
+        private void ShowMessage(string message)
+        {
+            MessageBox.Show(message, "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
         /// <summary>
         /// Determines whether [is session valid].
         /// </summary>
@@ -1800,6 +1809,79 @@ namespace Fme.Database.Verification
         {           
             viewMappings.PostEditor();
             viewMappings.UpdateCurrentRow();            
+        }
+
+        /// <summary>
+        /// Handles the ItemClick event of the tnExportPackage control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="DevExpress.XtraBars.ItemClickEventArgs"/> instance containing the event data.</param>
+        private void tnExportPackage_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                tnExportPackage.Enabled = false;
+                var name = Path.GetFileNameWithoutExtension(this.Text);
+                var path = Path.GetDirectoryName(this.Text);
+                var folder = string.Format("{0}\\{1}", path, name);
+                GridControl[] grids = { gridSourceData, gridTargetData, gridResults , gridComparison , gridMessages, gridMappings, gridFieldLookup,
+                                    gridCalcFields,gridSourcehSchema, gridTargetSchema  };
+
+                foreach (var grid in grids)
+                {
+                    ExportGrids(grid);
+                }
+
+                Serializer.Serialize<CompareModel>(folder + "\\" + name + ".exported.xml", this.model);
+                string queries = txtSourceQuery.Text + ";+\r\n" + txtTargetQuery.Text;
+                File.WriteAllText(folder + "\\" + name + ".queries.sql", queries);
+                ShowMessage("Export Complete");
+                Process.Start(folder);
+                
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex);
+            }
+            tnExportPackage.Enabled = true;
+            Cursor = Cursors.Default;
+        }
+        /// <summary>
+        /// Exports the grids.
+        /// </summary>
+        /// <param name="grid">The grid.</param>
+        private void ExportGrids(GridControl grid)
+        {
+            var name = Path.GetFileNameWithoutExtension(this.Text);
+            var path = Path.GetDirectoryName(this.Text);
+
+            var folder = string.Format("{0}\\{1}", path, name);
+            Directory.CreateDirectory(folder);
+
+            //var target = @"{0}\{1}_{2}.{3}";
+            var target = @"{0}\{1}.{2}";
+            string xls = string.Format(target, folder, grid.Name, ".xlsx");
+            
+            XlsxExportOptionsEx options = new XlsxExportOptionsEx(TextExportMode.Value);
+            options.ShowGridLines = false;
+
+           // view.Export(ExportTarget.Xlsx, xls);
+            grid.ExportToXlsx(xls, options);
+            
+
+            var table = grid.DataSource as DataTable;
+            if (table == null) return;
+
+            string xml = string.Format(target, folder, grid.Name, ".xml");
+
+            if (table.DataSet == null)
+            {
+                DataSet dataset = new DataSet(name);
+                dataset.Tables.Add(table);
+            }
+            table.DataSet.WriteXml(xml, XmlWriteMode.WriteSchema);
+          
         }
     }
 }
