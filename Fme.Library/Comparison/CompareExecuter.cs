@@ -171,8 +171,8 @@ namespace Fme.Library.Comparison
 
             for (int row = 0; row < Table.Rows.Count; row++)
             {
-                var left = Convert.ToString(Table.Rows[row][mapping.LeftAlias]);
-                var right = Convert.ToString(Table.Rows[row][mapping.RightAlias]);
+                var left = Convert.ToString(Table.Rows[row][mapping.LeftKey]);
+                var right = Convert.ToString(Table.Rows[row][mapping.RightKey]);
 
                 if (comparer.ContainsKey(mapping.CompareType))
                 {
@@ -180,7 +180,7 @@ namespace Fme.Library.Comparison
                     if (!comparer[mapping.CompareType](left, right, parms.Operator, parms))
                     {
                         var primary_key = Table.Rows[row].Field<string>(Alias.Primary_Key);
-                        results.Add(new CompareResultModel(primary_key, mapping.LeftSide, mapping.RightSide, left, right, row));
+                        results.Add(new CompareResultModel(primary_key, mapping, left, right, row));
 
                         var detail = string.Format("{0} {1} {2}\r\n\r\nValues [{3}] {1} [{4}]", 
                             mapping.LeftAlias, mapping.Operator, mapping.RightAlias, left, right);

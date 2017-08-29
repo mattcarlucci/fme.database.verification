@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Fme.Library.Enums;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace Fme.Library.Models
 {
@@ -142,6 +143,12 @@ namespace Fme.Library.Models
         public int LeftTimeZoneOffset { get; set; }
         public int RightTimeZoneOffset { get; set; }
 
+        [XmlIgnore]
+        public string LeftKey { get; set; }
+
+        [XmlIgnore]
+        public string RightKey { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="CompareMappingModel"/> class.
         /// </summary>
@@ -169,12 +176,12 @@ namespace Fme.Library.Models
         /// Gets the left alias.
         /// </summary>
         /// <value>The left alias.</value>
-        public string LeftAlias { get { return "left_" + LeftSide; } }
+        public string LeftAlias { get { return Alias.Left_ + LeftSide; } }
         /// <summary>
         /// Gets the right alias.
         /// </summary>
         /// <value>The right alias.</value>
-        public string RightAlias { get { return "right_" + RightSide; } }
+        public string RightAlias { get { return Alias.Right_ + RightSide; } }
 
         /// <summary>
         /// Gets the left SQL.
@@ -200,7 +207,15 @@ namespace Fme.Library.Models
                 return string.Format("[{0}] as [{1}]", RightSide, RightAlias);
             }
         }
-                
+        
+        public string GetLeftAlias(int position)
+        {
+            return LeftAlias + position;
+        }
+        public string GetRightAlias(int position)
+        {
+            return RightAlias + position;
+        }
 
         //public string LeftSql()
         //{

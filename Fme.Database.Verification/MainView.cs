@@ -237,6 +237,7 @@ namespace Fme.Database.Verification
             btnExecute.Enabled = false;
             cancelTokenSource = new CancellationTokenSource();
             cancelToken = cancelTokenSource.Token;
+            
 
             try
             {
@@ -868,8 +869,7 @@ namespace Fme.Database.Verification
             SetBestWidths();
             btnExecute.Enabled = true;
             MisMatches = CompareModelRepository.GetCompareResults(model);
-            LoadQueries();
-            TryFixHeadings();
+            LoadQueries();            
         }
         /// <summary>
         /// Loads the queries.
@@ -1240,31 +1240,7 @@ namespace Fme.Database.Verification
         {
             MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
-        /// <summary>
-        /// Checks the alias lengths.
-        /// </summary>
-        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
-        private bool CheckAliasLengths()
-        {
-            List<string> invalid = new List<string>();
-
-            foreach(var item in model.ColumnCompare)
-            {
-                if (item.LeftAlias.Length > 30) invalid.Add(item.LeftAlias + " | size = " + item.LeftAlias.Length);
-
-                if (item.RightAlias.Length > 30) invalid.Add(item.RightAlias + "| Size = " + item.RightAlias.Length);
-            }
-            if (invalid.Count > 0)
-            {
-                string buffer = string.Join(Environment.NewLine, invalid);
-                MessageBox.Show("The following fields exceed the maximum length\r\n\r\n" + buffer, "Validation", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-            
-            return true;
-
-        }
+        
         /// <summary>
         /// Determines whether [is session valid].
         /// </summary>
@@ -1695,19 +1671,7 @@ namespace Fme.Database.Verification
             model.Target.Key = cbTargetKey.Text;
         }
 
-        private void TryFixHeadings()
-        {
-            //DataTable table = gridResults.DataSource as DataTable;
-            //foreach(DataColumn col in table.Columns)
-            //{
-            //    var items = model.ColumnCompare.Where(w => w.LeftAlias != col.ColumnName  w.RightAlias == col.ColumnName);
-            //    {
-            //        foreach(var item in items)
-            //            Debug.Print(col.ColumnName);
-            //        //can we rename this or not!
-            //    }
-            //}
-        }
+       
         /// <summary>
         /// Handles the Tick event of the tmrMonitor control.
         /// </summary>

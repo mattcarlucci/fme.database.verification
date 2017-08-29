@@ -113,8 +113,8 @@ namespace Fme.Library.Comparison
             
             for (int row = 0; row < table.Rows.Count; row++)
             {
-                var sourceValue = ToString(table.Rows[row][compare.LeftAlias]);
-                var targetValue = ToString(table.Rows[row][compare.RightAlias]);
+                var sourceValue = ToString(table.Rows[row][compare.LeftKey]);
+                var targetValue = ToString(table.Rows[row][compare.RightKey]);
                 
                 if (comparer.ContainsKey(compare.CompareType))
                 {
@@ -122,7 +122,8 @@ namespace Fme.Library.Comparison
                     {
                         var primary_key = table.Rows[row].Field<string>(Alias.Primary_Key);
                         results.Add(new CompareResultModel(primary_key, compare.LeftSide, compare.RightSide, sourceValue, targetValue, row));
-                        var detail = string.Format("{0} {1} {2}\r\n\t   Values {3} {1} {4}", compare.LeftAlias, compare.Operator, compare.RightAlias, sourceValue, targetValue);
+                        var detail = string.Format("{0} {1} {2}\r\n\t   Values {3} {1} {4}", 
+                            compare.LeftAlias, compare.Operator, compare.RightAlias, sourceValue, targetValue);
 
                         if (parms.Exception != null)
                             model.ErrorMessages.Add(new ErrorMessageModel("Comparison", detail, parms.GetException()));
@@ -184,8 +185,8 @@ namespace Fme.Library.Comparison
                     if (cancelToken.IsCancellationRequested)
                         throw new OperationCanceledException("A cancellation token associated with this operation was canceled");
 
-                    var sourceValue = table.Rows[row][compare.LeftAlias];
-                    var targetValue = table.Rows[row][compare.RightAlias];
+                    var sourceValue = table.Rows[row][compare.LeftKey];
+                    var targetValue = table.Rows[row][compare.RightKey];
 
                     compare.LeftTimeZoneOffset = model.Source.TimeZoneOffset;
                     compare.RightTimeZoneOffset = model.Target.TimeZoneOffset;

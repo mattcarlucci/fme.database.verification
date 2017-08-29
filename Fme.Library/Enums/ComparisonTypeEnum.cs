@@ -8,7 +8,9 @@ namespace Fme.Library.Enums
 {
     public static class Alias
     {
+        public const string Left_ = "left_";
         public const string Left = "left";
+        public const string Right_ = "right_";
         public const string Right = "right";
         public const string Source = Left;
         public const string Target = Right;

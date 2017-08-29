@@ -448,5 +448,27 @@ namespace Fme.Library.Tests
           ////   cell[ComparisonTypeEnum.Datetime][OperatorEnums.Table]("8/24/2017 9:30:00 AM", "8/24/2017 12:30:00 PM", new int[] { 2, 0 });
         }
 
+        [TestMethod]
+        public void Test_NewQueryBuilder()
+        {
+            ExcelDbConnectionStringBuilder builder = new ExcelDbConnectionStringBuilder(@".\cd_clinical.xlsx");
+            OleDbDataSource dql = new OleDbDataSource(builder.ConnectionString);
+
+            
+
+            QueryBuilder query = dql.GetQueryBuilder();
+            var select = query.BuildSql("r_object_id",
+                new DataField[]
+                {   new DataField("object_name", 0),
+                    new DataField("r_object_type", 1),
+                    new DataField("r_object_type", 2)
+                }, "Sheet1$", "left", "0", "r_object_id", new string[] { "090200f1800de14c" });
+
+
+            var table = dql.ExecuteQuery(select);
+            Assert.AreEqual(table.Tables.Count, 1);
+            Assert.AreEqual(table.Tables[0].Rows.Count, 1);
+        }
+
     }
 }

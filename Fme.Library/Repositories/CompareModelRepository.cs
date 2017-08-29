@@ -140,7 +140,8 @@ namespace Fme.Library.Repositories
                         throw new Exception("No data was returned for the selected table " + Model.Source.SelectedTable);
 
                     Model.Source.DataSource.SetAliases(data1, Alias.Left);                    
-                    Model.MapTableColumns(data1, (map, index) => map[index].LeftAlias);
+                    Model.MapColumnCaptions(data1, (map, index) => map[index].LeftAlias);
+                    Model.MapColumnsKeys(data1, (map, index, value) => map[index].LeftKey = value);
 
                     #endregion
                     ///////////////////////////////////////////////////////////////
@@ -165,7 +166,8 @@ namespace Fme.Library.Repositories
                         throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
 
                     Model.Target.DataSource.SetAliases(data2, Alias.Right);
-                    Model.MapTableColumns(data2, (map, index) => map[index].RightAlias);
+                    Model.MapColumnCaptions(data2, (map, index) => map[index].RightAlias);
+                    Model.MapColumnsKeys(data2, (map, index, value) => map[index].RightKey = value);
                     #endregion
 
                     #region Check for matching records
@@ -193,19 +195,13 @@ namespace Fme.Library.Repositories
 
                     var sourceData = table1.CopyToDataTable();
                     var targetData = table2.CopyToDataTable();
-
-                    //  Model.MapTableColumns(sourceData, (map, index) => map[index].LeftAlias);
-                    //   Model.MapTableColumns(targetData, (map, index) => map[index].RightAlias);
-
+                                      
                     OnCompareStart(this, new CompareStartEventArgs() { Pairs = null });
                     OnSourceLoadComplete(this, new DataTableEventArgs() { Table = sourceData });
                     OnTargetLoadComplete(this, new DataTableEventArgs() { Table = targetData });
 
                     table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
-                    CompareMappingHelper.OrderColumns(table1, Model.ColumnCompare.Where(w=> w.Selected).ToList());
-                    
-                 
-                    
+                    CompareMappingHelper.OrderColumns(table1, Model.ColumnCompare.Where(w=> w.Selected).ToList());                    
                     CompareMappingHelper.CompareColumns(this, table1, Model, cancelToken);
                     
 
@@ -262,8 +258,8 @@ namespace Fme.Library.Repositories
             var results = model.ColumnCompare.SelectMany(s => s.CompareResults).ToList();
             foreach (var item in results)
             {
-                string key1 = item.Row + "left_" + item.LeftSide;
-                string key2 = item.Row + "right_" + item.RightSide;
+                string key1 = item.Row + item.LeftKey; // "left_" + item.LeftSide;
+                string key2 = item.Row + item.RightKey; // "right_" + item.RightSide;
 
                 if (keys.ContainsKey(key1))
                     model.ErrorMessages.Add(new

@@ -80,23 +80,13 @@ namespace Fme.Library.Models
         }
 
 
-        /// <summary>
-        /// Maps the table columns.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="target">The target.</param>
-        public void MapTableColumns(DataSet source, DataSet target)
-        {
-            MapTableColumns(source.Tables[0], (map, index) => map[index].LeftAlias);
-            MapTableColumns(target.Tables[0], (map, index) => map[index].RightAlias);            
-        }
-
+     
         /// <summary>
         /// Maps the table columns.
         /// </summary>
         /// <param name="data">The data.</param>
         /// <param name="selector">The selector.</param>
-        public void MapTableColumns(DataSet data, Func<List<CompareMappingModel>, int, string> selector)
+        public void MapColumnCaptions(DataSet data, Func<List<CompareMappingModel>, int, string> selector)
         {
             MapTableColumns(data.Tables[0], selector);
         }
@@ -112,13 +102,31 @@ namespace Fme.Library.Models
                 OrderBy(o => o.Ordinal).ToList();
 
             for (int i = 1; i < table.Columns.Count; i++)
-                table.Columns[i].SetHeading(selector(f1, i -1));
+            {
+                table.Columns[i].SetHeading(selector(f1, i - 1));                
+            }
         }
 
 
-        
+        public void MapColumnsKeys(DataSet data, Func<List<CompareMappingModel>, int, string, string> selector)
+        {
+            MapColumnsKeys(data.Table(), selector);
+        }
 
-       
+        public void MapColumnsKeys(DataTable table, Func<List<CompareMappingModel>, int, string, string> selector)
+        {
+            var f1 = this.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected == true).
+                OrderBy(o => o.Ordinal).ToList();
+
+            for (int i = 1; i < table.Columns.Count; i++)
+            {
+                selector(f1, i - 1, table.Columns[i].ColumnName);                
+            }
+        }
+
+
+
+
         /// <summary>
         /// Sets the compare ordinal.
         /// </summary>
@@ -196,6 +204,9 @@ namespace Fme.Library.Models
 
             table.Merge(data, false, MissingSchemaAction.AddWithKey);
         }
+
+        
+
         /// <summary>
         /// Executes the calculated fields.
         /// </summary>
@@ -223,7 +234,11 @@ namespace Fme.Library.Models
 
                         //only merge if the queries execute.
                         source.Merge(data1, false, MissingSchemaAction.AddWithKey);
+                        calc.LeftKey = data1.Columns[1].ColumnName;
+
                         target.Merge(data2, false, MissingSchemaAction.AddWithKey);
+                        calc.RightKey = data2.Columns[1].ColumnName;
+
                     }
                     catch (Exception ex)
                     {
