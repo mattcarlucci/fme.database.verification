@@ -70,7 +70,7 @@ namespace Fme.Library.Repositories
             var col = Model.ColumnCompare[e.CurrentRow];
             col.CompareResults = e.Results;
 
-            col.Errors = e.ErrorCount.ToString();
+            //col.Errors = e.ErrorCount.ToString();
             col.StartTime = e.StartTime;
             col.Status = e.Status + " " + e.Duration.ToString();
 
@@ -78,6 +78,10 @@ namespace Fme.Library.Repositories
             base.OnStatusEvent(sender, e);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompareModelRepository"/> class.
+        /// </summary>
+        /// <param name="model">The model.</param>
         public CompareModelRepository(CompareModel model) 
         {
             this.Model = model;
@@ -122,6 +126,10 @@ namespace Fme.Library.Repositories
                     var pairs = Model.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected).ToList();
                     QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();
 
+                    foreach(var r in Model.ColumnCompare)
+                    {
+                        r.CompareResults.Clear();
+                    }
                     ///////////////////////////////////////////////////////////////
                     #region Construct Source, Fetch Data and set Aliases
 

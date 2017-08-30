@@ -38,8 +38,9 @@ namespace Fme.Library.Extensions
 
             StringBuilder sb = new StringBuilder();
             var duplicates = dt.AsEnumerable()
-              .Select(dr => dr.Field<T>(key))
-              .GroupBy(x => x)
+              .Select(dr => dr.Field<T>(key).ToString())
+              .GroupBy(x => 
+              x)
               .Where(g => g.Count() > 1)
               .Select(g => g.Key)
               .ToList();
@@ -48,7 +49,7 @@ namespace Fme.Library.Extensions
                 sb.AppendLine(string.Format("Removing duplicate {0} = {1}", key, item)));
 
             dt.AsEnumerable().
-             Where(w => duplicates.Contains(w.Field<T>(key)) == true).
+             Where(w => duplicates.Contains(w.Field<T>(key).ToString()) == true).
                  ToList().ForEach(row => dt.Rows.Remove(row));
            
             return sb.ToString();

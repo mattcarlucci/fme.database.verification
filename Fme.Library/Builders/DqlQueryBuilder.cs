@@ -46,8 +46,22 @@ namespace Fme.Library
     /// <seealso cref="Fme.Library.QueryBuilder" />
     public class DqlQueryBuilder : QueryBuilder
     {
-        
-        
+
+        /// <summary>
+        /// Builds the field aliases.
+        /// </summary>
+        /// <param name="fields">The fields.</param>
+        /// <param name="alias">The alias.</param>
+        /// <returns>System.String.</returns>
+        protected override string BuildFieldAliases(string[] fields, string alias)
+        {
+            if (string.IsNullOrEmpty(alias))
+                return string.Join("\r\n,", fields);
+            else
+                return string.Join("\r\n,", fields.
+                    Select(s => s + " as " + alias + "_" + s));
+        }
+
         /// <summary>
         /// Builds the SQL in.
         /// </summary>

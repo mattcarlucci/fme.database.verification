@@ -24,7 +24,7 @@ namespace Fme.Library.Comparison
         /// <summary>
         /// Transforms the specified value.
         /// </summary>
-        /// <param name="value">The value.</param>
+        /// <param name="values">The values.</param>
         /// <param name="offset">The offset.</param>
         /// <returns>System.String.</returns>
         public virtual string Transform(string values, int offset)
@@ -32,11 +32,24 @@ namespace Fme.Library.Comparison
             return base.Transform(values, (dt) => dt.AddHours(offset));            
         }
 
+        /// <summary>
+        /// Transforms the specified values.
+        /// </summary>
+        /// <param name="values">The values.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="provider">The provider.</param>
+        /// <returns>System.String.</returns>
         public virtual string Transform(string values, int offset, IFormatProvider provider)
         {
             return base.Transform(values, (value) => ToDateTime(value, provider));
         }
 
+        /// <summary>
+        /// To the date time.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="provider">The provider.</param>
+        /// <returns>DateTime.</returns>
         public static DateTime ToDateTime(object value, IFormatProvider provider)
         {          
             return (DateTime)System.Convert.ChangeType(value, typeof(DateTime), provider);

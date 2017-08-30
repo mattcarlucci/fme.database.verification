@@ -81,7 +81,12 @@ namespace Fme.Library.Models
         /// Gets the errors.
         /// </summary>
         /// <value>The errors.</value>
-        public string Errors { get; set; }
+       // public string Errors { get; set; }
+       public string Errors
+        {
+            get { return CompareResults.Count.ToString(); }
+        }
+
        
         /// <summary>
         /// Gets or sets the status.
@@ -260,7 +265,8 @@ namespace Fme.Library.Models
                 string line = reader.ReadLine();
                 try
                 {
-                    items.Add(line.Split('\t')[0], line.Split('\t')[1]);
+                    if (string.IsNullOrEmpty(line) == false)
+                        items.Add(line.Split('\t')[0], line.Split('\t')[1]);
                 }
                 catch(Exception)
                 {

@@ -626,6 +626,18 @@ namespace Fme.Database.Verification
             {
                 e.Appearance.ForeColor = Color.DarkGreen;
             }
+            if (!string.IsNullOrEmpty(model.ColumnCompare[e.RowHandle].RightLookupFile) && (e.Column.FieldName == "LeftLookupFile"))
+            {
+                if (File.Exists(model.ColumnCompare[e.RowHandle].LeftLookupFile)) return;
+              //  e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Strikeout);
+                e.Appearance.ForeColor = Color.DarkRed;
+            }
+            if (!string.IsNullOrEmpty(model.ColumnCompare[e.RowHandle].RightLookupFile) && (e.Column.FieldName == "RightLookupFile"))
+            {
+                if (File.Exists(model.ColumnCompare[e.RowHandle].RightLookupFile)) return;
+           //     e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Strikeout);
+                e.Appearance.ForeColor = Color.DarkRed;
+            }
         }
         /// <summary>
         /// Handles the Click event of the bindingNavigatorAddNewItem control.
@@ -785,6 +797,7 @@ namespace Fme.Database.Verification
                 return;
             }
             lblStatus.Caption = "Executing...";
+            gridMappings.RefreshDataSource();
         }
         /// <summary>
         /// Handles the CompareStatus event of the Compare control.
@@ -933,8 +946,8 @@ namespace Fme.Database.Verification
             // bsMappings.DataSource = model.ColumnCompare;
             gridMappings.RefreshDataSource();
 
-            if (e.CurrentRow == 0)
-                gridMappings.BestFitWidth();
+           // if (e.CurrentRow == 0)
+           //     gridMappings.BestFitWidth();
 
             Application.DoEvents();
         }
@@ -1882,6 +1895,21 @@ namespace Fme.Database.Verification
             }
             table.DataSet.WriteXml(xml, XmlWriteMode.WriteSchema);
           
+        }
+
+        private void btnSourceData_DoubleClick(object sender, EventArgs e)
+        {
+            try
+            {
+                ProcessStartInfo info = new ProcessStartInfo();
+                info.UseShellExecute = true;
+                info.FileName = btnSourceData.Text;
+                Process.Start(info);
+            }
+            catch(Exception)
+            {
+
+            }
         }
     }
 }

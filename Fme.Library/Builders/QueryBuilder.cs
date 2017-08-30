@@ -89,7 +89,7 @@ namespace Fme.Library
         /// <param name="fields">The fields.</param>
         /// <param name="alias">The alias.</param>
         /// <returns>System.String.</returns>
-        protected string BuildFieldAliases(string[] fields, string alias)
+        protected virtual string BuildFieldAliasesX(string[] fields, string alias)
         {
             List<string> formatted = new List<string>();
             fields.Where(w=> string.IsNullOrEmpty(w) == false).ToList().ForEach(item =>
@@ -110,6 +110,30 @@ namespace Fme.Library
                 return string.Join("\r\n,", formatted.
                     Select(s => s + " as " + alias + "_" + s));
                 
+        }
+        /// <summary>
+        /// Builds the field aliases.
+        /// </summary>
+        /// <param name="fields">The fields.</param>
+        /// <param name="alias">The alias.</param>
+        /// <returns>System.String.</returns>
+        protected virtual string BuildFieldAliases(string[] fields, string alias)
+        {
+            List<string> formatted = new List<string>();
+            fields.ToList().ForEach(item =>
+            {
+                var x = item.Contains("[") == false
+                    ? "[" + item + "]"
+                    : item;
+
+                formatted.Add(x);
+            });
+
+            if (string.IsNullOrEmpty(alias))
+                return Environment.NewLine + " " + string.Join("\r\n,", formatted) + Environment.NewLine;
+            else
+                return Environment.NewLine + string.Join("\r\n,", formatted.
+                    Select(s => s + " as " + alias + "_" + s)) +Environment.NewLine; ;
         }
 
       

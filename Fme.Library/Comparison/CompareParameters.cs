@@ -96,7 +96,7 @@ namespace Fme.Library.Comparison
         /// <value>The dictionary2.</value>
         public Dictionary<string, string> Dictionary2
         {
-            get { return (Dictionary<string, string>)Parameters[4] ?? new Dictionary<string, string>(); }
+            get { return (Dictionary<string, string>)Parameters[3] ?? new Dictionary<string, string>(); }
         }
     }
    

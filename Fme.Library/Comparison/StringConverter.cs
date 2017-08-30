@@ -19,7 +19,7 @@ namespace Fme.Library.Comparison
     /// Class StringConverter.
     /// </summary>
     /// <seealso cref="Fme.Library.Comparison.GenericConverter{System.String}" />
-    public class StringConverter :GenericConverter<string>
+    public class StringConverter : GenericConverter<string>
     {
         /// <summary>
         /// Joins the specified values.
@@ -49,7 +49,6 @@ namespace Fme.Library.Comparison
         /// <returns>System.String.</returns>
         public string Transform(string value, Dictionary<string,string> translate)
         {
-
             return base.Transform(value, (dt) => translate.ContainsKey(dt) ? translate[dt] : dt);
         }
         /// <summary>

@@ -50,7 +50,7 @@ namespace Fme.Library.Comparison
         {
             return value.Split(new string[] { Token }, StringSplitOptions.RemoveEmptyEntries).ToArray();
         }
-
+               
         /// <summary>
         /// Converts the specified value.
         /// </summary>
@@ -84,7 +84,7 @@ namespace Fme.Library.Comparison
         {
             List<T> items = new List<T>();
             values.ToList().ForEach(value => items.Add(selector(value)));
-            return Join(items.OrderBy(o => o).ToArray());
+            return Join(items.OrderBy(o => o).ToArray());            
         }
         /// <summary>
         /// Transforms the specified value.
@@ -108,8 +108,7 @@ namespace Fme.Library.Comparison
         public bool Compare(T value, Func<T, bool> selector)
         {
             return selector(value);
-         //  return  value.CompareTo(selector);
-          //  return selector(value);
+           //  return value.CompareTo(selector);           
         }
     }
    

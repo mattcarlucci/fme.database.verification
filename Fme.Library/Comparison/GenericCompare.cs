@@ -19,6 +19,7 @@ using System.Linq;
 using System.Globalization;
 using System.Reflection;
 using Fme.Library.Extensions;
+using System.Text.RegularExpressions;
 
 namespace Fme.Library.Comparison
 {
@@ -84,16 +85,47 @@ namespace Fme.Library.Comparison
         {
             try
             {
-                //var fmt = "ddd, dd MMM yyyy HH':'mm':'ss 'GMT' (*)";
-                //var dta = "2015/01/22 12:08:51 (GMT+09:00)";
+                //var fmt = "yyyy/dd/MM hh':'mm':'ss '(''GMT''+'ff':' (*)";
+               // var dta = "2015/01/22 12:08:51 (GMT+09:00)";
+               // var fmt = "yyyy-MM-dd HH:mm:ss,fff";
                 //DateTime.TryParseExact(dta, fmt, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result);
+                //[+-][0-9]{2}:[0-9]{2}\b
 
+                //var fmt = "yyyy/dd/MM hh:mm:ss";
+                 //var exa = DateTime.ParseExact(left, fmt, CultureInfo.InvariantCulture);
+                //var match = Regex.Match(left, "[+-][0-9]{2}:[0-9]{2}\b");
+                //var rm = match.Value;
+            
                 var x = new DateTimeConverter();
                 var l = x.Transform(left, parms.Offset1);
                 var r = x.Transform(right, parms.Offset2);
                 return Execute(l, r, ops);
             }
             catch(Exception ex)
+            {
+                return CompareDateTimeString(left, right, ops, parms);
+               // parms.Exception = ex;
+              //  return false;
+            }
+        }
+        /// <summary>
+        /// Compares the date time string.
+        /// </summary>
+        /// <param name="left">The left.</param>
+        /// <param name="right">The right.</param>
+        /// <param name="ops">The ops.</param>
+        /// <param name="parms">The parms.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool CompareDateTimeString(string left, string right, OperatorEnums ops, CompareParameters parms)
+        {
+            try
+            {
+                var x = new StringConverter();
+                var l = x.Transform(left, parms.Dictionary1);
+                var r = x.Transform(right, parms.Dictionary2);
+                return Execute(l, r, ops);
+            }
+            catch (Exception ex)
             {
                 parms.Exception = ex;
                 return false;
@@ -218,7 +250,7 @@ namespace Fme.Library.Comparison
             {
                 var x = new StringConverter();
                 var l = x.Transform(left, parms.Dictionary1);
-                var r = x.Transform(right, parms.Dictionary1);
+                var r = x.Transform(right, parms.Dictionary2);
                 return Execute(l, r, ops);
             }
             catch (Exception ex)
