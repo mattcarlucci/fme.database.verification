@@ -540,7 +540,7 @@ namespace Fme.Database.Verification
                 GridLookupStyleFields(sender, e);
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return;
             }
@@ -554,17 +554,19 @@ namespace Fme.Database.Verification
         private void GridViewMapping_MarkMissingFields(object sender, RowCellStyleEventArgs e)
         {
             GridView view = sender as GridView;
-            if (e.Column.Name == "colLeftSide" && model.ColumnCompare[e.RowHandle].IsCalculated == false)
+            var RowHandle = (int)Convert.ChangeType(view.GetRowCellValue(e.RowHandle, "Ordinal"), typeof(int));
+
+            if (e.Column.Name == "colLeftSide" && model.ColumnCompare[RowHandle].IsCalculated == false)
             {
-                if (model.Source.SelectedSchema().Fields.Where(w => w.Name == model.ColumnCompare[e.RowHandle].LeftSide).Count() == 0)
+                if (model.Source.SelectedSchema().Fields.Where(w => w.Name == model.ColumnCompare[RowHandle].LeftSide).Count() == 0)
                     //e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Strikeout);
                     e.Appearance.ForeColor = Color.DimGray;
                 else
                     e.Appearance.ForeColor = Color.DarkBlue;
             }
-            else if (e.Column.Name == "colRightSide" && model.ColumnCompare[e.RowHandle].IsCalculated == false)
+            else if (e.Column.Name == "colRightSide" && model.ColumnCompare[RowHandle].IsCalculated == false)
             {
-                if (model.Target.SelectedSchema().Fields.Where(w => w.Name == model.ColumnCompare[e.RowHandle].RightSide).Count() == 0)
+                if (model.Target.SelectedSchema().Fields.Where(w => w.Name == model.ColumnCompare[RowHandle].RightSide).Count() == 0)
                     //e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Strikeout);
                     e.Appearance.ForeColor = Color.DimGray;
                 else
@@ -581,7 +583,8 @@ namespace Fme.Database.Verification
             GridView view = sender as GridView;
             if (view != viewMappings) return;
 
-            if(model.ColumnCompare[e.RowHandle].IsCalculated)            
+            var RowHandle = (int)Convert.ChangeType(view.GetRowCellValue(e.RowHandle, "Ordinal"), typeof(int));
+            if (model.ColumnCompare[RowHandle].IsCalculated)            
             {
                 e.Appearance.ForeColor = Color.DarkRed;
                 e.Appearance.BackColor = Color.Ivory;
@@ -597,9 +600,11 @@ namespace Fme.Database.Verification
         {
             GridView view = sender as GridView;
             if (view != viewCalcFields) return;
+            var RowHandle = (int)Convert.ChangeType(view.GetRowCellValue(e.RowHandle, "Ordinal"), typeof(int));
+            if (model.ColumnCompare[RowHandle].IsCalculated == false) return;
 
             e.Appearance.ForeColor = Color.DarkRed;
-            e.Appearance.BackColor = Color.Ivory;
+            e.Appearance.BackColor = Color.Ivory;           
 
             if (e.Column.FieldName.Contains("Query"))
             {
@@ -615,26 +620,26 @@ namespace Fme.Database.Verification
         private void GridLookupStyleFields(object sender, RowCellStyleEventArgs e)
         {
             GridView view = sender as GridView;
-            //if (view != this.viewFieldLookup && view != this.viewMappings) return;
-            if (view == this.viewCalcFields) return;
+            var RowHandle = (int)Convert.ChangeType(view.GetRowCellValue(e.RowHandle, "Ordinal"), typeof(int));
+           // if (view == this.viewCalcFields) return;
             
-            if (!string.IsNullOrEmpty(model.ColumnCompare[e.RowHandle].LeftLookupFile) && (e.Column.FieldName == "LeftSide"))
+            if (!string.IsNullOrEmpty(model.ColumnCompare[RowHandle].LeftLookupFile) && (e.Column.FieldName == "LeftSide"))
             {
                 e.Appearance.ForeColor = Color.DarkGreen;
             }
-            if (!string.IsNullOrEmpty(model.ColumnCompare[e.RowHandle].RightLookupFile) && (e.Column.FieldName == "RightSide"))
+            if (!string.IsNullOrEmpty(model.ColumnCompare[RowHandle].RightLookupFile) && (e.Column.FieldName == "RightSide"))
             {
                 e.Appearance.ForeColor = Color.DarkGreen;
             }
-            if (!string.IsNullOrEmpty(model.ColumnCompare[e.RowHandle].RightLookupFile) && (e.Column.FieldName == "LeftLookupFile"))
+            if (!string.IsNullOrEmpty(model.ColumnCompare[RowHandle].RightLookupFile) && (e.Column.FieldName == "LeftLookupFile"))
             {
                 if (File.Exists(model.ColumnCompare[e.RowHandle].LeftLookupFile)) return;
               //  e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Strikeout);
                 e.Appearance.ForeColor = Color.DarkRed;
             }
-            if (!string.IsNullOrEmpty(model.ColumnCompare[e.RowHandle].RightLookupFile) && (e.Column.FieldName == "RightLookupFile"))
+            if (!string.IsNullOrEmpty(model.ColumnCompare[RowHandle].RightLookupFile) && (e.Column.FieldName == "RightLookupFile"))
             {
-                if (File.Exists(model.ColumnCompare[e.RowHandle].RightLookupFile)) return;
+                if (File.Exists(model.ColumnCompare[RowHandle].RightLookupFile)) return;
            //     e.Appearance.Font = new Font(e.Appearance.Font, FontStyle.Strikeout);
                 e.Appearance.ForeColor = Color.DarkRed;
             }
@@ -1678,16 +1683,19 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="RowCellClickEventArgs"/> instance containing the event data.</param>
         private void viewCalcFields_RowCellClick(object sender, RowCellClickEventArgs e)
         {
-            
+            GridView view = sender as GridView;
+            if (view != viewCalcFields) return;
+            var RowHandle = (int)Convert.ChangeType(view.GetRowCellValue(e.RowHandle, "Ordinal"), typeof(int));
+
             if (e.Column.FieldName == "RightQuery" && string.IsNullOrEmpty(e.CellValue?.ToString()))
             {
-                var query = viewCalcFields.GetRowCellValue(e.RowHandle, "LeftQuery");
-                viewCalcFields.SetRowCellValue(e.RowHandle, "RightQuery", query);
+                var query = viewCalcFields.GetRowCellValue(RowHandle, "LeftQuery");
+                viewCalcFields.SetRowCellValue(RowHandle, "RightQuery", query);
             }
             if (e.Column.FieldName == "RightSide" && string.IsNullOrEmpty(e.CellValue?.ToString()))
             {
-                var query = viewCalcFields.GetRowCellValue(e.RowHandle, "LeftSide");
-                viewCalcFields.SetRowCellValue(e.RowHandle, "RightSide", query);
+                var query = viewCalcFields.GetRowCellValue(RowHandle, "LeftSide");
+                viewCalcFields.SetRowCellValue(RowHandle, "RightSide", query);
             }
 
         }

@@ -32,15 +32,15 @@ namespace Fme.Database.Verification
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            DevExpress.Utils.SuperToolTip superToolTip11 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem11 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip12 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem12 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip9 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem9 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip10 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem10 = new DevExpress.Utils.ToolTipTitleItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
+            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem1 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem2 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip3 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem3 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip4 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem4 = new DevExpress.Utils.ToolTipTitleItem();
             this.compareMappingModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar1 = new DevExpress.XtraBars.Bar();
@@ -488,9 +488,9 @@ namespace Fme.Database.Verification
             this.btnExecute.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnExecute.ImageOptions.LargeImage")));
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem11.Text = "Execute a Compare";
-            superToolTip11.Items.Add(toolTipTitleItem11);
-            this.btnExecute.SuperTip = superToolTip11;
+            toolTipTitleItem1.Text = "Execute a Compare";
+            superToolTip1.Items.Add(toolTipTitleItem1);
+            this.btnExecute.SuperTip = superToolTip1;
             this.btnExecute.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnExecute_ItemClick);
             // 
             // btnCancel
@@ -501,9 +501,9 @@ namespace Fme.Database.Verification
             this.btnCancel.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.ImageOptions.LargeImage")));
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem12.Text = "Cancel Execution";
-            superToolTip12.Items.Add(toolTipTitleItem12);
-            this.btnCancel.SuperTip = superToolTip12;
+            toolTipTitleItem2.Text = "Cancel Execution";
+            superToolTip2.Items.Add(toolTipTitleItem2);
+            this.btnCancel.SuperTip = superToolTip2;
             this.btnCancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnCancel_ItemClick);
             // 
             // btnRefresh
@@ -665,9 +665,9 @@ namespace Fme.Database.Verification
             this.barButtonItem4.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem4.ImageOptions.LargeImage")));
             this.barButtonItem4.Name = "barButtonItem4";
             this.barButtonItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem9.Text = "Select the Source Data";
-            superToolTip9.Items.Add(toolTipTitleItem9);
-            this.barButtonItem4.SuperTip = superToolTip9;
+            toolTipTitleItem3.Text = "Select the Source Data";
+            superToolTip3.Items.Add(toolTipTitleItem3);
+            this.barButtonItem4.SuperTip = superToolTip3;
             // 
             // popupMenu1
             // 
@@ -703,9 +703,9 @@ namespace Fme.Database.Verification
             this.barButtonItem5.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem5.ImageOptions.LargeImage")));
             this.barButtonItem5.Name = "barButtonItem5";
             this.barButtonItem5.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem10.Text = "Select the Target Data";
-            superToolTip10.Items.Add(toolTipTitleItem10);
-            this.barButtonItem5.SuperTip = superToolTip10;
+            toolTipTitleItem4.Text = "Select the Target Data";
+            superToolTip4.Items.Add(toolTipTitleItem4);
+            this.barButtonItem5.SuperTip = superToolTip4;
             // 
             // popupMenu2
             // 
