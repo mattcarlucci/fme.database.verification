@@ -130,6 +130,8 @@ namespace Fme.Library.Repositories
                     {
                         r.CompareResults.Clear();
                     }
+                    OnCompareStart(this, new CompareStartEventArgs() { Pairs = null });
+
                     ///////////////////////////////////////////////////////////////
                     #region Construct Source, Fetch Data and set Aliases
 
@@ -146,6 +148,9 @@ namespace Fme.Library.Repositories
                     var data1 = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
                     if (data1.Tables == null || data1.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Source.SelectedTable);
+
+                    var sourceData = data1.CopyToDataTable();
+                    OnSourceLoadComplete(this, new DataTableEventArgs() { Table = sourceData });
 
                     Model.Source.DataSource.SetAliases(data1, Alias.Left);                    
                     Model.MapColumnCaptions(data1, (map, index) => map[index].LeftAlias);
@@ -173,6 +178,8 @@ namespace Fme.Library.Repositories
                     if (data2.Tables == null || data2.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
 
+                    var targetData = data2.CopyToDataTable();
+                    OnTargetLoadComplete(this, new DataTableEventArgs() { Table = targetData });
                     Model.Target.DataSource.SetAliases(data2, Alias.Right);
                     Model.MapColumnCaptions(data2, (map, index) => map[index].RightAlias);
                     Model.MapColumnsKeys(data2, (map, index, value) => map[index].RightKey = value);
@@ -191,23 +198,18 @@ namespace Fme.Library.Repositories
                     var dupset2 = table2.RemoveDuplicates<string>(Alias.Primary_Key);
 
                     if (string.IsNullOrEmpty(dupset1) == false)
-                        Model.ErrorMessages.Add(new ErrorMessageModel("Left Query has duplicate Keys", dupset1, ""));
+                        Model.ErrorMessages.Add(new ErrorMessageModel("Left Query has duplicate Keys", dupset1, table1.Rows.Count + " record(s) remain after removing duplicates"));
 
                     if (string.IsNullOrEmpty(dupset2) == false)
-                        Model.ErrorMessages.Add(new ErrorMessageModel("Right Query has duplicate Keys", dupset2, ""));
+                        Model.ErrorMessages.Add(new ErrorMessageModel("Right Query has duplicate Keys", dupset2, table2.Rows.Count + " record(s) remain after removing duplicates"));
 
                     table1.SetPrimaryKey(Alias.Primary_Key, table2);
-                         
+
+                    if (table1.Rows.Count == 0 || table2.Rows.Count == 0)
+                        throw new DataException("No matching records found to complete the request. Please see the error log for more details.");
+
+                    Model.ExecuteCalculatedFields(table1, table2, cancelToken);                   
                     
-                    Model.ExecuteCalculatedFields(table1, table2, cancelToken);
-
-                    var sourceData = table1.CopyToDataTable();
-                    var targetData = table2.CopyToDataTable();
-                                      
-                    OnCompareStart(this, new CompareStartEventArgs() { Pairs = null });
-                    OnSourceLoadComplete(this, new DataTableEventArgs() { Table = sourceData });
-                    OnTargetLoadComplete(this, new DataTableEventArgs() { Table = targetData });
-
                     table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
                     CompareMappingHelper.OrderColumns(table1, Model.ColumnCompare.Where(w=> w.Selected).ToList());                    
                     CompareMappingHelper.CompareColumns(this, table1, Model, cancelToken);

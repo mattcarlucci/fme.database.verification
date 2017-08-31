@@ -21,7 +21,20 @@ namespace Fme.Library.Extensions
                 target.Columns[index].Caption = table.Columns[index].Caption;
 
             return target;
+        }
+        /// <summary>
+        /// Copies to data table.
+        /// </summary>
+        /// <param name="ds">The ds.</param>
+        /// <returns>DataTable.</returns>
+        public static DataTable CopyToDataTable(this DataSet ds)
+        {
+            var table = ds.Tables[0];
+            var target = table.AsEnumerable().CopyToDataTable();
+            for (int index = 0; index < table.Columns.Count; index++)
+                target.Columns[index].Caption = table.Columns[index].Caption;
 
+            return target;
         }
     }
 }
