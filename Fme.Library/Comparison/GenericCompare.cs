@@ -84,18 +84,17 @@ namespace Fme.Library.Comparison
         public bool CompareDateTime(string left, string right, OperatorEnums ops,  CompareParameters parms)
         {
             try
-            {
-                //var fmt = "yyyy/dd/MM hh':'mm':'ss '(''GMT''+'ff':' (*)";
-               // var dta = "2015/01/22 12:08:51 (GMT+09:00)";
-               // var fmt = "yyyy-MM-dd HH:mm:ss,fff";
-                //DateTime.TryParseExact(dta, fmt, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime result);
-                //[+-][0-9]{2}:[0-9]{2}\b
+            {            
 
-                //var fmt = "yyyy/dd/MM hh:mm:ss";
-                 //var exa = DateTime.ParseExact(left, fmt, CultureInfo.InvariantCulture);
-                //var match = Regex.Match(left, "[+-][0-9]{2}:[0-9]{2}\b");
-                //var rm = match.Value;
-            
+                //var str = "2015/01/22 12:08:51 (GMT+09:00)";
+
+                //var dt = DateTimeOffset.ParseExact
+                //    (str,
+                //    "yyyy/MM/dd HH:mm:ss (\\G\\M\\TK)",
+                //    System.Globalization.CultureInfo.InvariantCulture
+                //    );
+             
+
                 var x = new DateTimeConverter();
                 var l = x.Transform(left, parms.Offset1);
                 var r = x.Transform(right, parms.Offset2);
@@ -103,6 +102,10 @@ namespace Fme.Library.Comparison
             }
             catch(Exception ex)
             {
+                //temp for now
+                left = left.Replace("nulldate", "");
+                right = right.Replace("nulldate", "");
+
                 return CompareDateTimeString(left, right, ops, parms);
                // parms.Exception = ex;
               //  return false;

@@ -165,7 +165,7 @@ namespace Fme.Library.Comparison
                 Model.Source.TimeZoneOffset, 
                 Model.Target.TimeZoneOffset, 
                 mapping.ToDictionary(mapping.LeftLookupFile), 
-                mapping.ToDictionary(mapping.RightLookupFile));
+                mapping.ToDictionary(mapping.RightLookupFile), mapping.IgnoreChars);
 
             OnStatusEvent(mapping, currentRow, startTime);
 

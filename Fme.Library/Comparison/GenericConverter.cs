@@ -48,7 +48,8 @@ namespace Fme.Library.Comparison
         /// <returns>System.String[].</returns>
         protected string[] Split(string value)
         {
-            return value.Split(new string[] { Token }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+            return value.Split(new string[] { Token }, 
+                StringSplitOptions.RemoveEmptyEntries).ToArray();
         }
                
         /// <summary>

@@ -98,6 +98,16 @@ namespace Fme.Library.Comparison
         {
             get { return (Dictionary<string, string>)Parameters[3] ?? new Dictionary<string, string>(); }
         }
+
+        /// <summary>
+        /// Gets the ignore words.
+        /// </summary>
+        /// <returns>List&lt;System.String&gt;.</returns>
+        public List<string> GetIgnoreWords()
+        {
+            return Parameters[4].ToString().Split(new char[] { ';' }, 
+                StringSplitOptions.RemoveEmptyEntries ).ToList();
+        }
     }
    
    

@@ -1542,9 +1542,6 @@
         C/FZ4teu5xPcVdx9LHzLt+Ftk91r5my8d8Drf6NW+cp2dOEmAAAAAElFTkSuQmCC
 </value>
   </data>
-  <metadata name="btnTargetData.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="fieldSchemaModelBindingSource.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>650, 17</value>
   </metadata>

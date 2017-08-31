@@ -1499,12 +1499,15 @@ namespace Fme.Database.Verification
         {
 
             GridControl grid = sender as GridControl;
-            GridView view = grid.MainView as GridView;
-            view.GridControl.Focus();
-            int index = view.FocusedRowHandle;
+            GridView view = grid.MainView as GridView; 
                         
             if (grid != gridMappings) return;
-            if (view.FocusedColumn.OptionsColumn.AllowEdit == true) return;            
+            if (view.FocusedColumn.OptionsColumn.AllowEdit == true) return;
+
+            
+            view.GridControl.Focus();
+            int index = view.FocusedRowHandle;
+
             if (e.KeyCode == Keys.Up && e.Modifiers == Keys.Control ) 
             {
                 Debug.Print("Move Up");               
