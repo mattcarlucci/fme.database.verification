@@ -96,11 +96,12 @@ namespace Fme.DqlProvider
             DqlReader formatter = new DqlReader();
 
             List<DqlCommand> commands = new List<DqlCommand>();
-            command.CommandText.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                .ToList().ForEach(commandText => commands.Add(new DqlCommand(commandText, (DqlConnection)command.Connection)));
+            command.CommandText.Split(new char[] { ';'}, StringSplitOptions.RemoveEmptyEntries)
+                .ToList().Where(w=> string.IsNullOrEmpty(w) == false).ToList()
+                .ForEach(commandText => commands.Add(new DqlCommand(commandText, (DqlConnection)command.Connection)));
 
             foreach (var cmd in commands)
-            {
+            {                
                 if (token.IsCancellationRequested)
                     throw new OperationCanceledException("A cancellation token associated with this operation was canceled");
 

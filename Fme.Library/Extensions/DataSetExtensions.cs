@@ -159,15 +159,27 @@ namespace Fme.Library.Extensions
                 column.Caption = column.ColumnName;
                 return true;
             }
-#pragma warning disable CS0168 // The variable 'ex' is declared but never used
-            catch (Exception ex)
-#pragma warning restore CS0168 // The variable 'ex' is declared but never used
+            catch (Exception)
             {
                 index++;
                 return false;
             }
         }
 
+        /// <summary>
+        /// Merges all.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <returns>DataTable.</returns>
+        public static DataTable MergeAll(this DataSet data)
+        {
+            DataTable results = data.Tables[0];
+
+            foreach (DataTable table in data.Tables)
+                results.Merge(table);
+
+            return results;
+        }
 
 
     }

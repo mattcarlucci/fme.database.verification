@@ -449,25 +449,26 @@ namespace Fme.Library.Tests
         }
 
         [TestMethod]
-        public void Test_NewQueryBuilder()
+        public void Test_DqlMultiQuery()
         {
-            //ExcelDbConnectionStringBuilder builder = new ExcelDbConnectionStringBuilder(@".\cd_clinical.xlsx");
-            //OleDbDataSource dql = new OleDbDataSource(builder.ConnectionString);
-
-            
-
-            //QueryBuilder query = dql.GetQueryBuilder();
-            //var select = query.BuildSql("r_object_id",
-            //    new DataField[]
-            //    {   new DataField("object_name", 0),
-            //        new DataField("r_object_type", 1),
-            //        new DataField("r_object_type", 2)
-            //    }, "Sheet1$", "left", "0", "r_object_id", new string[] { "090200f1800de14c" });
-
-
-            //var table = dql.ExecuteQuery(select);
-            //Assert.AreEqual(table.Tables.Count, 1);
-            //Assert.AreEqual(table.Tables[0].Rows.Count, 1);
+            DataSet dataset = new DataSet("MulitQueryTest");
+            string cnstr = "User=dmadmin;Password=@vmware99;Repository=ls_repos";
+            using (DqlConnection cn = new DqlConnection(cnstr))
+            {
+                cn.Open();
+                using (DqlCommand cmd = new DqlCommand(File.ReadAllText(".\\DqlMultiQueryTest.txt"), cn))
+                {
+                    using (DqlDataAdapter adapter = new DqlDataAdapter(cmd))
+                    {
+                        var schemas = adapter.Fill(dataset);
+                        var table = dataset.MergeAll();
+                        Assert.AreEqual(dataset.Tables.Count, 21);
+                        Assert.AreEqual(table.Rows.Count, 10000);
+                        //Assert.AreEqual(dataset.Tables[0].Rows.Count, 1);
+                        //Assert.AreEqual(dataset.Tables[1].Rows.Count, 1);
+                    }
+                }
+            }
         }
 
     }

@@ -39,6 +39,27 @@ namespace Fme.Library
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
         public string CreateInClause(string field, int[] inValues)
+        {           
+            return string.Join(" or ", GetInClauses(field, inValues));
+        }
+        /// <summary>
+        /// Creates the in clause.
+        /// </summary>
+        /// <param name="field">The field.</param>
+        /// <param name="inValues">The in values.</param>
+        /// <returns>System.String.</returns>
+        public string CreateInClause(string field, string[] inValues)
+        {
+            return string.Join(" or ", GetInClauses(field, inValues));
+        }
+
+        /// <summary>
+        /// Gets the in clauses.
+        /// </summary>
+        /// <param name="field">The field.</param>
+        /// <param name="inValues">The in values.</param>
+        /// <returns>System.String[].</returns>
+        public string[] GetInClauses(string field, int[] inValues)
         {
             string @in = string.Join(",", inValues.Select(s => s.ToString()));
 
@@ -52,18 +73,16 @@ namespace Fme.Library
                 string buffer = field + " in (" + string.Join(",", block.Select(s => s)) + ")";
                 @in2.Add(buffer);
             }
-            string stack = string.Join(" or ", @in2.Select(s => s));
-
-            return stack;
+            return @in2.ToArray();
         }
 
         /// <summary>
-        /// Creates the in clause.
+        /// Gets the in clauses.
         /// </summary>
         /// <param name="field">The field.</param>
         /// <param name="inValues">The in values.</param>
-        /// <returns>System.String.</returns>
-        public string CreateInClause(string field, string[] inValues)
+        /// <returns>System.String[].</returns>
+        protected string[] GetInClauses(string field, string[] inValues)
         {
             string @in = string.Join(",", inValues.Select(s => s));
 
@@ -77,10 +96,9 @@ namespace Fme.Library
                 string buffer = field + " in ('" + string.Join("','", block.Select(s => s)) + "')";
                 @in2.Add(buffer);
             }
-            string stack = string.Join(" or ", @in2.Select(s => s));
-
-            return stack;
+            return @in2.ToArray();
         }
+     
 
         
         /// <summary>
@@ -173,12 +191,23 @@ namespace Fme.Library
         {           
             if (inValues == null)            
                 return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
-                
-            
+                            
             var aliases = BuildFieldAliases(fields, aliasPrefix);
-            var inCaluse = BuildInValues(inField, inValues.Distinct().ToArray());
+            var inClause = BuildInValues(inField, inValues.Distinct().ToArray());
 
-            return string.Format("select {0} as primary_key, {1} from [{2}] where {3}", primaryKey, aliases, tableName, inCaluse);
+            //var clauses = GetInClauses(inField, inValues.Distinct().ToArray());
+            //List<string> sqls = new List<string>();
+            //foreach(var clause in clauses)
+            //{
+            //    sqls.Add(string.Format("select {0} as primary_key, {1} from [{2}] where {3}", primaryKey, aliases, tableName, clause));
+            //}
+
+            //if (clauses.Count() > 0 )
+            //    return string.Join(";", sqls);
+
+            return string.Format("select {0} as primary_key, {1} from [{2}] where {3}", primaryKey, aliases, tableName, inClause);
+
+        
         }
 
         /// <summary>

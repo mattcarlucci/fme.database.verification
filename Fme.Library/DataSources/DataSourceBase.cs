@@ -199,6 +199,10 @@ namespace Fme.Library
         /// <returns>QueryBuilder.</returns>
         public abstract QueryBuilder GetQueryBuilder();
 
+        /// <summary>
+        /// Creates the connection.
+        /// </summary>
+        /// <returns>DbConnection.</returns>
         public abstract DbConnection CreateConnection();
 
 

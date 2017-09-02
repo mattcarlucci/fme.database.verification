@@ -22,6 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Data.Common;
 using System.Collections;
+using Fme.Library.Extensions;
 
 namespace Fme.Library
 {
@@ -73,7 +74,7 @@ namespace Fme.Library
         /// <returns>DataSet.</returns>
         public override DataSet ExecuteQuery(string select, CancellationToken token)
         {
-            DataSet dataSet = null;            
+            DataSet dataSet = null;           
             
             using (var cn = new DqlConnection(ConnectionString))
             {

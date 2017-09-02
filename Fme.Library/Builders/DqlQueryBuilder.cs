@@ -81,16 +81,24 @@ namespace Fme.Library
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
 
-            //string enabletop = string.Format("enable(return_top {0})", maxRows);
-            //enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows) > 0 ? maxRows : "";
-            var enabletop = "";
+            string enabletop = "";
             tableName = IncludeVersion ? tableName + " (deleted) " : tableName;
-            return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", primaryKey, aliases, tableName, inCaluse, enabletop);
 
-           /// var key = primaryKey == "r_object_id" ? "," : ", " + primaryKey + " as primary_key,";
+            var clauses = GetInClauses(inField, inValues.Distinct().ToArray());
+            List<string> sqls = new List<string>();
+            foreach (var clause in clauses)
+            {
+                sqls.Add(string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", 
+                    primaryKey, aliases, tableName, clause, enabletop));
+            }
+            
+            if (sqls.Count() == 0)
+                return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", 
+                    primaryKey, aliases, tableName, inCaluse, enabletop);
 
-            //hack to get dql to return the correct records.
-           // return string.Format("select r_object_id{0} {1} from {2} where {3}", key,  aliases, tableName, inCaluse);
+            return string.Join(";", sqls); 
+
+         
         }
         /// <summary>
         /// Builds the SQL in.
@@ -109,13 +117,7 @@ namespace Fme.Library
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
-
-            //hack to get dql to return the correct records.
-            /// string key = primaryKey == "r_object_id" ? " as primary_key," : ", " + primaryKey + " as primary_key,";
-            // return string.Format("select r_object_id{0} {1} from {2} where {3}", key, aliases, tableName, inCaluse);
-
-            //string enabletop = string.Format("enable(return_top {0})", maxRows);
-            //enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows) > 0 ? maxRows : "";
+          
             var enabletop = "";
             tableName = IncludeVersion ? tableName + " (deleted) " : tableName;
 
@@ -132,14 +134,12 @@ namespace Fme.Library
         public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows)
         {            
             var aliases = BuildFieldAliases(fields.Distinct().ToArray(), aliasPrefix);
-
-            // string key = primaryKey == "r_object_id" ? " as primary_key," : ", " + primaryKey + " as primary_key,";
-            // return string.Format("select r_object_id{0} {1} from {2}", key, aliases, tableName);
-
-            //string enabletop = string.Format("enable(return_top {0})", maxRows);
-            //enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows) > 0 ? maxRows : "";
-            var enabletop = "";
+                       
             tableName = IncludeVersion ? tableName + " (deleted) " : tableName;
+
+            string enabletop = string.Format("enable(return_top {0})", maxRows ?? "0");
+            enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows ?? "0") > 0 ? enabletop : "";
+
             return string.Format("select r_object_id, {0} as primary_key, {1} from {2} {3}", primaryKey, aliases, tableName, enabletop);
         }
     }

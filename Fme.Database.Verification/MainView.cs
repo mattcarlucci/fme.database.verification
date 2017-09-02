@@ -835,7 +835,8 @@ namespace Fme.Database.Verification
                 Invoke(handler, sender, e);
                 return;
             }
-            SetDataSource(gridSourceData, e.Table);           
+            SetDataSource(gridSourceData, e.Table);
+            tabSourceData.Tooltip = string.Format("{0} record(s)", e.Table.Rows.Count);
 
         }
 
@@ -854,6 +855,7 @@ namespace Fme.Database.Verification
             }
             SetDataSource(gridTargetData, e.Table);
             SetDataSource(gridMessages, model.ErrorMessages);
+            tabTargetData.Tooltip = string.Format("{0} record(s)", e.Table.Rows.Count);
 
         }
 
@@ -923,6 +925,7 @@ namespace Fme.Database.Verification
         {
             try
             {
+                Cursor = Cursors.WaitCursor;
                 txtSourceQuery.Text = File.ReadAllText(string.Format(@".\logs\{0}Query_{1}_{2}.sql", "Left", model.Source.SelectedTable, model.Source.Key));
                 txtTargetQuery.Text = File.ReadAllText(string.Format(@".\logs\{0}Query_{1}_{2}.sql", "Right", model.Target.SelectedTable, model.Target.Key));
             }
@@ -930,6 +933,7 @@ namespace Fme.Database.Verification
             {
 
             }
+            Cursor = Cursors.Default;
         }
         /// <summary>
         /// Handles the <see cref="E:EventStatus" /> event.
@@ -1090,12 +1094,16 @@ namespace Fme.Database.Verification
         {
             GridControl[] dataGrids = { gridSourceData, gridTargetData, gridReport, gridResults,gridMessages };
             GridControl[] configGrids = { gridMappings /*,gridCalcFields, gridFieldLookup */ };
-            
-            foreach (var dataGrid in dataGrids)            
-                dataGrid.BestFitWidth(false, true);
 
+            DataTable table = gridSourceData.DataSource as DataTable;
+            if (table != null && table.Rows.Count < 1000)
+            {
+                foreach (var dataGrid in dataGrids)
+                    dataGrid.BestFitWidth(false, true);
+            }
             foreach (var configGrid in configGrids)
                 configGrid.BestFitWidth(true, true);
+           
 
             #region no longer needed?
             //foreach (GridControl grid in set1)
@@ -1161,6 +1169,7 @@ namespace Fme.Database.Verification
             tabMessages.Text = "System Messages";
 
             SetupGridMappings();
+            SetupMapping();
         }
 
         /// <summary>
@@ -1273,6 +1282,8 @@ namespace Fme.Database.Verification
             cbLeftSide.Items.AddRange(cbSourceKey.Properties.Items);
             cbRightSide.Items.AddRange(cbTargetKey.Properties.Items);
 
+            cbCompareType.Items.Clear();
+            cbOperator.Items.Clear();
             cbCompareType.Items.AddRange(Enum.GetNames(typeof(ComparisonTypeEnum)));
             cbOperator.Items.AddRange(Enum.GetNames(typeof(OperatorEnums)));
 
@@ -1788,8 +1799,10 @@ namespace Fme.Database.Verification
 
         private void xtraTabControl1_Click(object sender, EventArgs e)
         {
+            Cursor = Cursors.WaitCursor;
             if (xtraTabControl1.SelectedTabPage == tabMessages)
                 gridMessages.RefreshDataSource();
+            Cursor = Cursors.Default;
         }
 
         private void viewMessages_RowStyle(object sender, RowStyleEventArgs e)

@@ -65,12 +65,8 @@ namespace Fme.Library.Repositories
         /// <param name="e">The <see cref="CompareHelperEventArgs" /> instance containing the event data.</param>
         public override void OnStatusEvent(object sender, CompareHelperEventArgs e)
         {
-           // Debug.Print("Current Row is " + e.CurrentRow);
-
             var col = Model.ColumnCompare[e.CurrentRow];
-            col.CompareResults = e.Results;
-
-            //col.Errors = e.ErrorCount.ToString();
+            col.CompareResults = e.Results;           
             col.StartTime = e.StartTime;
             col.Status = e.Status + " " + e.Duration.ToString();
 
@@ -117,8 +113,7 @@ namespace Fme.Library.Repositories
         /// </summary>
         /// <param name="cancelToken">The cancel token.</param>
         public async Task Execute(CancellationTokenSource cancelToken)
-        {
-            
+        {            
             try
             {
                 await Task.Run(() =>
@@ -126,11 +121,9 @@ namespace Fme.Library.Repositories
                     var pairs = Model.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected).ToList();
                     QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();
 
-                    foreach(var r in Model.ColumnCompare)
-                    {
-                        r.CompareResults.Clear();
-                    }
-                    OnCompareStart(this, new CompareStartEventArgs() { Pairs = null });
+                    Model.ColumnCompare.ForEach(item => item.CompareResults.Clear());
+                  
+                    OnCompareStart(this, new CompareStartEventArgs());
 
                     ///////////////////////////////////////////////////////////////
                     #region Construct Source, Fetch Data and set Aliases
@@ -142,15 +135,17 @@ namespace Fme.Library.Repositories
 
                     LogQuery(Model.Source, select1, "Left");
 
-                    OnCompareModelStatus(this, new CompareModelStatusEventArgs()
-                    { DataSource = Model.Source, Data = select1, StatusMessage = "Executing Query" });
-                    
+                    OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Source, select1, "Executing Query..."));
+                                       
                     var data1 = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
+                    
                     if (data1.Tables == null || data1.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Source.SelectedTable);
 
+                    var table1 = data1.MergeAll();
+
                     var sourceData = data1.CopyToDataTable();
-                    OnSourceLoadComplete(this, new DataTableEventArgs() { Table = sourceData });
+                    OnSourceLoadComplete(this, new DataTableEventArgs(sourceData));
 
                     Model.Source.DataSource.SetAliases(data1, Alias.Left);                    
                     Model.MapColumnCaptions(data1, (map, index) => map[index].LeftAlias);
@@ -158,8 +153,6 @@ namespace Fme.Library.Repositories
 
                     #endregion
                     ///////////////////////////////////////////////////////////////
-
-                    DataTable table1 = data1.Table();
 
                     #region Construct Target, Fetch Data and set Aliases
                     
@@ -171,23 +164,24 @@ namespace Fme.Library.Repositories
 
                     LogQuery(Model.Target, select2, Alias.Right);
 
-                    OnCompareModelStatus(this, new CompareModelStatusEventArgs()
-                    { DataSource = Model.Target, Data = select1, StatusMessage = "Executing Query" });
-
+                    OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Target, select2, "Executing Query..."));
+                        
                     var data2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);                    
+
                     if (data2.Tables == null || data2.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
 
+                    var table2 = data2.MergeAll();
+
                     var targetData = data2.CopyToDataTable();
-                    OnTargetLoadComplete(this, new DataTableEventArgs() { Table = targetData });
+                    OnTargetLoadComplete(this, new DataTableEventArgs(targetData));
                     Model.Target.DataSource.SetAliases(data2, Alias.Right);
                     Model.MapColumnCaptions(data2, (map, index) => map[index].RightAlias);
                     Model.MapColumnsKeys(data2, (map, index, value) => map[index].RightKey = value);
                     #endregion
 
                     #region Check for matching records
-                    DataTable table2 = data2.Table();
-                 
+             
                     if (table1.Rows.Count == 0 || table2.Rows.Count == 0)
                         throw new DataException("No matching records found to complete the request");
                     #endregion
@@ -198,15 +192,17 @@ namespace Fme.Library.Repositories
                     var dupset2 = table2.RemoveDuplicates<string>(Alias.Primary_Key);
 
                     if (string.IsNullOrEmpty(dupset1) == false)
-                        Model.ErrorMessages.Add(new ErrorMessageModel("Left Query has duplicate Keys", dupset1, table1.Rows.Count + " record(s) remain after removing duplicates"));
+                        Model.ErrorMessages.Add(new ErrorMessageModel("Left Query has duplicate Keys", 
+                            dupset1, table1.Rows.Count + " record(s) remain after removing duplicates"));
 
                     if (string.IsNullOrEmpty(dupset2) == false)
-                        Model.ErrorMessages.Add(new ErrorMessageModel("Right Query has duplicate Keys", dupset2, table2.Rows.Count + " record(s) remain after removing duplicates"));
+                        Model.ErrorMessages.Add(new ErrorMessageModel("Right Query has duplicate Keys", 
+                            dupset2, table2.Rows.Count + " record(s) remain after removing duplicates"));
 
                     table1.SetPrimaryKey(Alias.Primary_Key, table2);
 
                     if (table1.Rows.Count == 0 || table2.Rows.Count == 0)
-                        throw new DataException("No matching records found to complete the request. Please see the error log for more details.");
+                        throw new DataException("No valid records found to complete the request. Please see the error log for more details.");
 
                     Model.ExecuteCalculatedFields(table1, table2, cancelToken);                   
                     
@@ -214,8 +210,7 @@ namespace Fme.Library.Repositories
                     CompareMappingHelper.OrderColumns(table1, Model.ColumnCompare.Where(w=> w.Selected).ToList());                    
                     CompareMappingHelper.CompareColumns(this, table1, Model, cancelToken);
                     
-
-                    OnCompareComplete(this, new DataTableEventArgs() { Table = table1, Pairs = null });
+                    OnCompareComplete(this, new DataTableEventArgs(table1));
                 }
                   ); //.Wait(cancelToken.Token);
 
@@ -278,8 +273,7 @@ namespace Fme.Library.Repositories
                 if (keys.ContainsKey(key2))
                     model.ErrorMessages.Add(new
                         ErrorMessageModel("Get Compare Results", string.Format("The right key {0} already exists", key2), "Please report this error"));
-
-             
+                             
                 if (keys.ContainsKey(key1)== false) keys.Add(key1, "Red");
                 if (keys.ContainsKey(key2) == false)  keys.Add(key2, "LightGreen");
             }

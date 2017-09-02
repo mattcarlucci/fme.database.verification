@@ -22,6 +22,21 @@ namespace Fme.Library
     /// <seealso cref="System.EventArgs" />
     public class CompareModelStatusEventArgs : EventArgs
     {
+
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CompareModelStatusEventArgs"/> class.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="data">The data.</param>
+        /// <param name="message">The message.</param>
+        public CompareModelStatusEventArgs(DataSourceModel source, string data, string message)
+        {
+            this.DataSource = source;
+            this.Data = data;
+            this.StatusMessage = message;
+        }
+
         /// <summary>
         /// Gets or sets the status message.
         /// </summary>
