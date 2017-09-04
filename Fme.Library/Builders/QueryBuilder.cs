@@ -144,14 +144,15 @@ namespace Fme.Library
                     ? "[" + item + "]"
                     : item;
 
-                formatted.Add(x);
-            });
-
-            if (string.IsNullOrEmpty(alias))
-                return Environment.NewLine + " " + string.Join("\r\n,", formatted) + Environment.NewLine;
-            else
-                return Environment.NewLine + string.Join("\r\n,", formatted.
-                    Select(s => s + " as " + alias + "_" + s)) +Environment.NewLine; ;
+                var y = item.Contains("[") == false
+                    ? "[" + item + "] as [" + alias + "_" + item + "]"
+                    : item;
+                if (string.IsNullOrEmpty(alias))
+                    formatted.Add(x);
+                else formatted.Add(y);
+            });            
+             return Environment.NewLine + " " + string.Join("\r\n,", formatted) + Environment.NewLine;
+           
         }
 
       
@@ -177,6 +178,26 @@ namespace Fme.Library
         {
             return CreateInClause(inField, inValues);
         }
+
+        /// <summary>
+        /// Builds the SQL.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="fields">The fields.</param>
+        /// <param name="strings">The strings.</param>
+        /// <returns>System.String.</returns>
+        public virtual string BuildSql(DataSourceModel source, string[] fields, string[] inValues)
+        {
+            if (inValues == null)
+                return BuildSql(source.Key, fields, source.SelectedTable, string.Empty, source.MaxRows);
+
+            if (source.KeyType == typeof(string) || source.KeyType == typeof(DateTime) || source.KeyType == null)
+                return BuildSql(source.Key, fields, source.SelectedTable, string.Empty, source.MaxRows, source.Key, inValues);
+
+            var ints = Array.ConvertAll(inValues, int.Parse);
+            return BuildSql(source.Key, fields, source.SelectedTable, string.Empty, source.MaxRows, source.Key, ints);
+        }
+        
         /// <summary>
         /// Builds the SQL in.
         /// </summary>

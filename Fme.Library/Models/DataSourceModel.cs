@@ -17,6 +17,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Fme.Library.Enums;
+using System.Reflection;
 
 namespace Fme.Library.Models
 {
@@ -31,12 +32,13 @@ namespace Fme.Library.Models
         /// </summary>
         /// <value>The name.</value>
         public string Name { get; set; }
+                
         /// <summary>
         /// Gets or sets the key.
         /// </summary>
         /// <value>The key.</value>
         public string Key { get; set; }
-
+       
         /// <summary>
         /// Gets or sets the table schemas.
         /// </summary>
@@ -85,6 +87,21 @@ namespace Fme.Library.Models
         /// <value>The time zone offset.</value>
         public int TimeZoneOffset { get; set; }
 
+        /// <summary>
+        /// Determines whether [is key string].
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public Type KeyType
+        {
+            get
+            {
+                var field = SelectedSchema().Fields.Where(w => w.Name == Key).SingleOrDefault();
+                var datatype = field == null ? "System.String" : field.Type;
+                Type type = Type.GetType(datatype); 
+                return type ?? typeof(string);              
+            }
+        }
+        
         /// <summary>
         /// Gets or sets the data source.
         /// </summary>

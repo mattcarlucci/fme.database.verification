@@ -14,6 +14,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Fme.Library.Models;
 
 namespace Fme.Library
 {
@@ -62,6 +63,10 @@ namespace Fme.Library
                     Select(s => s + " as " + alias + "_" + s));
         }
 
+        public override string BuildSql(DataSourceModel source, string[] fields, string[] strings)
+        {
+            return base.BuildSql(source, fields, strings);
+        }
         /// <summary>
         /// Builds the SQL in.
         /// </summary>

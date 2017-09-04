@@ -470,6 +470,20 @@ namespace Fme.Library.Tests
                 }
             }
         }
+        [TestMethod]
+        public void Test_KeyTypes()
+        {
+            AccessDbConnectionStringBuilder builder = new AccessDbConnectionStringBuilder(@".\Northwinds.accdb");
+            OleDbDataSource dql = new OleDbDataSource(builder.ConnectionString);
+
+            var strings = new string[] { "1", "2" };
+            var ints = Array.ConvertAll(strings, int.Parse);
+            
+            QueryBuilder query = dql.GetQueryBuilder();
+            var select = query.BuildSql("ID", new string[] { "City", "Company" }, "Customers", "left", "0", "ID", ints);
+            var table = dql.ExecuteQuery(select);
+
+        }
 
     }
 }

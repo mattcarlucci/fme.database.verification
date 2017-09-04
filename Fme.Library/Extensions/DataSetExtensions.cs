@@ -19,11 +19,12 @@ namespace Fme.Library.Extensions
         public static void InnerJoin<T>(this DataTable source, string key, DataTable data)
         {
             var missing = data.AsEnumerable().
-               Select(s => s.Field<T>(key)).
-                   Except(source.AsEnumerable().Select(s2 => s2.Field<T>(key))).ToList();
+               Select(s => (T)Convert.ChangeType(s[key], typeof(T) ) ).
+                   Except(source.AsEnumerable().
+                   Select(s2 => (T)Convert.ChangeType(s2[key], typeof(T)))).ToList();
 
             data.AsEnumerable().
-              Where(w => missing.Contains(w.Field<T>(key)) == true).
+              Where(w => missing.Contains((T)Convert.ChangeType(w[key], typeof(T))) == true).
                   ToList().ForEach(row => data.Rows.Remove(row));
         }
         /// <summary>
@@ -38,7 +39,7 @@ namespace Fme.Library.Extensions
 
             StringBuilder sb = new StringBuilder();
             var duplicates = dt.AsEnumerable()
-              .Select(dr => dr.Field<T>(key).ToString())
+              .Select(dr => (T)Convert.ChangeType(dr[key], typeof(T)))
               .GroupBy(x => 
               x)
               .Where(g => g.Count() > 1)
@@ -49,7 +50,7 @@ namespace Fme.Library.Extensions
                 sb.AppendLine(string.Format("Removing duplicate {0} = {1}", key, item)));
 
             dt.AsEnumerable().
-             Where(w => duplicates.Contains(w.Field<T>(key).ToString()) == true).
+             Where(w => duplicates.Contains((T)Convert.ChangeType(w[key], typeof(T))) == true).
                  ToList().ForEach(row => dt.Rows.Remove(row));
            
             return sb.ToString();
@@ -97,6 +98,11 @@ namespace Fme.Library.Extensions
             Type t = typeof(T);
 
             return table.AsEnumerable().Select(s => (T)Convert.ChangeType(s[field], t)).ToArray();
+        }
+
+        public static object[] SelectKeys(this DataTable table, string field, Type type)
+        {   
+            return table.AsEnumerable().Select(s => (object)Convert.ChangeType(s[field], type)).ToArray();
         }
         /// <summary>
         /// Removes the empty columns.

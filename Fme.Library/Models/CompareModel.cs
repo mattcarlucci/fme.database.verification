@@ -88,15 +88,16 @@ namespace Fme.Library.Models
         /// <param name="selector">The selector.</param>
         public void MapColumnCaptions(DataSet data, Func<List<CompareMappingModel>, int, string> selector)
         {
-            MapTableColumns(data.Tables[0], selector);
+            MapColumnCaptions(data.Tables[0], selector);
         }
+        
 
         /// <summary>
         /// Maps the table columns.
         /// </summary>
         /// <param name="table">The table.</param>
         /// <param name="selector">The selector.</param>
-        public void MapTableColumns(DataTable table, Func<List<CompareMappingModel>, int , string> selector)
+        public void MapColumnCaptions(DataTable table, Func<List<CompareMappingModel>, int , string> selector)
         {
             var f1 = this.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected == true).
                 OrderBy(o => o.Ordinal).ToList();
@@ -189,6 +190,24 @@ namespace Fme.Library.Models
         }
 
         #region Calculated Fields. TODO refactor
+
+        /// <summary>
+        /// Tries to convert to numbers 
+        /// </summary>
+        /// <param name="inValues">The in values.</param>
+        /// <returns>System.Int32[].</returns>
+        private int[] TryConvert(string[] inValues)
+        {
+            try
+            {
+                return Array.ConvertAll(inValues, int.Parse);
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         /// <summary>
         /// Merges the calculated data.
         /// </summary>
@@ -196,15 +215,21 @@ namespace Fme.Library.Models
         /// <param name="side">The side.</param>
         /// <param name="field">The field.</param>
         /// <param name="query">The query.</param>
-        /// <param name="in">The in.</param>
+        /// <param name="inValues">The in.</param>
         /// <param name="dataSource">The data source.</param>
-        private DataTable MergeCalculatedData(DataTable table, string side, string field, string query, string[] @in, 
+        private DataTable MergeCalculatedData(DataTable table, string side, string field, string query, string[] inValues, 
             DataSourceBase dataSource, CancellationTokenSource cancelToken)
         {
-            //lblStatus.Caption = "Executing Calculated Queries: " + side + " " + field;
+            string having = string.Empty;
+            int[] outValues = TryConvert(inValues);
 
             QueryBuilder builder = new QueryBuilder();
-            var having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1], @in);
+                
+            if (outValues == null)
+                having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1],  inValues);
+            else
+               having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1], outValues);
+
             var sql = string.Format(" {0} HAVING {1} ", query, having);
 
             var data = dataSource.ExecuteQuery(sql, cancelToken.Token).Tables[0];
@@ -213,10 +238,7 @@ namespace Fme.Library.Models
             table.InnerJoin<string>(Alias.Primary_Key, data);
             data.Columns[1].ColumnName = side + "_" + field;
             return data;
-
-#pragma warning disable CS0162 // Unreachable code detected
-            table.Merge(data, false, MissingSchemaAction.AddWithKey);
-#pragma warning restore CS0162 // Unreachable code detected
+            //table.Merge(data, false, MissingSchemaAction.AddWithKey);
         }
 
         

@@ -237,7 +237,7 @@ namespace Fme.Database.Verification
             btnExecute.Enabled = false;
             cancelTokenSource = new CancellationTokenSource();
             cancelToken = cancelTokenSource.Token;
-            
+            //model.Source.Side = Alias.Left;
 
             try
             {
@@ -540,7 +540,7 @@ namespace Fme.Database.Verification
                 GridLookupStyleFields(sender, e);
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return;
             }
@@ -1739,6 +1739,8 @@ namespace Fme.Database.Verification
         private void cbTargetKey_Leave(object sender, EventArgs e)
         {
             model.Target.Key = cbTargetKey.Text;
+            //probelm is we don't always have the field in teh schema so how can we tell the datatype.
+            //model.Target.SelectedSchema().Fields.Where(w=> w.Name == cbTargetKey.Text)
         }
 
        
@@ -1925,9 +1927,11 @@ namespace Fme.Database.Verification
         {
             try
             {
-                ProcessStartInfo info = new ProcessStartInfo();
-                info.UseShellExecute = true;
-                info.FileName = btnSourceData.Text;
+                ProcessStartInfo info = new ProcessStartInfo()
+                {
+                    UseShellExecute = true,
+                    FileName = btnSourceData.Text
+                };
                 Process.Start(info);
             }
             catch(Exception)

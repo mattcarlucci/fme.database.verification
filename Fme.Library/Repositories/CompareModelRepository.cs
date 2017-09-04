@@ -118,66 +118,69 @@ namespace Fme.Library.Repositories
             {
                 await Task.Run(() =>
                 {
-                    var pairs = Model.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected).ToList();
-                    QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();
-
-                    Model.ColumnCompare.ForEach(item => item.CompareResults.Clear());
-                  
+                    #region Initalize and Reset prior results
+                    var pairs = Model.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected).ToList();               
+                    Model.ColumnCompare.ForEach(item => item.CompareResults.Clear());                  
                     OnCompareStart(this, new CompareStartEventArgs());
-
-                    ///////////////////////////////////////////////////////////////
+                    #endregion
+                                        
                     #region Construct Source, Fetch Data and set Aliases
 
+                    QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();            
                     query.IncludeVersion = Model.Source.IncludeVersions;
 
-                    var select1 = query.BuildSql(Model.Source.Key, pairs.Select(s => s.LeftSide).ToArray(),
-                      Model.Source.SelectedTable, "", Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
+                    var select1 = query.BuildSql(Model.Source, pairs.Select(s => s.LeftSide).ToArray(), Model.GetIdsFromFile());
 
-                    LogQuery(Model.Source, select1, "Left");
+                   // var select1 = query.BuildSql(Model.Source.Key, pairs.Select(s => s.LeftSide).ToArray(),
+                   // Model.Source.SelectedTable, string.Empty, Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
 
-                    OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Source, select1, "Executing Query..."));
+                    LogQuery(Model.Source, select1, Alias.Left);
+
+                    OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Source, select1, "Executing Source Query..."));
                                        
-                    var data1 = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
-                    
+                    var data1 = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);                    
                     if (data1.Tables == null || data1.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Source.SelectedTable);
 
                     var table1 = data1.MergeAll();
-
-                    var sourceData = data1.CopyToDataTable();
+                    var sourceData = table1.CopyToDataTable();
                     OnSourceLoadComplete(this, new DataTableEventArgs(sourceData));
 
-                    Model.Source.DataSource.SetAliases(data1, Alias.Left);                    
-                    Model.MapColumnCaptions(data1, (map, index) => map[index].LeftAlias);
-                    Model.MapColumnsKeys(data1, (map, index, value) => map[index].LeftKey = value);
+                    Model.Source.DataSource.SetAliases(table1, Alias.Left);                    
+                    Model.MapColumnCaptions(table1, (map, index) => map[index].LeftAlias);
+                    Model.MapColumnsKeys(table1, (map, index, value) => map[index].LeftKey = value);
 
                     #endregion
-                    ///////////////////////////////////////////////////////////////
-
+                    /******************************************/
                     #region Construct Target, Fetch Data and set Aliases
                     
                     query = Model.Target.DataSource.GetQueryBuilder();
                     query.IncludeVersion = Model.Target.IncludeVersions;
 
-                    var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
-                        Model.Target.SelectedTable, "", Model.Target.MaxRows, Model.Target.Key,  table1.SelectKeys<string>(Alias.Primary_Key));
+
+                    var select2 = query.BuildSql(Model.Target, pairs.Select(s => s.RightSide).ToArray(), 
+                        table1.SelectKeys<string>(Alias.Primary_Key));
+
+                    //var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
+                    //    Model.Target.SelectedTable, string.Empty, Model.Target.MaxRows, Model.Target.Key,  
+                    //    table1.SelectKeys<string>(Alias.Primary_Key));
 
                     LogQuery(Model.Target, select2, Alias.Right);
 
-                    OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Target, select2, "Executing Query..."));
+                    OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Target, select2, "Executing Target Query..."));
                         
                     var data2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);                    
-
                     if (data2.Tables == null || data2.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
 
                     var table2 = data2.MergeAll();
-
-                    var targetData = data2.CopyToDataTable();
+                    var targetData = table2.CopyToDataTable();
                     OnTargetLoadComplete(this, new DataTableEventArgs(targetData));
-                    Model.Target.DataSource.SetAliases(data2, Alias.Right);
-                    Model.MapColumnCaptions(data2, (map, index) => map[index].RightAlias);
-                    Model.MapColumnsKeys(data2, (map, index, value) => map[index].RightKey = value);
+
+                    Model.Target.DataSource.SetAliases(table2, Alias.Right);
+                    Model.MapColumnCaptions(table2, (map, index) => map[index].RightAlias);
+                    Model.MapColumnsKeys(table2, (map, index, value) => map[index].RightKey = value);
+                    
                     #endregion
 
                     #region Check for matching records
@@ -186,8 +189,10 @@ namespace Fme.Library.Repositories
                         throw new DataException("No matching records found to complete the request");
                     #endregion
 
-
+                    #region Merge and Compare Results
+                    
                     table1.InnerJoin<string>(Alias.Primary_Key, table2);
+
                     var dupset1 = table1.RemoveDuplicates<string>(Alias.Primary_Key);
                     var dupset2 = table2.RemoveDuplicates<string>(Alias.Primary_Key);
 
@@ -202,7 +207,7 @@ namespace Fme.Library.Repositories
                     table1.SetPrimaryKey(Alias.Primary_Key, table2);
 
                     if (table1.Rows.Count == 0 || table2.Rows.Count == 0)
-                        throw new DataException("No valid records found to complete the request. Please see the error log for more details.");
+                        throw new DataException("No valid records found to complete the request. Please see the error log for more details");
 
                     Model.ExecuteCalculatedFields(table1, table2, cancelToken);                   
                     
@@ -211,18 +216,15 @@ namespace Fme.Library.Repositories
                     CompareMappingHelper.CompareColumns(this, table1, Model, cancelToken);
                     
                     OnCompareComplete(this, new DataTableEventArgs(table1));
-                }
-                  ); //.Wait(cancelToken.Token);
-
+                    #endregion
+                });
             }
             catch (OperationCanceledException ex)
             {
                 OnError(ex, EventArgs.Empty);
-
             }
             catch (Exception ex)
             {
-
                 OnError(ex, EventArgs.Empty);
             }
         }
@@ -234,10 +236,7 @@ namespace Fme.Library.Repositories
         /// <param name="select">The select.</param>
         /// <param name="side">The side.</param>
         private void LogQuery(DataSourceModel model, string select, string side)
-        {
-            //var name = model.Name.Split(new string[] { "\\"}, StringSplitOptions.RemoveEmptyEntries).LastOrDefault();
-            //if (string.IsNullOrEmpty(name))
-            //    name = "Untitled";
+        {           
             try
             {
                 if (Directory.Exists(@".\logs") == false)

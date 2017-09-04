@@ -110,8 +110,7 @@ namespace Fme.Library.Comparison
         /// <param name="e">The <see cref="CompareHelperEventArgs"/> instance containing the event data.</param>
         public virtual void OnStatusEvent(object sender, CompareHelperEventArgs e)
         {
-            if (StatusEvent != null)
-                StatusEvent(this, e);
+            StatusEvent?.Invoke(this, e);
         }
 
         public CompareExecuter()
@@ -198,11 +197,8 @@ namespace Fme.Library.Comparison
                     pairs.AddOrUpdate(mapping.LeftSide, 1, (existingKey, existingVal) => existingVal);
                 }
             }
-
             OnStatusEvent(mapping, results, currentRow, StatusMessage, startTime);
-        }
-
-      
+        }      
     }
    
    
