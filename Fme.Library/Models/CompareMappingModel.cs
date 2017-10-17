@@ -125,38 +125,19 @@ namespace Fme.Library.Models
         /// <value><c>true</c> if this instance is calculated; otherwise, <c>false</c>.</value>
         public bool IsCalculated { get; set; }
 
-        private string leftQuery;
+      
         /// <summary>
         /// Gets or sets the left query.
         /// </summary>
         /// <value>The left query.</value>
-        public string LeftQuery
-        {
-            get
-            {
-                if (File.Exists(leftQuery))
-                    return File.ReadAllText(leftQuery);
-                return leftQuery;
-            }
-            set { leftQuery = value; }
-        }
+        public string LeftQuery { get; set; }
 
-        private string rightQuery;
         /// <summary>
         /// Gets or sets the right query.
         /// </summary>
         /// <value>The right query.</value>
-        public string RightQuery
-        {
-            get
-            {
-                if (File.Exists(rightQuery))
-                    return File.ReadAllText(rightQuery);
-                return rightQuery;
-            }
-            set { rightQuery = value; }
-        }
-
+        public string RightQuery { get; set; }
+       
         /// <summary>
         /// Gets or sets the name of the column from the table. Requires a mapping after query exection
         /// </summary>
@@ -234,16 +215,51 @@ namespace Fme.Library.Models
                 return string.Format("[{0}] as [{1}]", RightSide, RightAlias);
             }
         }
-        
+
+        /// <summary>
+        /// Gets the left alias.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns>System.String.</returns>
         public string GetLeftAlias(int position)
         {
             return LeftAlias + position;
         }
+        /// <summary>
+        /// Gets the right alias.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns>System.String.</returns>
         public string GetRightAlias(int position)
         {
             return RightAlias + position;
         }
 
+        /// <summary>
+        /// Gets the left query.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public string GetLeftQuery()
+        {
+            if (File.Exists(LeftQuery))
+                return File.ReadAllText(LeftQuery);
+
+            if (LeftQuery.EndsWith(".sql")) return File.ReadAllText(LeftQuery);
+
+            return LeftQuery;
+        }
+        /// <summary>
+        /// Gets the right query.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public string GetRightQuery()
+        {
+            if (File.Exists(RightQuery))
+                return File.ReadAllText(RightQuery);
+
+            if (RightQuery.EndsWith(".sql")) return File.ReadAllText(RightQuery);
+            return RightQuery;
+        }
         //public string LeftSql()
         //{
         //    List<string> fields = new List<string>();

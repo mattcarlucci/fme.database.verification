@@ -232,7 +232,10 @@ namespace Fme.Library.Models
 
             var sql = string.Format(" {0} HAVING {1} ", query, having);
 
-            var data = dataSource.ExecuteQuery(sql, cancelToken.Token).Tables[0];
+            var results = dataSource.ExecuteQuery(sql, cancelToken.Token);
+            if (results.Tables.Count == 0) return null;
+
+            var data =  results.Tables[0];
             data = data.ListAggr();
 
             data.Columns[0].ColumnName = Alias.Primary_Key;
@@ -242,9 +245,8 @@ namespace Fme.Library.Models
             return data;
             //table.Merge(data, false, MissingSchemaAction.AddWithKey);
         }
-
         
-
+      
         /// <summary>
         /// Executes the calculated fields.
         /// </summary>
@@ -263,25 +265,31 @@ namespace Fme.Library.Models
                     try
                     {
                         index = 1;
-                        if (string.IsNullOrEmpty(calc.LeftQuery) == false)
+                        if (string.IsNullOrEmpty(calc.GetLeftQuery()) == false)
                         {
-                            var data1 = MergeCalculatedData(source, Alias.Left, calc.LeftSide, calc.LeftQuery,
+                            var data1 = MergeCalculatedData(source, Alias.Left, calc.LeftSide, calc.GetLeftQuery(),
                                 source.SelectKeys<string>(Alias.Primary_Key), Source.DataSource, cancelToken);
 
                             //only merge if the queries execute.
-                            source.Merge(data1, false, MissingSchemaAction.AddWithKey);
-                            calc.LeftKey = data1.Columns[1].ColumnName;
+                            if (data1 != null)
+                            {
+                                source.Merge(data1, false, MissingSchemaAction.AddWithKey);
+                                calc.LeftKey = data1.Columns[1].ColumnName;
+                            }
 
                         }
 
                         index = 2;
-                        if (string.IsNullOrEmpty(calc.RightQuery) == false)
+                        if (string.IsNullOrEmpty(calc.GetRightQuery()) == false)
                         {
-                            var data2 = MergeCalculatedData(target, Alias.Right, calc.RightSide, calc.RightQuery,
+                            var data2 = MergeCalculatedData(target, Alias.Right, calc.RightSide, calc.GetRightQuery(),
                             target.SelectKeys<string>(Alias.Primary_Key), Target.DataSource, cancelToken);
 
-                            target.Merge(data2, false, MissingSchemaAction.AddWithKey);
-                            calc.RightKey = data2.Columns[1].ColumnName;
+                            if (data2 != null)
+                            {
+                                target.Merge(data2, false, MissingSchemaAction.AddWithKey);
+                                calc.RightKey = data2.Columns[1].ColumnName;
+                            }
                         }
 
                     }
