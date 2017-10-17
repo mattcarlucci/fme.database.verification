@@ -233,6 +233,8 @@ namespace Fme.Library.Models
             var sql = string.Format(" {0} HAVING {1} ", query, having);
 
             var data = dataSource.ExecuteQuery(sql, cancelToken.Token).Tables[0];
+            data = data.ListAggr();
+
             data.Columns[0].ColumnName = Alias.Primary_Key;
             data.PrimaryKey = new[] { data.Columns[0] };
             table.InnerJoin<string>(Alias.Primary_Key, data);
@@ -261,19 +263,26 @@ namespace Fme.Library.Models
                     try
                     {
                         index = 1;
-                        var data1 = MergeCalculatedData(source, "left", calc.LeftSide, calc.LeftQuery, 
-                            source.SelectKeys<string>(Alias.Primary_Key), Source.DataSource, cancelToken);
+                        if (string.IsNullOrEmpty(calc.LeftQuery) == false)
+                        {
+                            var data1 = MergeCalculatedData(source, Alias.Left, calc.LeftSide, calc.LeftQuery,
+                                source.SelectKeys<string>(Alias.Primary_Key), Source.DataSource, cancelToken);
+
+                            //only merge if the queries execute.
+                            source.Merge(data1, false, MissingSchemaAction.AddWithKey);
+                            calc.LeftKey = data1.Columns[1].ColumnName;
+
+                        }
 
                         index = 2;
-                        var data2 = MergeCalculatedData(target, "right", calc.RightSide, calc.RightQuery, 
+                        if (string.IsNullOrEmpty(calc.RightQuery) == false)
+                        {
+                            var data2 = MergeCalculatedData(target, Alias.Right, calc.RightSide, calc.RightQuery,
                             target.SelectKeys<string>(Alias.Primary_Key), Target.DataSource, cancelToken);
 
-                        //only merge if the queries execute.
-                        source.Merge(data1, false, MissingSchemaAction.AddWithKey);
-                        calc.LeftKey = data1.Columns[1].ColumnName;
-
-                        target.Merge(data2, false, MissingSchemaAction.AddWithKey);
-                        calc.RightKey = data2.Columns[1].ColumnName;
+                            target.Merge(data2, false, MissingSchemaAction.AddWithKey);
+                            calc.RightKey = data2.Columns[1].ColumnName;
+                        }
 
                     }
                     catch (Exception ex)

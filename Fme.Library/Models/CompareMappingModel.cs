@@ -124,16 +124,38 @@ namespace Fme.Library.Models
         /// </summary>
         /// <value><c>true</c> if this instance is calculated; otherwise, <c>false</c>.</value>
         public bool IsCalculated { get; set; }
+
+        private string leftQuery;
         /// <summary>
         /// Gets or sets the left query.
         /// </summary>
         /// <value>The left query.</value>
-        public string LeftQuery { get; set; }
+        public string LeftQuery
+        {
+            get
+            {
+                if (File.Exists(leftQuery))
+                    return File.ReadAllText(leftQuery);
+                return leftQuery;
+            }
+            set { leftQuery = value; }
+        }
+
+        private string rightQuery;
         /// <summary>
         /// Gets or sets the right query.
         /// </summary>
         /// <value>The right query.</value>
-        public string RightQuery { get;set; }
+        public string RightQuery
+        {
+            get
+            {
+                if (File.Exists(rightQuery))
+                    return File.ReadAllText(rightQuery);
+                return rightQuery;
+            }
+            set { rightQuery = value; }
+        }
 
         /// <summary>
         /// Gets or sets the name of the column from the table. Requires a mapping after query exection

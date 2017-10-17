@@ -1377,7 +1377,6 @@ namespace Fme.Database.Verification
             this.viewMappings.GridControl = this.gridMappings;
             this.viewMappings.Name = "viewMappings";
             this.viewMappings.OptionsCustomization.AllowRowSizing = true;
-            this.viewMappings.OptionsCustomization.AllowSort = false;
             this.viewMappings.OptionsMenu.ShowGroupSortSummaryItems = false;
             this.viewMappings.OptionsMenu.ShowGroupSummaryEditorItem = true;
             this.viewMappings.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.GridViewMapping_RowCellStyle);

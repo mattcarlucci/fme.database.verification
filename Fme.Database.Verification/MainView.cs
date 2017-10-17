@@ -1011,8 +1011,9 @@ namespace Fme.Database.Verification
             ToolStripMenuItem item = sender as ToolStripMenuItem;
             ContextMenuStrip owner = item.Owner as ContextMenuStrip;
             if (owner.SourceControl is GridControl grid)
+            {
                 grid.ShowPrintPreview();
-
+            }
         }
 
         /// <summary>
