@@ -609,7 +609,7 @@ namespace Fme.Database.Verification
             if (e.Column.FieldName.Contains("Query"))
             {
                 e.Appearance.ForeColor = Color.DarkBlue;
-                e.Appearance.Font = new Font("Courier New", e.Appearance.Font.Size);                
+             //   e.Appearance.Font = new Font("Courier New", e.Appearance.Font.Size);                
             }
         }
         /// <summary>
@@ -1924,6 +1924,11 @@ namespace Fme.Database.Verification
           
         }
 
+        /// <summary>
+        /// Handles the DoubleClick event of the btnSourceData control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnSourceData_DoubleClick(object sender, EventArgs e)
         {
             try
@@ -1939,6 +1944,48 @@ namespace Fme.Database.Verification
             {
 
             }
+        }
+
+        /// <summary>
+        /// Handles the OnShowFileDialog event of the CalculatedFields control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ButtonPressedEventArgs"/> instance containing the event data.</param>
+        private void CalculatedFields_OnShowFileDialog(object sender, ButtonPressedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog()
+            {
+                Filter = "DQL/SQL files (*.dql, *.sql)|*.dql;*.sql|All files (*.*)|*.*"
+            };
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
+
+            ButtonEdit edit = sender as ButtonEdit;
+            edit.Text = dlg.FileName;
+        }
+
+        private void repositoryItemButtonEdit3_MouseEnter(object sender, EventArgs e)
+        {
+            if (sender is ButtonEdit)
+            {
+                try
+                {
+                    //ButtonEdit be = sender as ButtonEdit;
+                    //be.ShowToolTips = true;
+                    
+                    //be.ToolTip = File.ReadAllText(be.Text);
+                    //be.ToolTipTitle = be.Text;
+                    
+                }
+                catch(Exception)
+                {
+                    //ignore
+                }
+            }
+        }
+
+        private void repositoryItemButtonEdit3_MouseHover(object sender, EventArgs e)
+        {
+            Debug.Print("Hovering");
         }
     }
 }

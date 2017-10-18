@@ -232,6 +232,18 @@ namespace Fme.Library.Models
 
             var sql = string.Format(" {0} HAVING {1} ", query, having);
 
+            int lastgroupBy = query.ToLower().LastIndexOf("group by");
+            int lastEnable = query.ToLower().Substring(lastgroupBy).IndexOf("enable");
+
+            if (lastEnable > 0)
+            {
+                var gb = query.Substring(lastgroupBy + lastEnable);
+                var newQuery = query.Replace(gb, " ");
+                sql = string.Format(" {0} HAVING {1} {2} ", newQuery, having, gb);
+            }
+
+            
+
             var results = dataSource.ExecuteQuery(sql, cancelToken.Token);
             if (results.Tables.Count == 0) return null;
 

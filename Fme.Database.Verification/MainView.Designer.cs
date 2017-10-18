@@ -253,6 +253,7 @@ namespace Fme.Database.Verification
             this.colRightLookupFile = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu3 = new DevExpress.XtraBars.PopupMenu(this.components);
             this.tmrMonitor = new System.Windows.Forms.Timer(this.components);
+            this.repositoryItemButtonEdit3 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).BeginInit();
@@ -375,6 +376,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
             this.ctxLookupMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit3)).BeginInit();
             this.SuspendLayout();
             // 
             // compareMappingModelBindingSource
@@ -1691,7 +1693,8 @@ namespace Fme.Database.Verification
             this.repositoryItemButtonEdit2,
             this.repositoryItemCheckEdit2,
             this.repositoryItemMemoEdit1,
-            this.repositoryItemMemoEdit2});
+            this.repositoryItemMemoEdit2,
+            this.repositoryItemButtonEdit3});
             this.gridCalcFields.Size = new System.Drawing.Size(798, 231);
             this.gridCalcFields.TabIndex = 2;
             this.gridCalcFields.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -1711,7 +1714,8 @@ namespace Fme.Database.Verification
             this.viewCalcFields.Name = "viewCalcFields";
             this.viewCalcFields.OptionsCustomization.AllowRowSizing = true;
             this.viewCalcFields.OptionsCustomization.AllowSort = false;
-            this.viewCalcFields.RowHeight = 50;
+            this.viewCalcFields.OptionsDetail.EnableDetailToolTip = true;
+            this.viewCalcFields.OptionsView.ShowFilterPanelMode = DevExpress.XtraGrid.Views.Base.ShowFilterPanelMode.Never;
             this.viewCalcFields.RowCellClick += new DevExpress.XtraGrid.Views.Grid.RowCellClickEventHandler(this.viewCalcFields_RowCellClick);
             this.viewCalcFields.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.GridViewMapping_RowCellStyle);
             this.viewCalcFields.FocusedColumnChanged += new DevExpress.XtraGrid.Views.Base.FocusedColumnChangedEventHandler(this.viewCalcFields_FocusedColumnChanged);
@@ -1753,7 +1757,9 @@ namespace Fme.Database.Verification
             // 
             // gridColumn4
             // 
-            this.gridColumn4.ColumnEdit = this.repositoryItemMemoEdit1;
+            this.gridColumn4.AppearanceCell.Options.UseTextOptions = true;
+            this.gridColumn4.AppearanceCell.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            this.gridColumn4.ColumnEdit = this.repositoryItemButtonEdit3;
             this.gridColumn4.FieldName = "LeftQuery";
             this.gridColumn4.Name = "gridColumn4";
             this.gridColumn4.Visible = true;
@@ -1783,7 +1789,9 @@ namespace Fme.Database.Verification
             // 
             // gridColumn6
             // 
-            this.gridColumn6.ColumnEdit = this.repositoryItemMemoEdit2;
+            this.gridColumn6.AppearanceCell.Options.UseTextOptions = true;
+            this.gridColumn6.AppearanceCell.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            this.gridColumn6.ColumnEdit = this.repositoryItemButtonEdit3;
             this.gridColumn6.FieldName = "RightQuery";
             this.gridColumn6.Name = "gridColumn6";
             this.gridColumn6.Visible = true;
@@ -2561,6 +2569,18 @@ namespace Fme.Database.Verification
             this.tmrMonitor.Interval = 1000;
             this.tmrMonitor.Tick += new System.EventHandler(this.tmrMonitor_Tick);
             // 
+            // repositoryItemButtonEdit3
+            // 
+            this.repositoryItemButtonEdit3.Appearance.Options.UseTextOptions = true;
+            this.repositoryItemButtonEdit3.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            this.repositoryItemButtonEdit3.AutoHeight = false;
+            this.repositoryItemButtonEdit3.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.repositoryItemButtonEdit3.Name = "repositoryItemButtonEdit3";
+            this.repositoryItemButtonEdit3.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.CalculatedFields_OnShowFileDialog);
+            this.repositoryItemButtonEdit3.MouseEnter += new System.EventHandler(this.repositoryItemButtonEdit3_MouseEnter);
+            this.repositoryItemButtonEdit3.MouseHover += new System.EventHandler(this.repositoryItemButtonEdit3_MouseHover);
+            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2709,6 +2729,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
             this.ctxLookupMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2932,6 +2953,7 @@ namespace Fme.Database.Verification
         private DevExpress.XtraEditors.Repository.RepositoryItemSpinEdit repoSpinEdit1;
         private DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit repoItemMessage;
         private DevExpress.XtraBars.BarButtonItem tnExportPackage;
+        private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit repositoryItemButtonEdit3;
     }
 
 }
