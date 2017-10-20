@@ -182,7 +182,11 @@ namespace Fme.Database.Verification
                 };
                 if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
+                
                 OnOpenModel(dlg.FileName);
+                
+
+
             }
             catch (Exception ex)
             {
@@ -1192,6 +1196,14 @@ namespace Fme.Database.Verification
                 chkSourceRandom.Checked = model.Source.IsRandom;
                 txtSourceMaxRows.Text = model.Source.MaxRows;
 
+                //update the model?
+                if (model.Name != fileName)
+                {
+                    model.Name = fileName; // can't use saved name because someone can make copy of file.
+                    Serializer.Serialize<CompareModel>(fileName, model);
+                }
+
+                
                 this.Text = model.Name;
                 SetBestWidths();
             }

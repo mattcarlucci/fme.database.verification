@@ -167,15 +167,16 @@ namespace Fme.Database.Verification
             this.gridColumn1 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemComboBox6 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.gridColumn4 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.repositoryItemMemoEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
+            this.repositoryItemButtonEdit3 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             this.gridColumn5 = new DevExpress.XtraGrid.Columns.GridColumn();
             this.repositoryItemComboBox7 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.gridColumn6 = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.repositoryItemMemoEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
             this.repositoryItemComboBox8 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.repositoryItemComboBox9 = new DevExpress.XtraEditors.Repository.RepositoryItemComboBox();
             this.repositoryItemMRUEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemMRUEdit();
             this.repositoryItemButtonEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
+            this.repositoryItemMemoEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
+            this.repositoryItemMemoEdit2 = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
             this.xtraTabPage4 = new DevExpress.XtraTab.XtraTabPage();
             this.gridSourcehSchema = new DevExpress.XtraGrid.GridControl();
             this.viewSourceSchema = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -253,7 +254,6 @@ namespace Fme.Database.Verification
             this.colRightLookupFile = new DevExpress.XtraGrid.Columns.GridColumn();
             this.popupMenu3 = new DevExpress.XtraBars.PopupMenu(this.components);
             this.tmrMonitor = new System.Windows.Forms.Timer(this.components);
-            this.repositoryItemButtonEdit3 = new DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit();
             ((System.ComponentModel.ISupportInitialize)(this.compareMappingModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barManager1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mbStatus)).BeginInit();
@@ -312,13 +312,14 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.viewCalcFields)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox9)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMRUEdit2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit2)).BeginInit();
             this.xtraTabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridSourcehSchema)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewSourceSchema)).BeginInit();
@@ -376,7 +377,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).BeginInit();
             this.ctxLookupMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit3)).BeginInit();
             this.SuspendLayout();
             // 
             // compareMappingModelBindingSource
@@ -1766,10 +1766,17 @@ namespace Fme.Database.Verification
             this.gridColumn4.VisibleIndex = 2;
             this.gridColumn4.Width = 268;
             // 
-            // repositoryItemMemoEdit1
+            // repositoryItemButtonEdit3
             // 
-            this.repositoryItemMemoEdit1.AcceptsReturn = false;
-            this.repositoryItemMemoEdit1.Name = "repositoryItemMemoEdit1";
+            this.repositoryItemButtonEdit3.Appearance.Options.UseTextOptions = true;
+            this.repositoryItemButtonEdit3.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
+            this.repositoryItemButtonEdit3.AutoHeight = false;
+            this.repositoryItemButtonEdit3.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.repositoryItemButtonEdit3.Name = "repositoryItemButtonEdit3";
+            this.repositoryItemButtonEdit3.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.CalculatedFields_OnShowFileDialog);
+            this.repositoryItemButtonEdit3.MouseEnter += new System.EventHandler(this.repositoryItemButtonEdit3_MouseEnter);
+            this.repositoryItemButtonEdit3.MouseHover += new System.EventHandler(this.repositoryItemButtonEdit3_MouseHover);
             // 
             // gridColumn5
             // 
@@ -1798,11 +1805,6 @@ namespace Fme.Database.Verification
             this.gridColumn6.VisibleIndex = 4;
             this.gridColumn6.Width = 280;
             // 
-            // repositoryItemMemoEdit2
-            // 
-            this.repositoryItemMemoEdit2.AcceptsReturn = false;
-            this.repositoryItemMemoEdit2.Name = "repositoryItemMemoEdit2";
-            // 
             // repositoryItemComboBox8
             // 
             this.repositoryItemComboBox8.AutoHeight = false;
@@ -1830,6 +1832,16 @@ namespace Fme.Database.Verification
             this.repositoryItemButtonEdit2.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton()});
             this.repositoryItemButtonEdit2.Name = "repositoryItemButtonEdit2";
+            // 
+            // repositoryItemMemoEdit1
+            // 
+            this.repositoryItemMemoEdit1.AcceptsReturn = false;
+            this.repositoryItemMemoEdit1.Name = "repositoryItemMemoEdit1";
+            // 
+            // repositoryItemMemoEdit2
+            // 
+            this.repositoryItemMemoEdit2.AcceptsReturn = false;
+            this.repositoryItemMemoEdit2.Name = "repositoryItemMemoEdit2";
             // 
             // xtraTabPage4
             // 
@@ -2569,18 +2581,6 @@ namespace Fme.Database.Verification
             this.tmrMonitor.Interval = 1000;
             this.tmrMonitor.Tick += new System.EventHandler(this.tmrMonitor_Tick);
             // 
-            // repositoryItemButtonEdit3
-            // 
-            this.repositoryItemButtonEdit3.Appearance.Options.UseTextOptions = true;
-            this.repositoryItemButtonEdit3.Appearance.TextOptions.WordWrap = DevExpress.Utils.WordWrap.Wrap;
-            this.repositoryItemButtonEdit3.AutoHeight = false;
-            this.repositoryItemButtonEdit3.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
-            new DevExpress.XtraEditors.Controls.EditorButton()});
-            this.repositoryItemButtonEdit3.Name = "repositoryItemButtonEdit3";
-            this.repositoryItemButtonEdit3.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.CalculatedFields_OnShowFileDialog);
-            this.repositoryItemButtonEdit3.MouseEnter += new System.EventHandler(this.repositoryItemButtonEdit3_MouseEnter);
-            this.repositoryItemButtonEdit3.MouseHover += new System.EventHandler(this.repositoryItemButtonEdit3_MouseHover);
-            // 
             // MainView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2663,13 +2663,14 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.viewCalcFields)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemComboBox9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMRUEdit2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit2)).EndInit();
             this.xtraTabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridSourcehSchema)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewSourceSchema)).EndInit();
@@ -2729,7 +2730,6 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.mvvmContext1)).EndInit();
             this.ctxLookupMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.popupMenu3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemButtonEdit3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

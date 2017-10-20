@@ -144,7 +144,8 @@ namespace Fme.Library.Comparison
         /// <param name="model">The model.</param>
         /// <param name="cancelToken">The cancel token.</param>
         /// <param name="StatusEvent">The status event.</param>
-        public CompareExecuter(DataTable table, CompareModel model, CancellationTokenSource cancelToken, EventHandler<CompareHelperEventArgs>StatusEvent) : this(table, model, cancelToken)
+        public CompareExecuter(DataTable table, CompareModel model, CancellationTokenSource cancelToken, EventHandler<CompareHelperEventArgs>StatusEvent) 
+            : this(table, model, cancelToken)
         {
             this.StatusEvent = StatusEvent;
         }
@@ -172,6 +173,13 @@ namespace Fme.Library.Comparison
             {
                 var left = Convert.ToString(Table.Rows[row][mapping.LeftKey]);
                 var right = Convert.ToString(Table.Rows[row][mapping.RightKey]);
+
+                //if (string.IsNullOrEmpty(mapping.IgnoreChars) == false)
+                //{
+                //    mapping.IgnoreChars.ToList().ForEach(@char => right = right.Replace(@char.ToString(), ""));
+                //    mapping.IgnoreChars.ToList().ForEach(@char => left = left.Replace(@char.ToString(), ""));
+                //}
+
 
                 if (comparer.ContainsKey(mapping.CompareType))
                 {

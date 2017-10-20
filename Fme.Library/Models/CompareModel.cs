@@ -228,7 +228,7 @@ namespace Fme.Library.Models
             if (outValues == null)
                 having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1],  inValues);
             else
-               having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1], outValues);
+                having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1], outValues);
 
             var sql = string.Format(" {0} HAVING {1} ", query, having);
 
@@ -240,9 +240,7 @@ namespace Fme.Library.Models
                 var gb = query.Substring(lastgroupBy + lastEnable);
                 var newQuery = query.Replace(gb, " ");
                 sql = string.Format(" {0} HAVING {1} {2} ", newQuery, having, gb);
-            }
-
-            
+            }            
 
             var results = dataSource.ExecuteQuery(sql, cancelToken.Token);
             if (results.Tables.Count == 0) return null;
