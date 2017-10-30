@@ -35,6 +35,12 @@
   <PropertyGroup>
     <ApplicationIcon>ScriptFile.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>fme.database.verification.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="DevExpress.BonusSkins.v16.2" />
     <Reference Include="DevExpress.Data.v16.2" />
@@ -112,6 +118,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="app.config" />
+    <None Include="fme.database.verification.snk" />
     <None Include="Properties\DataSources\Fme.Library.Models.CompareMappingModel.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -32,6 +32,8 @@ namespace Fme.Library.Models
     [Serializable]
     public class CompareModel
     {
+        private int chunkSize;
+
         /// <summary>
         /// Gets or sets the name.
         /// </summary>
@@ -77,10 +79,16 @@ namespace Fme.Library.Models
             Target = new DataSourceModel();
             ColumnCompare = new List<CompareMappingModel>();
             ErrorMessages = new List<ErrorMessageModel>();
+            chunkSize = 1500;
+        }
+
+        public CompareModel(int chunkSize) : this()
+        {
+            this.chunkSize = chunkSize;
         }
 
 
-     
+
         /// <summary>
         /// Maps the table columns.
         /// </summary>
@@ -208,25 +216,38 @@ namespace Fme.Library.Models
                 return null;
             }
         }
-        /// <summary>
-        /// Merges the calculated data.
-        /// </summary>
-        /// <param name="table">The table.</param>
-        /// <param name="side">The side.</param>
-        /// <param name="field">The field.</param>
-        /// <param name="query">The query.</param>
-        /// <param name="inValues">The in.</param>
-        /// <param name="dataSource">The data source.</param>
-        private DataTable MergeCalculatedData(DataTable table, string side, string field, string query, string[] inValues, 
+
+        private DataTable MergeCalculatedData(DataTable table, string side, string field, string sql,
             DataSourceBase dataSource, CancellationTokenSource cancelToken)
+        {
+            var results = dataSource.ExecuteQuery(sql, cancelToken.Token);
+            if (results.Tables.Count == 0) return null;
+            var data = results.MergeAll();
+          //  var data = results.Tables[0];
+            data = data.ListAggr();
+
+            data.Columns[0].ColumnName = Alias.Primary_Key;
+            data.PrimaryKey = new[] { data.Columns[0] };
+            table.InnerJoin<string>(Alias.Primary_Key, data);
+            data.Columns[1].ColumnName = side + "_" + field;
+            return data;
+        }
+
+        /// <summary>
+        /// Builds the calculated SQL.
+        /// </summary>
+        /// <param name="query">The query.</param>
+        /// <param name="inValues">The in values.</param>
+        /// <returns>System.String.</returns>
+        private string BuildCalculatedSql(string query, string[] inValues)
         {
             string having = string.Empty;
             int[] outValues = TryConvert(inValues);
 
             QueryBuilder builder = new QueryBuilder();
-                
+
             if (outValues == null)
-                having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1],  inValues);
+                having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1], inValues);
             else
                 having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1], outValues);
 
@@ -240,22 +261,34 @@ namespace Fme.Library.Models
                 var gb = query.Substring(lastgroupBy + lastEnable);
                 var newQuery = query.Replace(gb, " ");
                 sql = string.Format(" {0} HAVING {1} {2} ", newQuery, having, gb);
-            }            
-
-            var results = dataSource.ExecuteQuery(sql, cancelToken.Token);
-            if (results.Tables.Count == 0) return null;
-
-            var data =  results.Tables[0];
-            data = data.ListAggr();
-
-            data.Columns[0].ColumnName = Alias.Primary_Key;
-            data.PrimaryKey = new[] { data.Columns[0] };
-            table.InnerJoin<string>(Alias.Primary_Key, data);
-            data.Columns[1].ColumnName = side + "_" + field;
-            return data;
-            //table.Merge(data, false, MissingSchemaAction.AddWithKey);
+            }
+            return sql;
         }
-        
+
+       
+        /// <summary>
+        /// Merges the multi calculated data.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="side">The side.</param>
+        /// <param name="field">The field.</param>
+        /// <param name="query">The query.</param>
+        /// <param name="inValues">The in values.</param>
+        /// <param name="dataSource">The data source.</param>
+        /// <param name="cancelToken">The cancel token.</param>
+        /// <returns>DataTable.</returns>
+        public DataTable MergeMultiCalculatedData(DataTable table, string side, string field, string query, string[] inValues,
+            DataSourceBase dataSource, CancellationTokenSource cancelToken)
+        {
+            List<string> sqls = new List<string>();
+            inValues.Split(chunkSize).ToList().ForEach( block =>
+            {
+                sqls.Add(BuildCalculatedSql(query, block.ToArray()));
+            });
+
+            string sql = string.Join(";", sqls);
+            return MergeCalculatedData(table, side, field, sql, dataSource, cancelToken);          
+        }
       
         /// <summary>
         /// Executes the calculated fields.
@@ -277,7 +310,7 @@ namespace Fme.Library.Models
                         index = 1;
                         if (string.IsNullOrEmpty(calc.GetLeftQuery()) == false)
                         {
-                            var data1 = MergeCalculatedData(source, Alias.Left, calc.LeftSide, calc.GetLeftQuery(),
+                            var data1 = MergeMultiCalculatedData(source, Alias.Left, calc.LeftSide, calc.GetLeftQuery(),
                                 source.SelectKeys<string>(Alias.Primary_Key), Source.DataSource, cancelToken);
 
                             //only merge if the queries execute.
@@ -292,7 +325,7 @@ namespace Fme.Library.Models
                         index = 2;
                         if (string.IsNullOrEmpty(calc.GetRightQuery()) == false)
                         {
-                            var data2 = MergeCalculatedData(target, Alias.Right, calc.RightSide, calc.GetRightQuery(),
+                            var data2 = MergeMultiCalculatedData(target, Alias.Right, calc.RightSide, calc.GetRightQuery(),
                             target.SelectKeys<string>(Alias.Primary_Key), Target.DataSource, cancelToken);
 
                             if (data2 != null)

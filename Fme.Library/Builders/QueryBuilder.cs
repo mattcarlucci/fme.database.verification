@@ -82,7 +82,7 @@ namespace Fme.Library
         /// <param name="field">The field.</param>
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String[].</returns>
-        protected string[] GetInClauses(string field, string[] inValues)
+        public string[] GetInClauses(string field, string[] inValues)
         {
             string @in = string.Join(",", inValues.Select(s => s));
 

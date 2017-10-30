@@ -59,7 +59,7 @@ namespace Fme.Database.Verification
         /// <summary>
         /// The model
         /// </summary>
-        CompareModel model = new CompareModel();
+        CompareModel model = new CompareModel(Properties.Settings.Default.ChunkSize);
         /// <summary>
         /// The cancel token source
         /// </summary>
@@ -148,7 +148,7 @@ namespace Fme.Database.Verification
             exportToolStripMenuItem.Image = barButtonItem1.ImageOptions.Image;
             hideEmptyColumnToolStripMenuItem.Image = barButtonItem2.ImageOptions.Image;
             showHiddenColumnsToolStripMenuItem.Image = barButtonItem8.ImageOptions.Image;
-            for (int i = -12; i <= 12; i++)
+            for (int i = -24; i <= 24; i++)
             {
                 cbSourceTZ.Properties.Items.Add(i.ToString());
                 cbTargetTZ.Properties.Items.Add(i.ToString());
@@ -438,7 +438,7 @@ namespace Fme.Database.Verification
         {
             OpenFileDialog dlg = new OpenFileDialog()
             {
-                Filter = "Text File *.txt;*.csv|*.txt;*.csv"
+                Filter = "Supported Files (*.txt;*.csv;*.sql)|*.txt;*.csv;*.sql|Text File *.txt;*.csv|*.txt;*.csv|SQL Filter *.sql|*.sql"
             };
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
@@ -929,9 +929,14 @@ namespace Fme.Database.Verification
         {
             try
             {
+                string logFile = @".\logs\{0}Query_{1}_{2}.sql";
+
                 Cursor = Cursors.WaitCursor;
-                txtSourceQuery.Text = File.ReadAllText(string.Format(@".\logs\{0}Query_{1}_{2}.sql", "Left", model.Source.SelectedTable, model.Source.Key));
-                txtTargetQuery.Text = File.ReadAllText(string.Format(@".\logs\{0}Query_{1}_{2}.sql", "Right", model.Target.SelectedTable, model.Target.Key));
+                txtSourceQuery.Text = File.ReadAllText(string.Format(logFile, Alias.Left, 
+                    model.Source.SelectedTable, model.Source.Key));
+
+                txtTargetQuery.Text = File.ReadAllText(string.Format(logFile, Alias.Right, 
+                    model.Target.SelectedTable, model.Target.Key));
             }
             catch (Exception)
             {
@@ -979,8 +984,6 @@ namespace Fme.Database.Verification
                 e.Appearance.BackColor = Color.FromName(MisMatches[e.RowHandle + e.Column.FieldName]); //red
             else if (MisMatches != null && MisMatches.ContainsKey(e.RowHandle + e.Column.FieldName))
                 e.Appearance.BackColor = Color.FromName(MisMatches[e.RowHandle + e.Column.FieldName]); //light green
-
-
 
         }
 
@@ -1064,7 +1067,6 @@ namespace Fme.Database.Verification
         private void SetDataSource(BindingSource ctrl, object dataSource)
         {
             ctrl.DataSource = dataSource;
-
         }
         /// <summary>
         /// Sets the data source.
@@ -1196,13 +1198,13 @@ namespace Fme.Database.Verification
                 chkSourceRandom.Checked = model.Source.IsRandom;
                 txtSourceMaxRows.Text = model.Source.MaxRows;
 
-                //update the model?
+                //BUG: Storing file name doesn't make sense. User can rename file outside application. 
+                //     We update the model to reflect the correct name
                 if (model.Name != fileName)
                 {
                     model.Name = fileName; // can't use saved name because someone can make copy of file.
                     Serializer.Serialize<CompareModel>(fileName, model);
                 }
-
                 
                 this.Text = model.Name;
                 SetBestWidths();
@@ -1239,8 +1241,7 @@ namespace Fme.Database.Verification
             cbSourceTZ.Text = model.Source.TimeZoneOffset.ToString();
 
             chkSourceVersions.Checked = model.Source.IncludeVersions;            
-            chkSourceVersions.Visible = model.Source.DataSource is DqlDataSource;
-            
+            chkSourceVersions.Visible = model.Source.DataSource is DqlDataSource;            
 
         }
         /// <summary>
@@ -1357,6 +1358,8 @@ namespace Fme.Database.Verification
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+            if (model.Source.MaxRows == "0" || model.Source.MaxRows == "")
+                model.Source.MaxRows = null;
 
             Dictionary<string, int> testDuplicates = new Dictionary<string, int>();
             foreach(var key in model.ColumnCompare.
@@ -1456,6 +1459,11 @@ namespace Fme.Database.Verification
             e.Cancel = !int.TryParse(txtSourceMaxRows.Text, out int value);
         }
 
+        /// <summary>
+        /// Handles the Validated event of the txtSourceMaxRows control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void txtSourceMaxRows_Validated(object sender, EventArgs e)
         {
             if (int.TryParse(txtSourceMaxRows.Text, out int value))
