@@ -118,6 +118,7 @@ namespace Fme.Library.Models
         /// Gets or sets the compare results.
         /// </summary>
         /// <value>The compare results.</value>
+        [XmlIgnore]
         public List<CompareResultModel> CompareResults { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether this instance is calculated.
@@ -149,6 +150,11 @@ namespace Fme.Library.Models
         /// </summary>
         /// <value><c>true</c> if [time zone offset]; otherwise, <c>false</c>.</value>
         public int LeftTimeZoneOffset { get; set; }
+
+        /// <summary>
+        /// Gets or sets the right time zone offset.
+        /// </summary>
+        /// <value>The right time zone offset.</value>
         public int RightTimeZoneOffset { get; set; }
 
        // [XmlIgnore]

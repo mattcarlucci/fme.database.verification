@@ -66,6 +66,7 @@
     <Compile Include="DataSources\DqlDataSource.cs" />
     <Compile Include="Builders\DqlQueryBuilder.cs" />
     <Compile Include="DataSources\OleDbDatatypeMapping.cs" />
+    <Compile Include="EventArgs\CalculatedQueryEventArgs.cs" />
     <Compile Include="EventArgs\CompareModelEventArgs.cs" />
     <Compile Include="Extensions\DataSetExtensions.cs" />
     <Compile Include="Extensions\DataTableExtensions.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Globals\GlobalSuppressions.cs" />
     <Compile Include="Extensions\KernelExtensions.cs" />
+    <Compile Include="Models\CalcFieldModel.cs" />
     <Compile Include="Models\CompareMappingHelper.cs" />
     <Compile Include="Models\CompareMappingModel.cs" />
     <Compile Include="Models\CompareModel.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="Models\ErrorMessageModel.cs" />
     <Compile Include="Models\FieldSchemaModel.cs" />
     <Compile Include="Models\PublicOptions.cs" />
+    <Compile Include="Models\QueryMessageModel.cs" />
     <Compile Include="Models\TableSchemaModel.cs" />
     <Compile Include="DataSources\OleDbDataSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

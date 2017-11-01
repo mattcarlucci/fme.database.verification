@@ -63,9 +63,9 @@ namespace Fme.Library
                     Select(s => s + " as " + alias + "_" + s));
         }
 
-        public override string BuildSql(DataSourceModel source, string[] fields, string[] strings)
+        public override string BuildSql(DataSourceModel source, string[] fields, string[] strings, string filter)
         {
-            return base.BuildSql(source, fields, strings);
+            return base.BuildSql(source, fields, strings, filter);
         }
         /// <summary>
         /// Builds the SQL in.
@@ -77,29 +77,30 @@ namespace Fme.Library
         /// <param name="inField">The in field.</param>
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
-        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues)
-        {          
+        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues, string filter)
+        {
+            //var _filter = string.IsNullOrEmpty(filter) ? "" : " AND " + filter;
 
             if (inValues == null)
-                return BuildSql(primaryKey, fields.ToArray(), tableName, aliasPrefix, maxRows);
+                return BuildSql(primaryKey, fields.ToArray(), tableName, aliasPrefix, maxRows, filter);
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
 
             string enabletop = "";
-            tableName = IncludeVersion ? tableName + " (deleted) " : tableName;
+            var _tableName = IncludeVersion ? tableName + " (all) " : tableName;
 
             var clauses = GetInClauses(inField, inValues.Distinct().ToArray());
             List<string> sqls = new List<string>();
             foreach (var clause in clauses)
             {
                 sqls.Add(string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", 
-                    primaryKey, aliases, tableName, clause, enabletop));
+                    primaryKey, aliases, _tableName, clause, enabletop));
             }
             
             if (sqls.Count() == 0)
                 return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", 
-                    primaryKey, aliases, tableName, inCaluse, enabletop);
+                    primaryKey, aliases, _tableName, inCaluse, enabletop);
 
             return string.Join(";", sqls); 
 
@@ -115,16 +116,16 @@ namespace Fme.Library
         /// <param name="inField">The in field.</param>
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
-        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues)
+        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues, string filter)
         {
             if (inValues == null)
-                return BuildSql(primaryKey, fields.Distinct().ToArray(), tableName, aliasPrefix, maxRows);
+                return BuildSql(primaryKey, fields.Distinct().ToArray(), tableName, aliasPrefix, maxRows, filter);
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
           
             var enabletop = "";
-            tableName = IncludeVersion ? tableName + " (deleted) " : tableName;
+            tableName = IncludeVersion ? tableName + " (all) " : tableName;
 
             return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", primaryKey, aliases, tableName, inCaluse, enabletop);
         }
@@ -136,16 +137,18 @@ namespace Fme.Library
         /// <param name="tableName">Name of the table.</param>
         /// <param name="aliasPrefix">The alias prefix.</param>
         /// <returns>System.String.</returns>
-        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows)
-        {            
+        public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string filter)
+        {
+            filter = string.IsNullOrEmpty(filter) ? "" : " WHERE " + filter;
+
             var aliases = BuildFieldAliases(fields.Distinct().ToArray(), aliasPrefix);
                        
-            tableName = IncludeVersion ? tableName + " (deleted) " : tableName;
+            tableName = IncludeVersion ? tableName + " (all) " : tableName;
 
             string enabletop = string.Format("enable(return_top {0})", maxRows ?? "0");
             enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows ?? "0") > 0 ? enabletop : "";
 
-            return string.Format("select r_object_id, {0} as primary_key, {1} from {2} {3}", primaryKey, aliases, tableName, enabletop);
+            return string.Format("select r_object_id, {0} as primary_key, {1} from {2} {3} {4}", primaryKey, aliases, tableName, filter, enabletop);
         }
     }
 }

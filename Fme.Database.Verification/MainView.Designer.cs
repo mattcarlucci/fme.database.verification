@@ -46,6 +46,7 @@ namespace Fme.Database.Verification
             this.bar1 = new DevExpress.XtraBars.Bar();
             this.btnNew = new DevExpress.XtraBars.BarButtonItem();
             this.btnOpen = new DevExpress.XtraBars.BarButtonItem();
+            this.btnOpen1 = new DevExpress.XtraBars.BarSubItem();
             this.btnSave = new DevExpress.XtraBars.BarButtonItem();
             this.barButtonItem3 = new DevExpress.XtraBars.BarButtonItem();
             this.btnExecute = new DevExpress.XtraBars.BarButtonItem();
@@ -115,6 +116,8 @@ namespace Fme.Database.Verification
             this.btnSourceData = new DevExpress.XtraEditors.ButtonEdit();
             this.labelControl1 = new DevExpress.XtraEditors.LabelControl();
             this.xtraTabPage7 = new DevExpress.XtraTab.XtraTabPage();
+            this.labelControl13 = new DevExpress.XtraEditors.LabelControl();
+            this.btnFilterFile = new DevExpress.XtraEditors.ButtonEdit();
             this.chkSourceRandom = new System.Windows.Forms.CheckBox();
             this.txtSourceMaxRows = new DevExpress.XtraEditors.TextEdit();
             this.labelControl9 = new DevExpress.XtraEditors.LabelControl();
@@ -236,6 +239,20 @@ namespace Fme.Database.Verification
             this.repoItemMemo = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
             this.repoItemMessage = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
             this.viewMessages = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.tabCalcQueries = new DevExpress.XtraTab.XtraTabPage();
+            this.gridCalcQueries = new DevExpress.XtraGrid.GridControl();
+            this.queryMessageModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.cardViewQueries = new DevExpress.XtraGrid.Views.Card.CardView();
+            this.colName = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colStartTime1 = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colEndTime = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colDuration = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colCount = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.colSql = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemMemoEdit5 = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
+            this.repositoryItemMemoEdit3 = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
+            this.repositoryItemMemoEdit4 = new DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit();
+            this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.fieldSchemaModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tableSchemaModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.repositoryItemCheckEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemCheckEdit();
@@ -284,6 +301,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.cbSourceTable.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnSourceData.Properties)).BeginInit();
             this.xtraTabPage7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnFilterFile.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtSourceMaxRows.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnEditIdList.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl2)).BeginInit();
@@ -368,6 +386,14 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.repoItemMemo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repoItemMessage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).BeginInit();
+            this.tabCalcQueries.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridCalcQueries)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.queryMessageModelBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardViewQueries)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableSchemaModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
@@ -420,8 +446,9 @@ namespace Fme.Database.Verification
             this.barButtonItem2,
             this.barButtonItem7,
             this.barButtonItem8,
-            this.tnExportPackage});
-            this.barManager1.MaxItemId = 201;
+            this.tnExportPackage,
+            this.btnOpen1});
+            this.barManager1.MaxItemId = 206;
             this.barManager1.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.pbStatus,
             this.mbStatus});
@@ -436,6 +463,7 @@ namespace Fme.Database.Verification
             this.bar1.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.btnNew),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnOpen, true),
+            new DevExpress.XtraBars.LinkPersistInfo(this.btnOpen1),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnSave, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.barButtonItem3),
             new DevExpress.XtraBars.LinkPersistInfo(this.btnExecute, true),
@@ -466,6 +494,11 @@ namespace Fme.Database.Verification
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.btnOpen.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnOpen_ItemClick);
+            // 
+            // btnOpen1
+            // 
+            this.btnOpen1.Id = 205;
+            this.btnOpen1.Name = "btnOpen1";
             // 
             // btnSave
             // 
@@ -540,8 +573,10 @@ namespace Fme.Database.Verification
             // 
             // tnExportPackage
             // 
-            this.tnExportPackage.Caption = "Export Package";
+            this.tnExportPackage.Caption = "Package";
             this.tnExportPackage.Id = 200;
+            this.tnExportPackage.ImageOptions.Image = ((System.Drawing.Image)(resources.GetObject("tnExportPackage.ImageOptions.Image")));
+            this.tnExportPackage.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("tnExportPackage.ImageOptions.LargeImage")));
             this.tnExportPackage.Name = "tnExportPackage";
             this.tnExportPackage.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.tnExportPackage.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.tnExportPackage_ItemClick);
@@ -615,7 +650,7 @@ namespace Fme.Database.Verification
             this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
             this.barDockControlTop.Manager = this.barManager1;
             this.barDockControlTop.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.barDockControlTop.Size = new System.Drawing.Size(862, 31);
+            this.barDockControlTop.Size = new System.Drawing.Size(1041, 31);
             // 
             // barDockControlBottom
             // 
@@ -624,7 +659,7 @@ namespace Fme.Database.Verification
             this.barDockControlBottom.Location = new System.Drawing.Point(0, 575);
             this.barDockControlBottom.Manager = this.barManager1;
             this.barDockControlBottom.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.barDockControlBottom.Size = new System.Drawing.Size(862, 27);
+            this.barDockControlBottom.Size = new System.Drawing.Size(1041, 27);
             // 
             // barDockControlLeft
             // 
@@ -639,7 +674,7 @@ namespace Fme.Database.Verification
             // 
             this.barDockControlRight.CausesValidation = false;
             this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControlRight.Location = new System.Drawing.Point(862, 31);
+            this.barDockControlRight.Location = new System.Drawing.Point(1041, 31);
             this.barDockControlRight.Manager = this.barManager1;
             this.barDockControlRight.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.barDockControlRight.Size = new System.Drawing.Size(0, 544);
@@ -857,7 +892,7 @@ namespace Fme.Database.Verification
             this.xtraTabControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabControl1.Name = "xtraTabControl1";
             this.xtraTabControl1.SelectedTabPage = this.tabConfiguration;
-            this.xtraTabControl1.Size = new System.Drawing.Size(862, 544);
+            this.xtraTabControl1.Size = new System.Drawing.Size(1041, 544);
             this.xtraTabControl1.TabIndex = 4;
             this.xtraTabControl1.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.tabConfiguration,
@@ -866,7 +901,8 @@ namespace Fme.Database.Verification
             this.tabGridResults,
             this.tabCompareResults,
             this.tabQueries,
-            this.tabMessages});
+            this.tabMessages,
+            this.tabCalcQueries});
             this.xtraTabControl1.SelectedPageChanged += new DevExpress.XtraTab.TabPageChangedEventHandler(this.xtraTabControl1_SelectedPageChanged);
             this.xtraTabControl1.Click += new System.EventHandler(this.xtraTabControl1_Click);
             // 
@@ -883,7 +919,7 @@ namespace Fme.Database.Verification
             this.tabConfiguration.Image = ((System.Drawing.Image)(resources.GetObject("tabConfiguration.Image")));
             this.tabConfiguration.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabConfiguration.Name = "tabConfiguration";
-            this.tabConfiguration.Size = new System.Drawing.Size(856, 513);
+            this.tabConfiguration.Size = new System.Drawing.Size(1035, 513);
             this.tabConfiguration.Text = "Configuration";
             // 
             // xtraTabControl4
@@ -1201,6 +1237,8 @@ namespace Fme.Database.Verification
             // 
             // xtraTabPage7
             // 
+            this.xtraTabPage7.Controls.Add(this.labelControl13);
+            this.xtraTabPage7.Controls.Add(this.btnFilterFile);
             this.xtraTabPage7.Controls.Add(this.chkSourceRandom);
             this.xtraTabPage7.Controls.Add(this.txtSourceMaxRows);
             this.xtraTabPage7.Controls.Add(this.labelControl9);
@@ -1209,7 +1247,33 @@ namespace Fme.Database.Verification
             this.xtraTabPage7.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage7.Image")));
             this.xtraTabPage7.Name = "xtraTabPage7";
             this.xtraTabPage7.Size = new System.Drawing.Size(392, 150);
-            this.xtraTabPage7.Text = "Id List";
+            this.xtraTabPage7.Text = "Filters";
+            // 
+            // labelControl13
+            // 
+            this.labelControl13.Location = new System.Drawing.Point(28, 91);
+            this.labelControl13.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.labelControl13.Name = "labelControl13";
+            this.labelControl13.Size = new System.Drawing.Size(43, 13);
+            this.labelControl13.TabIndex = 55;
+            this.labelControl13.Text = "Filter File";
+            this.labelControl13.Visible = false;
+            // 
+            // btnFilterFile
+            // 
+            this.btnFilterFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnFilterFile.Location = new System.Drawing.Point(27, 109);
+            this.btnFilterFile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnFilterFile.MenuManager = this.barManager1;
+            this.btnFilterFile.Name = "btnFilterFile";
+            this.btnFilterFile.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton()});
+            this.btnFilterFile.Size = new System.Drawing.Size(340, 20);
+            this.btnFilterFile.TabIndex = 54;
+            this.btnFilterFile.Visible = false;
+            this.btnFilterFile.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.btnFilterFile_ButtonClick);
+            this.btnFilterFile.EditValueChanged += new System.EventHandler(this.btnFilterFile_Leave);
             // 
             // chkSourceRandom
             // 
@@ -1250,9 +1314,9 @@ namespace Fme.Database.Verification
             this.labelControl10.Location = new System.Drawing.Point(28, 18);
             this.labelControl10.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.labelControl10.Name = "labelControl10";
-            this.labelControl10.Size = new System.Drawing.Size(49, 13);
+            this.labelControl10.Size = new System.Drawing.Size(122, 13);
             this.labelControl10.TabIndex = 16;
-            this.labelControl10.Text = "ID File List";
+            this.labelControl10.Text = "ID File List / Custom Filter";
             // 
             // btnEditIdList
             // 
@@ -1279,7 +1343,7 @@ namespace Fme.Database.Verification
             this.xtraTabControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabControl2.Name = "xtraTabControl2";
             this.xtraTabControl2.SelectedTabPage = this.xtraTabFieldMappings;
-            this.xtraTabControl2.Size = new System.Drawing.Size(804, 262);
+            this.xtraTabControl2.Size = new System.Drawing.Size(983, 262);
             this.xtraTabControl2.TabIndex = 26;
             this.xtraTabControl2.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabFieldMappings,
@@ -1296,7 +1360,7 @@ namespace Fme.Database.Verification
             this.xtraTabFieldMappings.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabFieldMappings.Image")));
             this.xtraTabFieldMappings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabFieldMappings.Name = "xtraTabFieldMappings";
-            this.xtraTabFieldMappings.Size = new System.Drawing.Size(798, 231);
+            this.xtraTabFieldMappings.Size = new System.Drawing.Size(977, 231);
             this.xtraTabFieldMappings.Text = "Field Mappings";
             // 
             // gridMappings
@@ -1318,7 +1382,7 @@ namespace Fme.Database.Verification
             this.cbOperator,
             this.repo_chkSelected,
             this.repoSpinEdit1});
-            this.gridMappings.Size = new System.Drawing.Size(798, 231);
+            this.gridMappings.Size = new System.Drawing.Size(977, 231);
             this.gridMappings.TabIndex = 0;
             this.gridMappings.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewMappings});
@@ -1542,7 +1606,7 @@ namespace Fme.Database.Verification
             this.xtraTabLookup.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabLookup.Image")));
             this.xtraTabLookup.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabLookup.Name = "xtraTabLookup";
-            this.xtraTabLookup.Size = new System.Drawing.Size(798, 231);
+            this.xtraTabLookup.Size = new System.Drawing.Size(977, 231);
             this.xtraTabLookup.Text = "Field Lookups";
             // 
             // gridFieldLookup
@@ -1564,7 +1628,7 @@ namespace Fme.Database.Verification
             this.repositoryItemComboBox5,
             this.repositoryItemMRUEdit1,
             this.repositoryItemButtonEdit1});
-            this.gridFieldLookup.Size = new System.Drawing.Size(798, 231);
+            this.gridFieldLookup.Size = new System.Drawing.Size(977, 231);
             this.gridFieldLookup.TabIndex = 1;
             this.gridFieldLookup.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewFieldLookup});
@@ -1669,7 +1733,7 @@ namespace Fme.Database.Verification
             this.xtraTabCalcFields.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabCalcFields.Image")));
             this.xtraTabCalcFields.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabCalcFields.Name = "xtraTabCalcFields";
-            this.xtraTabCalcFields.Size = new System.Drawing.Size(798, 231);
+            this.xtraTabCalcFields.Size = new System.Drawing.Size(977, 231);
             this.xtraTabCalcFields.Text = "Calculated Fields";
             // 
             // gridCalcFields
@@ -1695,7 +1759,7 @@ namespace Fme.Database.Verification
             this.repositoryItemMemoEdit1,
             this.repositoryItemMemoEdit2,
             this.repositoryItemButtonEdit3});
-            this.gridCalcFields.Size = new System.Drawing.Size(798, 231);
+            this.gridCalcFields.Size = new System.Drawing.Size(977, 231);
             this.gridCalcFields.TabIndex = 2;
             this.gridCalcFields.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewCalcFields});
@@ -1849,7 +1913,7 @@ namespace Fme.Database.Verification
             this.xtraTabPage4.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage4.Image")));
             this.xtraTabPage4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabPage4.Name = "xtraTabPage4";
-            this.xtraTabPage4.Size = new System.Drawing.Size(798, 231);
+            this.xtraTabPage4.Size = new System.Drawing.Size(977, 231);
             this.xtraTabPage4.Text = "Source Schema";
             // 
             // gridSourcehSchema
@@ -1862,7 +1926,7 @@ namespace Fme.Database.Verification
             this.gridSourcehSchema.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridSourcehSchema.MenuManager = this.barManager1;
             this.gridSourcehSchema.Name = "gridSourcehSchema";
-            this.gridSourcehSchema.Size = new System.Drawing.Size(798, 231);
+            this.gridSourcehSchema.Size = new System.Drawing.Size(977, 231);
             this.gridSourcehSchema.TabIndex = 0;
             this.gridSourcehSchema.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewSourceSchema});
@@ -1884,7 +1948,7 @@ namespace Fme.Database.Verification
             this.xtraTabPage5.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage5.Image")));
             this.xtraTabPage5.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabPage5.Name = "xtraTabPage5";
-            this.xtraTabPage5.Size = new System.Drawing.Size(798, 231);
+            this.xtraTabPage5.Size = new System.Drawing.Size(977, 231);
             this.xtraTabPage5.Text = "Target Schema";
             // 
             // gridTargetSchema
@@ -1897,7 +1961,7 @@ namespace Fme.Database.Verification
             this.gridTargetSchema.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridTargetSchema.MenuManager = this.barManager1;
             this.gridTargetSchema.Name = "gridTargetSchema";
-            this.gridTargetSchema.Size = new System.Drawing.Size(798, 231);
+            this.gridTargetSchema.Size = new System.Drawing.Size(977, 231);
             this.gridTargetSchema.TabIndex = 1;
             this.gridTargetSchema.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewTargetSchema});
@@ -1917,7 +1981,7 @@ namespace Fme.Database.Verification
             this.xtraTabComparison.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.xtraTabComparison.Name = "xtraTabComparison";
             this.xtraTabComparison.PageVisible = false;
-            this.xtraTabComparison.Size = new System.Drawing.Size(798, 231);
+            this.xtraTabComparison.Size = new System.Drawing.Size(977, 231);
             this.xtraTabComparison.Text = "Comparison Report";
             // 
             // gridComparison
@@ -1929,7 +1993,7 @@ namespace Fme.Database.Verification
             this.gridComparison.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridComparison.MenuManager = this.barManager1;
             this.gridComparison.Name = "gridComparison";
-            this.gridComparison.Size = new System.Drawing.Size(798, 231);
+            this.gridComparison.Size = new System.Drawing.Size(977, 231);
             this.gridComparison.TabIndex = 1;
             this.gridComparison.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewComparison});
@@ -1951,7 +2015,7 @@ namespace Fme.Database.Verification
             // 
             this.dataNavigator1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.dataNavigator1.DataSource = this.bsMappings;
-            this.dataNavigator1.Location = new System.Drawing.Point(581, 496);
+            this.dataNavigator1.Location = new System.Drawing.Point(760, 496);
             this.dataNavigator1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.dataNavigator1.Name = "dataNavigator1";
             this.dataNavigator1.ShowToolTips = true;
@@ -1995,7 +2059,7 @@ namespace Fme.Database.Verification
             this.navGridMappings.Name = "navGridMappings";
             this.navGridMappings.PositionItem = this.bindingNavigatorPositionItem;
             this.navGridMappings.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.navGridMappings.Size = new System.Drawing.Size(856, 27);
+            this.navGridMappings.Size = new System.Drawing.Size(1035, 27);
             this.navGridMappings.TabIndex = 25;
             this.navGridMappings.Text = "bindingNavigator1";
             // 
@@ -2230,7 +2294,7 @@ namespace Fme.Database.Verification
             this.tabSourceData.Image = ((System.Drawing.Image)(resources.GetObject("tabSourceData.Image")));
             this.tabSourceData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.tabSourceData.Name = "tabSourceData";
-            this.tabSourceData.Size = new System.Drawing.Size(856, 513);
+            this.tabSourceData.Size = new System.Drawing.Size(1035, 513);
             this.tabSourceData.Text = "Source Data";
             // 
             // gridSourceData
@@ -2243,7 +2307,7 @@ namespace Fme.Database.Verification
             this.gridSourceData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridSourceData.MenuManager = this.barManager1;
             this.gridSourceData.Name = "gridSourceData";
-            this.gridSourceData.Size = new System.Drawing.Size(856, 513);
+            this.gridSourceData.Size = new System.Drawing.Size(1035, 513);
             this.gridSourceData.TabIndex = 2;
             this.gridSourceData.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewSourceData});
@@ -2267,7 +2331,7 @@ namespace Fme.Database.Verification
             this.tabTargetData.Controls.Add(this.gridTargetData);
             this.tabTargetData.Image = ((System.Drawing.Image)(resources.GetObject("tabTargetData.Image")));
             this.tabTargetData.Name = "tabTargetData";
-            this.tabTargetData.Size = new System.Drawing.Size(856, 513);
+            this.tabTargetData.Size = new System.Drawing.Size(1035, 513);
             this.tabTargetData.Text = "Target Data";
             // 
             // gridTargetData
@@ -2280,7 +2344,7 @@ namespace Fme.Database.Verification
             this.gridTargetData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridTargetData.MenuManager = this.barManager1;
             this.gridTargetData.Name = "gridTargetData";
-            this.gridTargetData.Size = new System.Drawing.Size(856, 513);
+            this.gridTargetData.Size = new System.Drawing.Size(1035, 513);
             this.gridTargetData.TabIndex = 3;
             this.gridTargetData.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewTargetData});
@@ -2304,7 +2368,7 @@ namespace Fme.Database.Verification
             this.tabGridResults.Controls.Add(this.gridResults);
             this.tabGridResults.Image = ((System.Drawing.Image)(resources.GetObject("tabGridResults.Image")));
             this.tabGridResults.Name = "tabGridResults";
-            this.tabGridResults.Size = new System.Drawing.Size(856, 513);
+            this.tabGridResults.Size = new System.Drawing.Size(1035, 513);
             this.tabGridResults.Text = "Column Comparison";
             // 
             // gridResults
@@ -2317,7 +2381,7 @@ namespace Fme.Database.Verification
             this.gridResults.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridResults.MenuManager = this.barManager1;
             this.gridResults.Name = "gridResults";
-            this.gridResults.Size = new System.Drawing.Size(856, 513);
+            this.gridResults.Size = new System.Drawing.Size(1035, 513);
             this.gridResults.TabIndex = 3;
             this.gridResults.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewResults});
@@ -2342,7 +2406,7 @@ namespace Fme.Database.Verification
             this.tabCompareResults.Controls.Add(this.gridReport);
             this.tabCompareResults.Image = ((System.Drawing.Image)(resources.GetObject("tabCompareResults.Image")));
             this.tabCompareResults.Name = "tabCompareResults";
-            this.tabCompareResults.Size = new System.Drawing.Size(856, 513);
+            this.tabCompareResults.Size = new System.Drawing.Size(1035, 513);
             this.tabCompareResults.Text = "Comparison Report";
             // 
             // gridReport
@@ -2355,7 +2419,7 @@ namespace Fme.Database.Verification
             this.gridReport.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gridReport.MenuManager = this.barManager1;
             this.gridReport.Name = "gridReport";
-            this.gridReport.Size = new System.Drawing.Size(856, 513);
+            this.gridReport.Size = new System.Drawing.Size(1035, 513);
             this.gridReport.TabIndex = 4;
             this.gridReport.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.viewReport});
@@ -2379,7 +2443,7 @@ namespace Fme.Database.Verification
             this.tabQueries.Controls.Add(this.splitContainerControl1);
             this.tabQueries.Image = ((System.Drawing.Image)(resources.GetObject("tabQueries.Image")));
             this.tabQueries.Name = "tabQueries";
-            this.tabQueries.Size = new System.Drawing.Size(856, 513);
+            this.tabQueries.Size = new System.Drawing.Size(1035, 513);
             this.tabQueries.Text = "Queries";
             // 
             // splitContainerControl1
@@ -2392,8 +2456,8 @@ namespace Fme.Database.Verification
             this.splitContainerControl1.Panel1.Text = "Panel1";
             this.splitContainerControl1.Panel2.Controls.Add(this.txtTargetQuery);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(856, 513);
-            this.splitContainerControl1.SplitterPosition = 438;
+            this.splitContainerControl1.Size = new System.Drawing.Size(1035, 513);
+            this.splitContainerControl1.SplitterPosition = 530;
             this.splitContainerControl1.TabIndex = 0;
             this.splitContainerControl1.Text = "splitContainerControl1";
             // 
@@ -2405,7 +2469,7 @@ namespace Fme.Database.Verification
             this.txtSourceQuery.Name = "txtSourceQuery";
             this.txtSourceQuery.Properties.Appearance.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtSourceQuery.Properties.Appearance.Options.UseFont = true;
-            this.txtSourceQuery.Size = new System.Drawing.Size(438, 513);
+            this.txtSourceQuery.Size = new System.Drawing.Size(530, 513);
             this.txtSourceQuery.TabIndex = 0;
             // 
             // txtTargetQuery
@@ -2417,7 +2481,7 @@ namespace Fme.Database.Verification
             this.txtTargetQuery.Name = "txtTargetQuery";
             this.txtTargetQuery.Properties.Appearance.Font = new System.Drawing.Font("Calibri", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtTargetQuery.Properties.Appearance.Options.UseFont = true;
-            this.txtTargetQuery.Size = new System.Drawing.Size(413, 513);
+            this.txtTargetQuery.Size = new System.Drawing.Size(500, 513);
             this.txtTargetQuery.TabIndex = 0;
             // 
             // tabMessages
@@ -2427,7 +2491,7 @@ namespace Fme.Database.Verification
             this.tabMessages.Controls.Add(this.gridMessages);
             this.tabMessages.Image = ((System.Drawing.Image)(resources.GetObject("tabMessages.Image")));
             this.tabMessages.Name = "tabMessages";
-            this.tabMessages.Size = new System.Drawing.Size(856, 513);
+            this.tabMessages.Size = new System.Drawing.Size(1035, 513);
             this.tabMessages.Text = "System Messages";
             // 
             // gridMessages
@@ -2441,7 +2505,7 @@ namespace Fme.Database.Verification
             this.gridMessages.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repoItemMemo,
             this.repoItemMessage});
-            this.gridMessages.Size = new System.Drawing.Size(856, 513);
+            this.gridMessages.Size = new System.Drawing.Size(1035, 513);
             this.gridMessages.TabIndex = 0;
             this.gridMessages.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.cardViewMessages,
@@ -2473,6 +2537,127 @@ namespace Fme.Database.Verification
             this.viewMessages.RowCellStyle += new DevExpress.XtraGrid.Views.Grid.RowCellStyleEventHandler(this.viewMessages_RowCellStyle);
             this.viewMessages.RowStyle += new DevExpress.XtraGrid.Views.Grid.RowStyleEventHandler(this.viewMessages_RowStyle);
             // 
+            // tabCalcQueries
+            // 
+            this.tabCalcQueries.Controls.Add(this.gridCalcQueries);
+            this.tabCalcQueries.Image = ((System.Drawing.Image)(resources.GetObject("tabCalcQueries.Image")));
+            this.tabCalcQueries.Name = "tabCalcQueries";
+            this.tabCalcQueries.Size = new System.Drawing.Size(1035, 513);
+            this.tabCalcQueries.Text = "Calculation Queries";
+            // 
+            // gridCalcQueries
+            // 
+            this.gridCalcQueries.ContextMenuStrip = this.ctxGrid;
+            this.gridCalcQueries.DataSource = this.queryMessageModelBindingSource;
+            this.gridCalcQueries.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridCalcQueries.Location = new System.Drawing.Point(0, 0);
+            this.gridCalcQueries.MainView = this.cardViewQueries;
+            this.gridCalcQueries.MenuManager = this.barManager1;
+            this.gridCalcQueries.Name = "gridCalcQueries";
+            this.gridCalcQueries.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.repositoryItemMemoEdit3,
+            this.repositoryItemMemoEdit4,
+            this.repositoryItemMemoEdit5});
+            this.gridCalcQueries.Size = new System.Drawing.Size(1035, 513);
+            this.gridCalcQueries.TabIndex = 1;
+            this.gridCalcQueries.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.cardViewQueries,
+            this.gridView1});
+            this.gridCalcQueries.DataSourceChanged += new System.EventHandler(this.gridCalcQueries_DataSourceChanged);
+            // 
+            // queryMessageModelBindingSource
+            // 
+            this.queryMessageModelBindingSource.AllowNew = true;
+            this.queryMessageModelBindingSource.DataSource = typeof(Fme.Library.Models.QueryMessageModel);
+            // 
+            // cardViewQueries
+            // 
+            this.cardViewQueries.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[] {
+            this.colName,
+            this.colStartTime1,
+            this.colEndTime,
+            this.colDuration,
+            this.colCount,
+            this.colSql});
+            this.cardViewQueries.FocusedCardTopFieldIndex = 0;
+            this.cardViewQueries.GridControl = this.gridCalcQueries;
+            this.cardViewQueries.Name = "cardViewQueries";
+            this.cardViewQueries.OptionsBehavior.AutoHorzWidth = true;
+            this.cardViewQueries.OptionsBehavior.FieldAutoHeight = true;
+            // 
+            // colName
+            // 
+            this.colName.FieldName = "Name";
+            this.colName.Name = "colName";
+            this.colName.Visible = true;
+            this.colName.VisibleIndex = 0;
+            // 
+            // colStartTime1
+            // 
+            this.colStartTime1.DisplayFormat.FormatString = "g";
+            this.colStartTime1.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.colStartTime1.FieldName = "StartTime";
+            this.colStartTime1.Name = "colStartTime1";
+            this.colStartTime1.Visible = true;
+            this.colStartTime1.VisibleIndex = 1;
+            // 
+            // colEndTime
+            // 
+            this.colEndTime.DisplayFormat.FormatString = "g";
+            this.colEndTime.DisplayFormat.FormatType = DevExpress.Utils.FormatType.DateTime;
+            this.colEndTime.FieldName = "EndTime";
+            this.colEndTime.Name = "colEndTime";
+            this.colEndTime.Visible = true;
+            this.colEndTime.VisibleIndex = 2;
+            // 
+            // colDuration
+            // 
+            this.colDuration.FieldName = "Duration";
+            this.colDuration.Name = "colDuration";
+            this.colDuration.OptionsColumn.ReadOnly = true;
+            this.colDuration.Visible = true;
+            this.colDuration.VisibleIndex = 3;
+            // 
+            // colCount
+            // 
+            this.colCount.AppearanceCell.Options.UseTextOptions = true;
+            this.colCount.AppearanceCell.TextOptions.HAlignment = DevExpress.Utils.HorzAlignment.Near;
+            this.colCount.FieldName = "Count";
+            this.colCount.Name = "colCount";
+            this.colCount.Visible = true;
+            this.colCount.VisibleIndex = 4;
+            // 
+            // colSql
+            // 
+            this.colSql.AppearanceCell.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.colSql.AppearanceCell.Options.UseFont = true;
+            this.colSql.ColumnEdit = this.repositoryItemMemoEdit5;
+            this.colSql.FieldName = "Sql";
+            this.colSql.Name = "colSql";
+            this.colSql.Visible = true;
+            this.colSql.VisibleIndex = 5;
+            // 
+            // repositoryItemMemoEdit5
+            // 
+            this.repositoryItemMemoEdit5.Appearance.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.repositoryItemMemoEdit5.Appearance.Options.UseFont = true;
+            this.repositoryItemMemoEdit5.Name = "repositoryItemMemoEdit5";
+            // 
+            // repositoryItemMemoEdit3
+            // 
+            this.repositoryItemMemoEdit3.Name = "repositoryItemMemoEdit3";
+            // 
+            // repositoryItemMemoEdit4
+            // 
+            this.repositoryItemMemoEdit4.Name = "repositoryItemMemoEdit4";
+            // 
+            // gridView1
+            // 
+            this.gridView1.GridControl = this.gridCalcQueries;
+            this.gridView1.Name = "gridView1";
+            this.gridView1.OptionsBehavior.Editable = false;
+            this.gridView1.OptionsView.RowAutoHeight = true;
+            // 
             // repositoryItemCheckEdit1
             // 
             this.repositoryItemCheckEdit1.AutoHeight = false;
@@ -2501,7 +2686,7 @@ namespace Fme.Database.Verification
             this.barDockControl1.Location = new System.Drawing.Point(0, 0);
             this.barDockControl1.Manager = this.barManager2;
             this.barDockControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.barDockControl1.Size = new System.Drawing.Size(862, 0);
+            this.barDockControl1.Size = new System.Drawing.Size(1041, 0);
             // 
             // barDockControl2
             // 
@@ -2510,7 +2695,7 @@ namespace Fme.Database.Verification
             this.barDockControl2.Location = new System.Drawing.Point(0, 602);
             this.barDockControl2.Manager = this.barManager2;
             this.barDockControl2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.barDockControl2.Size = new System.Drawing.Size(862, 0);
+            this.barDockControl2.Size = new System.Drawing.Size(1041, 0);
             // 
             // barDockControl3
             // 
@@ -2525,7 +2710,7 @@ namespace Fme.Database.Verification
             // 
             this.barDockControl4.CausesValidation = false;
             this.barDockControl4.Dock = System.Windows.Forms.DockStyle.Right;
-            this.barDockControl4.Location = new System.Drawing.Point(862, 0);
+            this.barDockControl4.Location = new System.Drawing.Point(1041, 0);
             this.barDockControl4.Manager = this.barManager2;
             this.barDockControl4.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.barDockControl4.Size = new System.Drawing.Size(0, 602);
@@ -2585,7 +2770,7 @@ namespace Fme.Database.Verification
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(862, 602);
+            this.ClientSize = new System.Drawing.Size(1041, 602);
             this.Controls.Add(this.xtraTabControl1);
             this.Controls.Add(this.barDockControlLeft);
             this.Controls.Add(this.barDockControlRight);
@@ -2635,6 +2820,7 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.btnSourceData.Properties)).EndInit();
             this.xtraTabPage7.ResumeLayout(false);
             this.xtraTabPage7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.btnFilterFile.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtSourceMaxRows.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnEditIdList.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl2)).EndInit();
@@ -2721,6 +2907,14 @@ namespace Fme.Database.Verification
             ((System.ComponentModel.ISupportInitialize)(this.repoItemMemo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repoItemMessage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewMessages)).EndInit();
+            this.tabCalcQueries.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridCalcQueries)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.queryMessageModelBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.cardViewQueries)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemMemoEdit4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.tableSchemaModelBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).EndInit();
@@ -2954,6 +3148,23 @@ namespace Fme.Database.Verification
         private DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit repoItemMessage;
         private DevExpress.XtraBars.BarButtonItem tnExportPackage;
         private DevExpress.XtraEditors.Repository.RepositoryItemButtonEdit repositoryItemButtonEdit3;
+        private DevExpress.XtraEditors.LabelControl labelControl13;
+        private DevExpress.XtraEditors.ButtonEdit btnFilterFile;
+        private DevExpress.XtraBars.BarSubItem btnOpen1;
+        private DevExpress.XtraTab.XtraTabPage tabCalcQueries;
+        private DevExpress.XtraGrid.GridControl gridCalcQueries;
+        private DevExpress.XtraGrid.Views.Card.CardView cardViewQueries;
+        private DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit repositoryItemMemoEdit3;
+        private DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit repositoryItemMemoEdit4;
+        private GridView gridView1;
+        private BindingSource queryMessageModelBindingSource;
+        private DevExpress.XtraEditors.Repository.RepositoryItemMemoEdit repositoryItemMemoEdit5;
+        private DevExpress.XtraGrid.Columns.GridColumn colName;
+        private DevExpress.XtraGrid.Columns.GridColumn colStartTime1;
+        private DevExpress.XtraGrid.Columns.GridColumn colEndTime;
+        private DevExpress.XtraGrid.Columns.GridColumn colDuration;
+        private DevExpress.XtraGrid.Columns.GridColumn colCount;
+        private DevExpress.XtraGrid.Columns.GridColumn colSql;
     }
 
 }

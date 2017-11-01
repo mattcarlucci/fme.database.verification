@@ -45,6 +45,7 @@ using DevExpress.LookAndFeel;
 using DevExpress.XtraGrid.Views.Card;
 using DevExpress.XtraTab;
 using DevExpress.XtraPrinting;
+using DevExpress.XtraBars;
 
 namespace Fme.Database.Verification
 {
@@ -64,6 +65,8 @@ namespace Fme.Database.Verification
         /// The cancel token source
         /// </summary>
         CancellationTokenSource cancelTokenSource = new CancellationTokenSource();
+
+        Task currentTask = null;
         /// <summary>
         /// The cancel token
         /// </summary>
@@ -152,10 +155,46 @@ namespace Fme.Database.Verification
             {
                 cbSourceTZ.Properties.Items.Add(i.ToString());
                 cbTargetTZ.Properties.Items.Add(i.ToString());
-            }
-
+            }           
+            LoadMru();
+           
         }
-        
+        /// <summary>
+        /// Saves the MRU.
+        /// </summary>
+        /// <param name="mru">The MRU.</param>
+        private void SaveMru(string mru)
+        {
+            var items = GetMruItems();
+            items.Remove(mru);
+            items.Insert(0, mru);
+            File.WriteAllLines(".\\mru.txt", items);
+            LoadMru();
+        }
+        /// <summary>
+        /// Gets the MRU items.
+        /// </summary>
+        /// <returns>List&lt;System.String&gt;.</returns>
+        private List<string> GetMruItems()
+        {
+            if (File.Exists(".\\mru.txt") == false) return new List<string>();
+            return File.ReadAllLines(".\\mru.txt").ToList();
+        }
+        /// <summary>
+        /// Loads the MRU.
+        /// </summary>
+        private void LoadMru()
+        {
+            var items = GetMruItems();
+            btnOpen1.ClearLinks();
+            for (int i = 0; i < items.Count(); i++)
+            {
+                BarItem btn = new BarButtonItem();
+                btn.Caption = items[i];
+                btn.ItemClick += new ItemClickEventHandler(OnOpenModel);
+                btnOpen1.AddItem(btn);
+            }
+        }
 
         /// <summary>
         /// Handles the ItemClick event of the btnNew control.
@@ -165,6 +204,19 @@ namespace Fme.Database.Verification
         private void btnNew_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
             OnCreateNewModel();
+        }
+
+        /// <summary>
+        /// Handles the <see cref="E:OpenModel" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="DevExpress.XtraBars.ItemClickEventArgs"/> instance containing the event data.</param>
+        private void OnOpenModel(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
+        {
+            Cursor = Cursors.WaitCursor;
+            OnOpenModel(e.Item.Caption);
+            SaveMru(e.Item.Caption);
+            Cursor = Cursors.Default;
         }
 
         /// <summary>
@@ -184,9 +236,7 @@ namespace Fme.Database.Verification
 
                 
                 OnOpenModel(dlg.FileName);
-                
-
-
+                SaveMru(dlg.FileName);
             }
             catch (Exception ex)
             {
@@ -232,7 +282,7 @@ namespace Fme.Database.Verification
         {
             if (ValidateRequiredFields() == false)
                 return;
-
+                      
             tmrMonitor.Start();
             model.ErrorMessages.Clear();
             LockControls(true);
@@ -260,7 +310,7 @@ namespace Fme.Database.Verification
                 repo.CompareModelStatus += Compare_CompareStatus;
                 repo.Error += Compare_OnError;
 
-                repo.Execute(cancelTokenSource);
+                currentTask = repo.Execute(cancelTokenSource);
 
             }
             catch (OperationCanceledException ex)
@@ -321,10 +371,12 @@ namespace Fme.Database.Verification
             try
             {
                 cancelTokenSource.Cancel();
+                currentTask.Dispose();
+                
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -430,23 +482,55 @@ namespace Fme.Database.Verification
         }
 
         /// <summary>
+        /// Handles the Leave event of the btnFilterFile control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void btnFilterFile_Leave(object sender, EventArgs e)
+        {
+          //  model.Source.FilterFile = btnFilterFile.Text;
+        }
+        /// <summary>
         /// Handles the ButtonClick event of the btnEditIdList control.
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="ButtonPressedEventArgs" /> instance containing the event data.</param>
         private void btnEditIdList_ButtonClick(object sender, ButtonPressedEventArgs e)
         {
+            //"Supported Files (*.txt;*.csv;*.sql)|*.txt;*.csv;*.sql|Text File *.txt;*.csv|*.txt;*.csv|SQL Filter *.sql|*.sql"
+            ButtonEdit edit = sender as ButtonEdit;
             OpenFileDialog dlg = new OpenFileDialog()
             {
+                //Filter = "Supported Files (*.txt;*.csv)|*.txt;*.csv"
                 Filter = "Supported Files (*.txt;*.csv;*.sql)|*.txt;*.csv;*.sql|Text File *.txt;*.csv|*.txt;*.csv|SQL Filter *.sql|*.sql"
+                , InitialDirectory = Path.GetDirectoryName(edit?.Text)
+              //  , FileName = Path.GetFileName(edit?.Text)
             };
+            dlg.FileName = Path.GetFileName(edit?.Text);
+
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
             model.Source.IdListFile = dlg.FileName;
             btnEditIdList.Text = dlg.FileName;
 
         }
+        /// <summary>
+        /// Handles the ButtonClick event of the btnFilterFile control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="ButtonPressedEventArgs"/> instance containing the event data.</param>
+        private void btnFilterFile_ButtonClick(object sender, ButtonPressedEventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog()
+            {
+                Filter = "Supported Files (*.sql)|*.sql"
+            };
+            if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
+            model.Source.IdListFile = dlg.FileName;
+            btnFilterFile.Text = dlg.FileName;
+
+        }
         /// <summary>
         /// Handles the SelectedIndexChanged event of the cbSourceTable control.
         /// </summary>
@@ -823,6 +907,7 @@ namespace Fme.Database.Verification
             }
             lblStatus.Caption = e.StatusMessage;            
             Application.DoEvents();
+            SetDataSource(gridCalcQueries, model.Queries);
         }
 
 
@@ -859,6 +944,7 @@ namespace Fme.Database.Verification
             }
             SetDataSource(gridTargetData, e.Table);
             SetDataSource(gridMessages, model.ErrorMessages);
+            SetDataSource(gridCalcQueries, model.Queries);
             tabTargetData.Tooltip = string.Format("{0} record(s)", e.Table.Rows.Count);
 
         }
@@ -910,7 +996,7 @@ namespace Fme.Database.Verification
             SetDataSource(gridReport, model.ColumnCompare.SelectMany(many => many.CompareResults).ToList());
 
             timerElapsed.Stop();
-            lblStatus.Caption = string.Format("Last Sucessful Compare {0}", DateTime.Now);
+            lblStatus.Caption = string.Format("Last Successful Compare {0}", DateTime.Now);
             MessageBox.Show("Comparison Completed", "Status", MessageBoxButtons.OK, MessageBoxIcon.Information);
             Animate(false);
 
@@ -1167,7 +1253,9 @@ namespace Fme.Database.Verification
 
             btnEditIdList.Text = "";
             chkSourceRandom.Checked = false;
-            txtSourceMaxRows.Text = "";
+            txtSourceMaxRows.Text = "0";
+
+            btnFilterFile.Text = "";
 
             foreach (var grid in grids)
                 SetDataSource(grid, null);
@@ -1195,8 +1283,9 @@ namespace Fme.Database.Verification
                 SetupMapping();
 
                 btnEditIdList.Text = model.Source.IdListFile;
+               // btnFilterFile.Text = model.Source.FilterFile;
                 chkSourceRandom.Checked = model.Source.IsRandom;
-                txtSourceMaxRows.Text = model.Source.MaxRows;
+                txtSourceMaxRows.Text = string.IsNullOrEmpty(model.Source.MaxRows) ? "0" :model.Source.MaxRows;
 
                 //BUG: Storing file name doesn't make sense. User can rename file outside application. 
                 //     We update the model to reflect the correct name
@@ -1656,6 +1745,11 @@ namespace Fme.Database.Verification
             model.Target.IncludeVersions = chkTargetVersions.Checked;
         }
 
+        private void gridCalcQueries_DataSourceChanged(object sender, EventArgs e)
+        {
+            this.cardViewQueries.OptionsBehavior.FieldAutoHeight = true;
+            //this.cardViewQueries.Columns["StartTime"].DisplayFormat = "mm/dd/yy hh:mm:ss";
+        }
         /// <summary>
         /// Handles the DataSourceChanged event of the gridMessages control.
         /// </summary>
@@ -1893,6 +1987,12 @@ namespace Fme.Database.Verification
                     ExportGrids(grid);
                 }
 
+                model.Queries.ForEach(item =>
+                {
+                    string file = folder + "\\" + item.Name + ".sql";
+                    item.LogQuery(file);
+                });
+  
                 Serializer.Serialize<CompareModel>(folder + "\\" + name + ".exported.xml", this.model);
                 string queries = txtSourceQuery.Text + ";+\r\n" + txtTargetQuery.Text;
                 File.WriteAllText(folder + "\\" + name + ".queries.sql", queries);
@@ -1973,13 +2073,18 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="ButtonPressedEventArgs"/> instance containing the event data.</param>
         private void CalculatedFields_OnShowFileDialog(object sender, ButtonPressedEventArgs e)
         {
+            ButtonEdit edit = sender as ButtonEdit;
+
             OpenFileDialog dlg = new OpenFileDialog()
             {
-                Filter = "DQL/SQL files (*.dql, *.sql)|*.dql;*.sql|All files (*.*)|*.*"
+                Filter = "DQL/SQL files (*.dql, *.sql)|*.dql;*.sql|All files (*.*)|*.*",
+                InitialDirectory = Path.GetDirectoryName(edit.Text),
+                FileName = Path.GetFileName(edit.Text)
+               
             };
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
-            ButtonEdit edit = sender as ButtonEdit;
+           
             edit.Text = dlg.FileName;
         }
 
@@ -2007,5 +2112,7 @@ namespace Fme.Database.Verification
         {
             Debug.Print("Hovering");
         }
+
+     
     }
 }

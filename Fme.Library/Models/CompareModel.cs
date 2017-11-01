@@ -32,6 +32,9 @@ namespace Fme.Library.Models
     [Serializable]
     public class CompareModel
     {
+        /// <summary>
+        /// The chunk size
+        /// </summary>
         private int chunkSize;
 
         /// <summary>
@@ -63,13 +66,34 @@ namespace Fme.Library.Models
         public List<CompareMappingModel> ColumnCompare { get; set; }
 
         /// <summary>
+        /// Calculateds the fields.
+        /// </summary>
+        /// <returns>List&lt;CompareMappingModel&gt;.</returns>
+        public List<CompareMappingModel> CalculatedFields()
+        {
+            return ColumnCompare.Where(w => w.IsCalculated).ToList();
+        }
+
+        /// <summary>
         /// Gets or sets the error messages.
         /// </summary>
         /// <value>The error messages.</value>
         [XmlIgnore]
         public List<ErrorMessageModel> ErrorMessages {get;set;}
-        
 
+        /// <summary>
+        /// Gets or sets the queries.
+        /// </summary>
+        /// <value>The queries.</value>
+        [XmlIgnore]
+        public List<QueryMessageModel> Queries { get; set; }
+
+        [XmlIgnore]
+        public EventHandler<CompareModelStatusEventArgs> CompareModelStatus;
+        protected virtual void OnCompareModelStatus(object sender, CompareModelStatusEventArgs e)
+        {
+            CompareModelStatus?.Invoke(sender, e);
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="CompareModel"/> class.
         /// </summary>
@@ -79,6 +103,7 @@ namespace Fme.Library.Models
             Target = new DataSourceModel();
             ColumnCompare = new List<CompareMappingModel>();
             ErrorMessages = new List<ErrorMessageModel>();
+            Queries = new List<QueryMessageModel>();
             chunkSize = 1500;
         }
 
@@ -86,8 +111,7 @@ namespace Fme.Library.Models
         {
             this.chunkSize = chunkSize;
         }
-
-
+        
 
         /// <summary>
         /// Maps the table columns.
@@ -123,11 +147,21 @@ namespace Fme.Library.Models
         }
 
 
+        /// <summary>
+        /// Maps the columns keys.
+        /// </summary>
+        /// <param name="data">The data.</param>
+        /// <param name="selector">The selector.</param>
         public void MapColumnsKeys(DataSet data, Func<List<CompareMappingModel>, int, string, string> selector)
         {
             MapColumnsKeys(data.Table(), selector);
         }
 
+        /// <summary>
+        /// Maps the columns keys.
+        /// </summary>
+        /// <param name="table">The table.</param>
+        /// <param name="selector">The selector.</param>
         public void MapColumnsKeys(DataTable table, Func<List<CompareMappingModel>, int, string, string> selector)
         {
             var f1 = this.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected == true).
@@ -145,9 +179,7 @@ namespace Fme.Library.Models
             }
         }
 
-
-
-
+        
         /// <summary>
         /// Sets the compare ordinal.
         /// </summary>
@@ -179,13 +211,33 @@ namespace Fme.Library.Models
         {
             return (string.IsNullOrEmpty(Source.IdListFile));
         }
+
+        /// <summary>
+        /// Gets the source filter.
+        /// </summary>
+        /// <returns>System.String[].</returns>
+        public string GetSourceFilter()
+        {
+            if (this.Source.IdListFile.ToLower().EndsWith(".sql"))
+            {
+                if (File.Exists(this.Source.IdListFile))
+                {
+                    return File.ReadAllText(this.Source.IdListFile);                   
+                }
+               
+            }
+            return null;
+        }
         /// <summary>
         /// Gets the ids from file.
         /// </summary>
         /// <returns>List&lt;System.String&gt;.</returns>
-        public string[] GetIdsFromFile()
+        public string[] GetSourceIds()
         {
              if (IsValidIdFile() == false)
+                return null;
+
+            if (GetSourceFilter() != null)
                 return null;
 
             var list = File.ReadAllLines(Source.IdListFile).
@@ -197,165 +249,15 @@ namespace Fme.Library.Models
             return list.ToArray();
         }
 
-        #region Calculated Fields. TODO refactor
-
         /// <summary>
-        /// Tries to convert to numbers 
+        /// Gets the name.
         /// </summary>
-        /// <param name="inValues">The in values.</param>
-        /// <returns>System.Int32[].</returns>
-        private int[] TryConvert(string[] inValues)
-        {
-            try
-            {
-                return Array.ConvertAll(inValues, int.Parse);
-
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
-        private DataTable MergeCalculatedData(DataTable table, string side, string field, string sql,
-            DataSourceBase dataSource, CancellationTokenSource cancelToken)
-        {
-            var results = dataSource.ExecuteQuery(sql, cancelToken.Token);
-            if (results.Tables.Count == 0) return null;
-            var data = results.MergeAll();
-          //  var data = results.Tables[0];
-            data = data.ListAggr();
-
-            data.Columns[0].ColumnName = Alias.Primary_Key;
-            data.PrimaryKey = new[] { data.Columns[0] };
-            table.InnerJoin<string>(Alias.Primary_Key, data);
-            data.Columns[1].ColumnName = side + "_" + field;
-            return data;
-        }
-
-        /// <summary>
-        /// Builds the calculated SQL.
-        /// </summary>
-        /// <param name="query">The query.</param>
-        /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
-        private string BuildCalculatedSql(string query, string[] inValues)
+        public string GetName()
         {
-            string having = string.Empty;
-            int[] outValues = TryConvert(inValues);
-
-            QueryBuilder builder = new QueryBuilder();
-
-            if (outValues == null)
-                having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1], inValues);
-            else
-                having = builder.CreateInClause(query.Split(new char[] { ' ', ',' })[1], outValues);
-
-            var sql = string.Format(" {0} HAVING {1} ", query, having);
-
-            int lastgroupBy = query.ToLower().LastIndexOf("group by");
-            int lastEnable = query.ToLower().Substring(lastgroupBy).IndexOf("enable");
-
-            if (lastEnable > 0)
-            {
-                var gb = query.Substring(lastgroupBy + lastEnable);
-                var newQuery = query.Replace(gb, " ");
-                sql = string.Format(" {0} HAVING {1} {2} ", newQuery, having, gb);
-            }
-            return sql;
+            return Path.GetFileNameWithoutExtension(Name);            
         }
-
-       
-        /// <summary>
-        /// Merges the multi calculated data.
-        /// </summary>
-        /// <param name="table">The table.</param>
-        /// <param name="side">The side.</param>
-        /// <param name="field">The field.</param>
-        /// <param name="query">The query.</param>
-        /// <param name="inValues">The in values.</param>
-        /// <param name="dataSource">The data source.</param>
-        /// <param name="cancelToken">The cancel token.</param>
-        /// <returns>DataTable.</returns>
-        public DataTable MergeMultiCalculatedData(DataTable table, string side, string field, string query, string[] inValues,
-            DataSourceBase dataSource, CancellationTokenSource cancelToken)
-        {
-            List<string> sqls = new List<string>();
-            inValues.Split(chunkSize).ToList().ForEach( block =>
-            {
-                sqls.Add(BuildCalculatedSql(query, block.ToArray()));
-            });
-
-            string sql = string.Join(";", sqls);
-            return MergeCalculatedData(table, side, field, sql, dataSource, cancelToken);          
-        }
-      
-        /// <summary>
-        /// Executes the calculated fields.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="target">The target.</param>
-        public void ExecuteCalculatedFields(DataTable source, DataTable target, CancellationTokenSource cancelToken)
-        {
-            int index = 0;
-            try
-            {
-                var calcs = ColumnCompare.Where(w => w.IsCalculated && w.Selected);
-                foreach (var calc in calcs)
-                {
-                    if (cancelToken.IsCancellationRequested)
-                        throw new OperationCanceledException("A cancellation token associated with this operation was canceled");
-                    try
-                    {
-                        index = 1;
-                        if (string.IsNullOrEmpty(calc.GetLeftQuery()) == false)
-                        {
-                            var data1 = MergeMultiCalculatedData(source, Alias.Left, calc.LeftSide, calc.GetLeftQuery(),
-                                source.SelectKeys<string>(Alias.Primary_Key), Source.DataSource, cancelToken);
-
-                            //only merge if the queries execute.
-                            if (data1 != null)
-                            {
-                                source.Merge(data1, false, MissingSchemaAction.AddWithKey);
-                                calc.LeftKey = data1.Columns[1].ColumnName;
-                            }
-
-                        }
-
-                        index = 2;
-                        if (string.IsNullOrEmpty(calc.GetRightQuery()) == false)
-                        {
-                            var data2 = MergeMultiCalculatedData(target, Alias.Right, calc.RightSide, calc.GetRightQuery(),
-                            target.SelectKeys<string>(Alias.Primary_Key), Target.DataSource, cancelToken);
-
-                            if (data2 != null)
-                            {
-                                target.Merge(data2, false, MissingSchemaAction.AddWithKey);
-                                calc.RightKey = data2.Columns[1].ColumnName;
-                            }
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        string query = index == 1 ? calc.LeftQuery : calc.RightQuery;
-                        string field = index == 1 ? calc.LeftSide : calc.RightSide;
-
-                        this.ErrorMessages.Add(new ErrorMessageModel("Calculated Query", field + " - " + query.Replace(Environment.NewLine, ""), ex.Message));
-                        
-                        //TODO: Log Calc error;
-                        continue;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                this.ErrorMessages.Add(new ErrorMessageModel("Calculated Fields", ex.Message, ex?.InnerException?.Message));
-                return;
-            }
-
-        }
-        #endregion
+        
         /// <summary>
         /// Loads the specified path.
         /// </summary>
@@ -364,6 +266,14 @@ namespace Fme.Library.Models
         public static CompareModel Load(string path)
         {
             return Serializer.DeSerialize<CompareModel>(path);
+        }
+
+        internal void ExecuteCalculatedFields(DataTable table1, DataTable table2, CancellationTokenSource cancelToken)
+        {
+            CalcFieldModel calc = new CalcFieldModel(this, chunkSize);
+            calc.CompareModelStatus += CompareModelStatus;
+            calc.ExecuteCalculatedFields(table1, table2, cancelToken);
+            
         }
     }
 }

@@ -90,13 +90,13 @@ namespace Fme.Library.Repositories
         /// <param name="fields">The fields.</param>
         /// <param name="pairs">The pairs.</param>
         /// <returns>System.String.</returns>
-        public string GetQueryString(DataSourceModel source, string side, string[] fields, List<CompareMappingModel> pairs)
-        {
-            QueryBuilder query = source.DataSource.GetQueryBuilder();
+        //public string GetQueryString(DataSourceModel source, string side, string[] fields, List<CompareMappingModel> pairs)
+        //{
+        //    QueryBuilder query = source.DataSource.GetQueryBuilder();
 
-            return query.BuildSql(source.Key, fields,
-                source.SelectedTable, side, source.MaxRows, source.Key, Model.GetIdsFromFile());
-        }
+        //    return query.BuildSql(source.Key, fields,
+        //        source.SelectedTable, side, source.MaxRows, source.Key, Model.GetIdsFromFile());
+        //}
 
         /// <summary>
         /// Executes the wait.
@@ -118,6 +118,7 @@ namespace Fme.Library.Repositories
             {
                 await Task.Run(() =>
                 {
+                    cancelToken.Token.ThrowIfCancellationRequested();
                     #region Initalize and Reset prior results
                     var pairs = Model.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected).ToList();               
                     Model.ColumnCompare.ForEach(item => item.CompareResults.Clear());                  
@@ -129,7 +130,7 @@ namespace Fme.Library.Repositories
                     QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();            
                     query.IncludeVersion = Model.Source.IncludeVersions;
 
-                    var select1 = query.BuildSql(Model.Source, pairs.Select(s => s.LeftSide).ToArray(), Model.GetIdsFromFile());
+                    var select1 = query.BuildSql(Model.Source, pairs.Select(s => s.LeftSide).ToArray(),Model.GetSourceIds(), Model.GetSourceFilter());
 
                    // var select1 = query.BuildSql(Model.Source.Key, pairs.Select(s => s.LeftSide).ToArray(),
                    // Model.Source.SelectedTable, string.Empty, Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
@@ -159,7 +160,7 @@ namespace Fme.Library.Repositories
 
 
                     var select2 = query.BuildSql(Model.Target, pairs.Select(s => s.RightSide).ToArray(), 
-                        table1.SelectKeys<string>(Alias.Primary_Key));
+                        table1.SelectKeys<string>(Alias.Primary_Key), null);
 
                     //var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
                     //    Model.Target.SelectedTable, string.Empty, Model.Target.MaxRows, Model.Target.Key,  
@@ -209,7 +210,9 @@ namespace Fme.Library.Repositories
                     if (table1.Rows.Count == 0 || table2.Rows.Count == 0)
                         throw new DataException("No valid records found to complete the request. Please see the error log for more details");
 
-                    Model.ExecuteCalculatedFields(table1, table2, cancelToken);                   
+                    Model.CompareModelStatus += this.CompareModelStatus;
+                    Model.ExecuteCalculatedFields(table1, table2, cancelToken);
+                    
                     
                     table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
                     CompareMappingHelper.OrderColumns(table1, Model.ColumnCompare.Where(w=> w.Selected).ToList());                    

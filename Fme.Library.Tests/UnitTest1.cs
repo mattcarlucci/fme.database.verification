@@ -55,7 +55,7 @@ namespace Fme.Library.Tests
             DqlDataSource dql = new DqlDataSource(builder.ConnectionString);
 
             QueryBuilder query = dql.GetQueryBuilder();
-            var select = query.BuildSql("r_object_id", new string[] { "keywords", "authors" }, "dm_cabinet", "left", "0", "r_object_id", new string[] { "0c00301880000104" } );
+            var select = query.BuildSql("r_object_id", new string[] { "keywords", "authors" }, "dm_cabinet", "left", "0", "r_object_id", new string[] { "0c00301880000104" }, null );
             var table = dql.ExecuteQuery(select, token);
             
 
@@ -93,7 +93,7 @@ namespace Fme.Library.Tests
 
 
             var query = dql.GetQueryBuilder();
-            var select = query.BuildSql("r_object_id", new string[] { "keywords", "authors", "r_object_id" }, "dm_cabinet", "", "0", "r_object_id", new string[] { "0c00301880000104" } );
+            var select = query.BuildSql("r_object_id", new string[] { "keywords", "authors", "r_object_id" }, "dm_cabinet", "", "0", "r_object_id", new string[] { "0c00301880000104" }, null );
             var table = dql.ExecuteQuery(select);
             dql.SetAliases(table.Tables[0], "right");
 
@@ -113,7 +113,7 @@ namespace Fme.Library.Tests
 
 
             var query = dql.GetQueryBuilder();
-            var select = query.BuildSql("keywords", new string[] {"r_object_id", "keywords", "authors" }, "dm_cabinet", "left", "0", "r_object_id", new string[] { "0c00301880000104" });
+            var select = query.BuildSql("keywords", new string[] {"r_object_id", "keywords", "authors" }, "dm_cabinet", "left", "0", "r_object_id", new string[] { "0c00301880000104" }, null);
             var table = dql.ExecuteQuery(select);
             Assert.AreEqual(table.Tables.Count, 1);
             Assert.AreEqual(table.Tables[0].Rows.Count, 1);
@@ -126,7 +126,7 @@ namespace Fme.Library.Tests
             var x = dql.GetConnectionStringBuilder();       
 
             var query = dql.GetQueryBuilder();
-            var select = query.BuildSql("keywords", new string[] { "r_object_id", "keywords", "authors" }, "dm_cabinet", "left", "0", "r_object_id", new string[] { "0c0030188000010X" });
+            var select = query.BuildSql("keywords", new string[] { "r_object_id", "keywords", "authors" }, "dm_cabinet", "left", "0", "r_object_id", new string[] { "0c0030188000010X" }, null);
             var table = dql.ExecuteQuery(select);
             Assert.AreEqual(table.Tables.Count,0);
           //  Assert.AreEqual(table.Tables[0].Rows.Count, 1);
@@ -157,7 +157,7 @@ namespace Fme.Library.Tests
             OleDbDataSource dql = new OleDbDataSource(builder.ConnectionString);
 
             QueryBuilder query = dql.GetQueryBuilder();
-            var select = query.BuildSql("r_object_id", new string[] { "object_name", "r_object_type" }, "Sheet1$", "left", "0", "r_object_id", new string[] { "090200f1800de14c" } );
+            var select = query.BuildSql("r_object_id", new string[] { "object_name", "r_object_type" }, "Sheet1$", "left", "0", "r_object_id", new string[] { "090200f1800de14c" }, null );
             var table = dql.ExecuteQuery(select);
             Assert.AreEqual(table.Tables.Count, 1);
             Assert.AreEqual(table.Tables[0].Rows.Count, 1);
@@ -173,7 +173,7 @@ namespace Fme.Library.Tests
             OleDbDataSource dql = new OleDbDataSource(builder.ConnectionString);
 
             QueryBuilder query = dql.GetQueryBuilder();
-            var select = query.BuildSql("ID", new string[] { "City", "Company" }, "Customers", "left", "0", "ID", new int[] { 1,2 });
+            var select = query.BuildSql("ID", new string[] { "City", "Company" }, "Customers", "left", "0", "ID", new int[] { 1,2 }, null);
             var table = dql.ExecuteQuery(select);
             Assert.AreEqual(table.Tables.Count, 1);
             Assert.AreEqual(table.Tables[0].Rows.Count, 2);
@@ -338,11 +338,11 @@ namespace Fme.Library.Tests
             var qb1 = dql1.GetQueryBuilder();
             var cb2 = dql1.GetConnectionStringBuilder();
 
-            qb1.BuildSql("r_object_id2", new string[] { "r_object_id2", "r_object_type" }, "Sheet1$", "right", "0");
+            qb1.BuildSql("r_object_id2", new string[] { "r_object_id2", "r_object_type" }, "Sheet1$", "right", "0", null);
 
 
             QueryBuilder query = new QueryBuilder();
-            var select1 = query.BuildSql("r_object_id", new string[] { "object_name", "r_object_type" }, "Sheet1$", "", "0");
+            var select1 = query.BuildSql("r_object_id", new string[] { "object_name", "r_object_type" }, "Sheet1$", "", "0", null);
             var table1 = dql1.ExecuteQuery(select1);
             dql1.SetAliases(table1.Tables[0], "left");
 
@@ -353,7 +353,7 @@ namespace Fme.Library.Tests
             var schema2 = dql2.GetSchemaModel("Sheet1$");
 
             
-            var select2 = query.BuildSql("r_object_id", new string[] { "r_object_id2", "r_object_type" }, "Sheet1$", "", "0");
+            var select2 = query.BuildSql("r_object_id", new string[] { "r_object_id2", "r_object_type" }, "Sheet1$", "", "0", null);
             var table2 = dql2.ExecuteQuery(select2);
             dql2.SetAliases(table2.Tables[0], "right");
 
@@ -480,7 +480,7 @@ namespace Fme.Library.Tests
             var ints = Array.ConvertAll(strings, int.Parse);
             
             QueryBuilder query = dql.GetQueryBuilder();
-            var select = query.BuildSql("ID", new string[] { "City", "Company" }, "Customers", "left", "0", "ID", ints);
+            var select = query.BuildSql("ID", new string[] { "City", "Company" }, "Customers", "left", "0", "ID", ints, null);
             var table = dql.ExecuteQuery(select);
 
         }

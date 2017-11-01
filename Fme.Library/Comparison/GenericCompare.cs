@@ -100,7 +100,7 @@ namespace Fme.Library.Comparison
                 var r = x.Transform(right, parms.Offset2);
                 return Execute(l, r, ops);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 //temp for now
                 left = left.Replace("nulldate", "");

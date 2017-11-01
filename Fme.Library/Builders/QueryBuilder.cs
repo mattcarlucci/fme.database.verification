@@ -50,6 +50,9 @@ namespace Fme.Library
         /// <returns>System.String.</returns>
         public string CreateInClause(string field, string[] inValues)
         {
+            if (inValues[0].Contains("where"))
+                return inValues[0];
+
             return string.Join(" or ", GetInClauses(field, inValues));
         }
 
@@ -186,16 +189,16 @@ namespace Fme.Library
         /// <param name="fields">The fields.</param>
         /// <param name="strings">The strings.</param>
         /// <returns>System.String.</returns>
-        public virtual string BuildSql(DataSourceModel source, string[] fields, string[] inValues)
+        public virtual string BuildSql(DataSourceModel source, string[] fields, string[] inValues, string filter)
         {
             if (inValues == null)
-                return BuildSql(source.Key, fields, source.SelectedTable, string.Empty, source.MaxRows);
+                return BuildSql(source.Key, fields, source.SelectedTable, string.Empty, source.MaxRows, filter);
 
             if (source.KeyType == typeof(string) || source.KeyType == typeof(DateTime) || source.KeyType == null)
-                return BuildSql(source.Key, fields, source.SelectedTable, string.Empty, source.MaxRows, source.Key, inValues);
+                return BuildSql(source.Key, fields, source.SelectedTable, string.Empty, source.MaxRows, source.Key, inValues, filter);
 
             var ints = Array.ConvertAll(inValues, int.Parse);
-            return BuildSql(source.Key, fields, source.SelectedTable, string.Empty, source.MaxRows, source.Key, ints);
+            return BuildSql(source.Key, fields, source.SelectedTable, string.Empty, source.MaxRows, source.Key, ints, filter);
         }
         
         /// <summary>
@@ -208,10 +211,10 @@ namespace Fme.Library
         /// <param name="inField">The in field.</param>
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
-        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues )
+        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues, string filter )
         {           
             if (inValues == null)            
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
+                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows, filter);
                             
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inClause = BuildInValues(inField, inValues.Distinct().ToArray());
@@ -241,10 +244,10 @@ namespace Fme.Library
         /// <param name="inField">The in field.</param>
         /// <param name="inValues">The in values.</param>
         /// <returns>System.String.</returns>
-        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues)
+        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues, string filter)
         {
             if (inValues == null)
-                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows);
+                return BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows, filter);
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
@@ -260,10 +263,11 @@ namespace Fme.Library
         /// <param name="tableName">Name of the table.</param>
         /// <param name="aliasPrefix">The alias prefix.</param>
         /// <returns>System.String.</returns>
-        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows)
+        public virtual string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string filter)
         {           
             var aliases = BuildFieldAliases(fields, aliasPrefix);
-            return string.Format("select {0} as primary_key, {1} from [{2}] where {0} IS NOT NULL", primaryKey, aliases, tableName);
+            filter = string.IsNullOrEmpty(filter) ? "" : " AND " + filter;
+            return string.Format("select {0} as primary_key, {1} from [{2}] where {0} IS NOT NULL {0}", primaryKey, aliases, tableName, filter);
         }
         
         /// <summary>

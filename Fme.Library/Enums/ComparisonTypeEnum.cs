@@ -15,6 +15,7 @@ namespace Fme.Library.Enums
         public const string Source = Left;
         public const string Target = Right;
         public const string Primary_Key = "primary_key";
+        public const string Debug = @".\debug\";
     }
     public enum Sources
     {

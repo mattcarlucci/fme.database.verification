@@ -225,11 +225,11 @@ namespace Fme.Library
         /// <param name="inValues">The in values.</param>
         /// <param name="aliasPrefix">The alias prefix.</param>
         /// <returns>System.String.</returns>
-        public override string FormatSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows,string inField, string[] inValues)
-        {
-            DqlQueryBuilder builder = new DqlQueryBuilder();
-            return builder.BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows, inField, inValues);
-        }
+        //public override string FormatSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows,string inField, string[] inValues)
+        //{
+        //    DqlQueryBuilder builder = new DqlQueryBuilder();
+        //    return builder.BuildSql(primaryKey, fields, tableName, aliasPrefix, maxRows, inField, inValues);
+        //}
 
         /// <summary>
         /// Formats the SQL.
@@ -242,10 +242,10 @@ namespace Fme.Library
         /// <param name="inValues">The in values.</param>
         /// <param name="aliasPrefix">The alias prefix.</param>
         /// <returns>System.String.</returns>
-        public override string FormatSql(QueryBuilder builder, string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues)
-        {
-            return base.FormatSql(builder, primaryKey, fields, tableName, aliasPrefix, maxRows, inField, inValues);
-        }
+        //public override string FormatSql(QueryBuilder builder, string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, string[] inValues)
+        //{
+        //    return base.FormatSql(builder, primaryKey, fields, tableName, aliasPrefix, maxRows, inField, inValues);
+        //}
               
        
 

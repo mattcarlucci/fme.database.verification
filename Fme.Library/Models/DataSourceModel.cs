@@ -64,7 +64,7 @@ namespace Fme.Library.Models
         /// Gets or sets the identifier list file.
         /// </summary>
         /// <value>The identifier list file.</value>
-        public string IdListFile { get; set; }
+        public string IdListFile { get; set; }              
         /// <summary>
         /// Gets or sets the selected table.
         /// </summary>
@@ -86,6 +86,7 @@ namespace Fme.Library.Models
         /// </summary>
         /// <value>The time zone offset.</value>
         public int TimeZoneOffset { get; set; }
+               
 
         /// <summary>
         /// Determines whether [is key string].
