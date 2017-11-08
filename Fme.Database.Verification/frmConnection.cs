@@ -173,7 +173,7 @@ namespace Fme.Database.Verification
         private void CreateDocumentum()
         {
             DqlConnectionStringBuilder builder = new DqlConnectionStringBuilder(txtUserId.Text, txtPassword.Text, btnDataSource.Text);
-            builder["Extended Properties"] = txtExt.Text;
+            builder["Extended Properties"] = txtExt.Text.Trim('\'', '\"');
             Model.DataSource = new DqlDataSource(builder.ConnectionString);
             Model.TableSchemas = Model.DataSource.GetSchemaModel();
             Model.DataSource.ProviderName = "OpenText Documentum";
@@ -220,6 +220,7 @@ namespace Fme.Database.Verification
             });
                         
             pbar.Visible = false;
+            lblMessage.Text = DqlConnection.DefaultBrokerHost;
             return;           
         }
 
@@ -358,6 +359,16 @@ namespace Fme.Database.Verification
         private void TestDocumentum()
         {
             DqlConnectionStringBuilder builder = new DqlConnectionStringBuilder(txtUserId.Text, txtPassword.Text, btnDataSource.Text);
+            builder["Extended Properties"] = txtExt.Text;
+
+            DqlDataSource ds = new DqlDataSource(builder.ConnectionString);
+
+            if (ds.UseExternalQueryEngine())
+            {                
+                ds.TestConnection();
+                return;
+            }
+
             using (DqlConnection cn = new DqlConnection(builder.ConnectionString))
             {
                 cn.Open();

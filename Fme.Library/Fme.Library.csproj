@@ -68,6 +68,7 @@
     <Compile Include="DataSources\OleDbDatatypeMapping.cs" />
     <Compile Include="EventArgs\CalculatedQueryEventArgs.cs" />
     <Compile Include="EventArgs\CompareModelEventArgs.cs" />
+    <Compile Include="Exceptions\ExternalQueryException.cs" />
     <Compile Include="Extensions\DataSetExtensions.cs" />
     <Compile Include="Extensions\DataTableExtensions.cs" />
     <Compile Include="Extensions\DeprecatedAttribute.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Models\CompareResultModel.cs" />
     <Compile Include="Models\DataSourceModel.cs" />
     <Compile Include="Models\ErrorMessageModel.cs" />
+    <Compile Include="Models\ExternalQueryModel.cs" />
     <Compile Include="Models\FieldSchemaModel.cs" />
     <Compile Include="Models\PublicOptions.cs" />
     <Compile Include="Models\QueryMessageModel.cs" />

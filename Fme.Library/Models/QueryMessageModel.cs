@@ -27,6 +27,11 @@ namespace Fme.Library.Models
     /// </summary>
     public class QueryMessageModel
     {
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        /// <value>The name.</value>
         public string Name { get; set; }
         /// <summary>
         /// Gets or sets the start time.
@@ -101,6 +106,23 @@ namespace Fme.Library.Models
             this.EndTime = endTime;
             this.Count = count;
             this.Sql = sql;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QueryMessageModel"/> class.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="startTime">The start time.</param>
+        /// <param name="endTime">The end time.</param>
+        /// <param name="sql">The SQL.</param>
+        /// <param name="count">The count.</param>
+        public QueryMessageModel(string name, DateTime startTime, DateTime endTime, string sql, int count)
+        {
+            this.Name = name;
+            this.StartTime = startTime;
+            this.EndTime = endTime;            
+            this.Sql = sql;
+            this.Count = count;
         }
 
         /// <summary>

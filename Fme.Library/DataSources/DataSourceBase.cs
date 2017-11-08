@@ -33,7 +33,11 @@ namespace Fme.Library
     [XmlInclude(typeof(DqlDataSource))]
     [XmlInclude(typeof(SqlDataSource))]    
     public abstract class DataSourceBase
-    {       
+    {        
+        /// <summary>
+        /// Gets or sets the name of the provider.
+        /// </summary>
+        /// <value>The name of the provider.</value>
         public string ProviderName { get; set; }
         /// <summary>
         /// Gets or sets the connection string.
@@ -46,7 +50,7 @@ namespace Fme.Library
         /// <param name="select">The select.</param>
         /// <returns>DataSet.</returns>
         public abstract DataSet ExecuteQuery(string select);
-
+                
         public string[] Map(string[] fields)
         {
             Dictionary<string, int> map = new Dictionary<string, int>();

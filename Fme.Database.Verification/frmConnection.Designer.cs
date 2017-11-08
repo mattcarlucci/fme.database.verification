@@ -44,6 +44,7 @@
             this.cbProviders = new DevExpress.XtraEditors.ComboBoxEdit();
             this.btnDataSource = new DevExpress.XtraEditors.ComboBoxEdit();
             this.pbar = new DevExpress.XtraEditors.MarqueeProgressBarControl();
+            this.lblMessage = new DevExpress.XtraEditors.LabelControl();
             ((System.ComponentModel.ISupportInitialize)(this.txtUserId.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPassword.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtExt.Properties)).BeginInit();
@@ -197,11 +198,19 @@
             this.pbar.TabIndex = 15;
             this.pbar.Visible = false;
             // 
+            // lblMessage
+            // 
+            this.lblMessage.Location = new System.Drawing.Point(110, 181);
+            this.lblMessage.Name = "lblMessage";
+            this.lblMessage.Size = new System.Drawing.Size(0, 13);
+            this.lblMessage.TabIndex = 16;
+            // 
             // frmConnection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(408, 249);
+            this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.pbar);
             this.Controls.Add(this.cbProviders);
             this.Controls.Add(this.btnTestCn);
@@ -251,5 +260,6 @@
         private DevExpress.XtraEditors.ComboBoxEdit cbProviders;
         private DevExpress.XtraEditors.ComboBoxEdit btnDataSource;
         private DevExpress.XtraEditors.MarqueeProgressBarControl pbar;
+        private DevExpress.XtraEditors.LabelControl lblMessage;
     }
 }

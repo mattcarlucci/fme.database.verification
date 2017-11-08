@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using Documentum.Interop.DFC;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -20,6 +21,63 @@ using System.Threading.Tasks;
 
 namespace Fme.DqlProvider
 {
+    /// <summary>
+    /// Class KeyValueIndexPair.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="U"></typeparam>
+    public class KeyValueIndexPair<T, U>
+    {
+        /// <summary>
+        /// Gets or sets the key.
+        /// </summary>
+        /// <value>The key.</value>
+        public T Key { get; set; }
+        /// <summary>
+        /// Gets or sets the value.
+        /// </summary>
+        /// <value>The value.</value>
+        public U Value { get; set; }
+        /// <summary>
+        /// Gets or sets the index.
+        /// </summary>
+        /// <value>The index.</value>
+        public int Index { get; set; }
+    }
+    /// <summary>
+    /// Class DictionaryIndex.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="U"></typeparam>
+    /// <seealso cref="System.Collections.Generic.List{Fme.DqlProvider.KeyValueIndexPair{T, U}}" />
+    public class DictionaryIndex<T, U> : List<KeyValueIndexPair<T, U>>
+    {
+        /// <summary>
+        /// Adds the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="index">The index.</param>
+        public virtual void Add(T key, U value, int index)
+        {
+            var pair = new KeyValueIndexPair<T, U>();
+            pair.Key = key;
+            pair.Value = value;
+            pair.Index = index;
+        }
+        /// <summary>
+        /// Adds the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        public virtual void Add(T key, U value)
+        {
+            var pair = new KeyValueIndexPair<T, U>();
+            pair.Key = key;
+            pair.Value = value;
+            pair.Index = -1;
+        }
+    }
     /// <summary>
     /// Class DqlConnectionStringBuilder.
     /// </summary>
@@ -91,6 +149,7 @@ namespace Fme.DqlProvider
         public String Password
         {
             get { return this["Password"] as string; }
+            set { this["Password"] = value; }
         }
         /// <summary>
         /// Gets the repository.
@@ -100,7 +159,46 @@ namespace Fme.DqlProvider
         {
             get { return this.ContainsKey("Data Source") ? this["Data Source"] as string : this["Repository"] as string; }
         }
-        
+
+        /// <summary>
+        /// Sets the extended properties.
+        /// </summary>
+        /// <param name="config">The configuration.</param>
+        public void SetExtendedProperties(IDfTypedObject config)
+        {            
+            foreach (var item in GetExtendedProperties())
+            {
+                var items = item.Key.Split(new string[] { "[", "]" }, StringSplitOptions.RemoveEmptyEntries);
+                if (items.Count() > 1)
+                {
+                    config.setRepeatingString(items.First().Trim(), int.Parse(items.Last().Trim()), item.Value.Trim());
+                }
+                else
+                    config.setString(item.Key.Trim(), item.Value.Trim());
+            }
+           
+        }
+        /// <summary>
+        /// Gets the extended properties.
+        /// </summary>
+        /// <returns>List&lt;KeyValuePair&lt;System.String&gt;&gt;.</returns>
+        public List<KeyValuePair<string, string>> GetExtendedProperties()
+        {         
+            Dictionary<string, string> pairs = new Dictionary<string, string>();
+
+            if (this.ContainsKey("extended properties"))
+            {
+                string ep = this["extended properties"] as string;
+                ep = ep.Trim('\'', '\"');                
+                var items = ep.Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var item in items)
+                {                   
+                    var pair = item.Split(new string[] { "=" }, StringSplitOptions.None);                 
+                    pairs.Add(pair.First().Trim(), pair.Last().Trim());
+                }
+            }
+            return pairs.ToList();
+        }       
 
     }
 }

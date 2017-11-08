@@ -106,9 +106,12 @@ namespace Fme.DqlProvider
                     throw new OperationCanceledException("A cancellation token associated with this operation was canceled");
 
                 DqlConnection cn = cmd.Connection;
+                if (cn == null)
+                    throw new Exception("Connection is null");
+
                 IDfCollection records = cn.ExecuteQuery(cmd);
                 DataTable table = null;
-
+                IDfTypedObject typedObj = null;
                 #region Row Iterator
                 while (records.next())
                 {
@@ -116,7 +119,7 @@ namespace Fme.DqlProvider
                         throw new OperationCanceledException("A cancellation token associated with this operation was canceled");
 
                     CreateTable(ref table, records);
-                    IDfTypedObject typedObj = records.getTypedObject();
+                    typedObj = records.getTypedObject();
 
                     DataRow row = table.NewRow();
                     table.Rows.Add(row);
@@ -135,14 +138,16 @@ namespace Fme.DqlProvider
                     #endregion
                 }
                 #endregion
-
-                records.close();
+                
+                records.close();                
+                records = null; typedObj = null;
 
                 if (table != null)
                     dataSet.Tables.Add(table);
             }
 
             commands.ForEach(item => item.Dispose());
+            
             return 1;
         }
         /// <summary>
@@ -172,11 +177,12 @@ namespace Fme.DqlProvider
 
             DqlDataType converter = new DqlDataType();
             IDfTypedObject typedObj = collection.getTypedObject();
+            IDfAttr attr = null;
 
             int count = collection.getAttrCount();
             for (int i = 0; i < count; i++)
             {
-                IDfAttr attr = collection.getAttr(i);
+                attr = collection.getAttr(i);
                 string field = attr.getName();
 
                 tagDfValueTypes dataType = attr.isRepeating() 
@@ -185,7 +191,10 @@ namespace Fme.DqlProvider
 
                 if (converter.ContainsKey(dataType))
                     table.Columns.Add(converter[dataType](field));
+                
             }
+            typedObj = null;
+            attr = null;
         }
 
         /// <summary>
@@ -377,6 +386,8 @@ namespace Fme.DqlProvider
             base.Dispose(disposing);
             if (disposing)
             {
+                command.Dispose();
+                command = null;
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
             }

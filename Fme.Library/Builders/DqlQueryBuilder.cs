@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Fme.Library.Models;
+using System.Text;
 
 namespace Fme.Library
 {
@@ -56,11 +57,33 @@ namespace Fme.Library
         /// <returns>System.String.</returns>
         protected override string BuildFieldAliases(string[] fields, string alias)
         {
-            if (string.IsNullOrEmpty(alias))
-                return string.Join("\r\n,", fields);
-            else
-                return string.Join("\r\n,", fields.
-                    Select(s => s + " as " + alias + "_" + s));
+            var keys = new Dictionary<string, int>();
+            var sb = new List<string>();
+
+            foreach(var field in fields)
+            {               
+                if (keys.ContainsKey(field) == false)
+                {
+                    keys.Add(field, 0);
+                    sb.Add(field);
+                }
+                else
+                {
+                    keys[field] = keys[field] + 1;
+                    sb.Add(field + " as " + field + keys[field]);                   
+                }
+            }            
+            return string.Join("\r\n   ,", sb);
+
+
+            //int counter = 0;
+            // return String.Join("\r\n,", fields.Select(s => s + " as C" + counter++));
+
+            //if (string.IsNullOrEmpty(alias))
+            //    return string.Join("\r\n,", sb);
+            //else
+            //    return string.Join("\r\n,", sb.
+            //        Select(s => s + " as " + alias + "_" + s));
         }
 
         public override string BuildSql(DataSourceModel source, string[] fields, string[] strings, string filter)
@@ -94,13 +117,13 @@ namespace Fme.Library
             List<string> sqls = new List<string>();
             foreach (var clause in clauses)
             {
-                sqls.Add(string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", 
-                    primaryKey, aliases, _tableName, clause, enabletop));
+                sqls.Add(string.Format("select {5}{0} as primary_key\r\n   ,{1}\r\nfrom {2}\r\nwhere {3} {4}", 
+                    primaryKey, aliases, _tableName, clause, enabletop, fields.Contains("r_object_id") ? "" : "r_object_id, "));
             }
             
             if (sqls.Count() == 0)
-                return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", 
-                    primaryKey, aliases, _tableName, inCaluse, enabletop);
+                return string.Format("select {5}{0} as primary_key\r\n   ,{1}\r\nfrom {2}\r\nwhere {3} {4}", 
+                    primaryKey, aliases, _tableName, inCaluse, enabletop, fields.Contains("r_object_id") ? "" : "r_object_id, ");
 
             return string.Join(";", sqls); 
 
@@ -119,7 +142,7 @@ namespace Fme.Library
         public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string inField, int[] inValues, string filter)
         {
             if (inValues == null)
-                return BuildSql(primaryKey, fields.Distinct().ToArray(), tableName, aliasPrefix, maxRows, filter);
+                return BuildSql(primaryKey, fields.ToArray(), tableName, aliasPrefix, maxRows, filter);
 
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             var inCaluse = BuildInValues(inField, inValues);
@@ -127,7 +150,7 @@ namespace Fme.Library
             var enabletop = "";
             tableName = IncludeVersion ? tableName + " (all) " : tableName;
 
-            return string.Format("select r_object_id, {0} as primary_key, {1} from {2} where {3} {4}", primaryKey, aliases, tableName, inCaluse, enabletop);
+            return string.Format("select {5}{0} as primary_key\r\n   ,{1}\r\nfrom {2}\r\nwhere {3} {4}", primaryKey, aliases, tableName, inCaluse, enabletop, fields.Contains("r_object_id") ? "" : "r_object_id, ");
         }
         /// <summary>
         /// Builds the SQL.
@@ -139,16 +162,16 @@ namespace Fme.Library
         /// <returns>System.String.</returns>
         public override string BuildSql(string primaryKey, string[] fields, string tableName, string aliasPrefix, string maxRows, string filter)
         {
-            filter = string.IsNullOrEmpty(filter) ? "" : " WHERE " + filter;
+            filter = string.IsNullOrEmpty(filter) ? "" : "WHERE " + filter;
 
-            var aliases = BuildFieldAliases(fields.Distinct().ToArray(), aliasPrefix);
+            var aliases = BuildFieldAliases(fields.ToArray(), aliasPrefix);
                        
             tableName = IncludeVersion ? tableName + " (all) " : tableName;
 
             string enabletop = string.Format("enable(return_top {0})", maxRows ?? "0");
             enabletop = !string.IsNullOrEmpty(maxRows) || int.Parse(maxRows ?? "0") > 0 ? enabletop : "";
 
-            return string.Format("select r_object_id, {0} as primary_key, {1} from {2} {3} {4}", primaryKey, aliases, tableName, filter, enabletop);
+            return string.Format("select {5}{0} as primary_key\r\n   ,{1}\r\nfrom {2}\r\n{3} {4}", primaryKey, aliases, tableName, filter, enabletop, fields.Contains("r_object_id") ? "" : "r_object_id, ");
         }
     }
 }

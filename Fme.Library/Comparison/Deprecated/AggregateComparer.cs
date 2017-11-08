@@ -1,7 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using Fme.Library.Models;
+using System.Collections.Generic;
+using System;
 
 namespace Fme.Library.Comparison
 {
+    public class MappingModelComparer : IEqualityComparer<CompareMappingModel>
+    {
+        public bool Equals(CompareMappingModel x, CompareMappingModel y)
+        {
+            return (x.LeftSide + x.RightSide) == (y.LeftSide + y.RightSide);
+        }
+
+        public int GetHashCode(CompareMappingModel obj)
+        {
+            var key = obj.LeftSide + obj.RightSide;
+            return key.GetHashCode();
+        }
+    }
     /// <summary>
     /// Class AggregateComparer.
     /// </summary>

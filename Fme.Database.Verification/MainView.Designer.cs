@@ -32,15 +32,15 @@ namespace Fme.Database.Verification
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            DevExpress.Utils.SuperToolTip superToolTip7 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem7 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip8 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem8 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip5 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem5 = new DevExpress.Utils.ToolTipTitleItem();
+            DevExpress.Utils.SuperToolTip superToolTip6 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem6 = new DevExpress.Utils.ToolTipTitleItem();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainView));
-            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem1 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem2 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip3 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem3 = new DevExpress.Utils.ToolTipTitleItem();
-            DevExpress.Utils.SuperToolTip superToolTip4 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipTitleItem toolTipTitleItem4 = new DevExpress.Utils.ToolTipTitleItem();
             this.compareMappingModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
             this.bar1 = new DevExpress.XtraBars.Bar();
@@ -523,9 +523,9 @@ namespace Fme.Database.Verification
             this.btnExecute.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnExecute.ImageOptions.LargeImage")));
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem1.Text = "Execute a Compare";
-            superToolTip1.Items.Add(toolTipTitleItem1);
-            this.btnExecute.SuperTip = superToolTip1;
+            toolTipTitleItem7.Text = "Execute a Compare";
+            superToolTip7.Items.Add(toolTipTitleItem7);
+            this.btnExecute.SuperTip = superToolTip7;
             this.btnExecute.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnExecute_ItemClick);
             // 
             // btnCancel
@@ -536,9 +536,9 @@ namespace Fme.Database.Verification
             this.btnCancel.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("btnCancel.ImageOptions.LargeImage")));
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem2.Text = "Cancel Execution";
-            superToolTip2.Items.Add(toolTipTitleItem2);
-            this.btnCancel.SuperTip = superToolTip2;
+            toolTipTitleItem8.Text = "Cancel Execution";
+            superToolTip8.Items.Add(toolTipTitleItem8);
+            this.btnCancel.SuperTip = superToolTip8;
             this.btnCancel.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.btnCancel_ItemClick);
             // 
             // btnRefresh
@@ -702,9 +702,9 @@ namespace Fme.Database.Verification
             this.barButtonItem4.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem4.ImageOptions.LargeImage")));
             this.barButtonItem4.Name = "barButtonItem4";
             this.barButtonItem4.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem3.Text = "Select the Source Data";
-            superToolTip3.Items.Add(toolTipTitleItem3);
-            this.barButtonItem4.SuperTip = superToolTip3;
+            toolTipTitleItem5.Text = "Select the Source Data";
+            superToolTip5.Items.Add(toolTipTitleItem5);
+            this.barButtonItem4.SuperTip = superToolTip5;
             // 
             // popupMenu1
             // 
@@ -740,9 +740,9 @@ namespace Fme.Database.Verification
             this.barButtonItem5.ImageOptions.LargeImage = ((System.Drawing.Image)(resources.GetObject("barButtonItem5.ImageOptions.LargeImage")));
             this.barButtonItem5.Name = "barButtonItem5";
             this.barButtonItem5.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
-            toolTipTitleItem4.Text = "Select the Target Data";
-            superToolTip4.Items.Add(toolTipTitleItem4);
-            this.barButtonItem5.SuperTip = superToolTip4;
+            toolTipTitleItem6.Text = "Select the Target Data";
+            superToolTip6.Items.Add(toolTipTitleItem6);
+            this.barButtonItem5.SuperTip = superToolTip6;
             // 
             // popupMenu2
             // 
@@ -948,7 +948,7 @@ namespace Fme.Database.Verification
             this.xtraTabPage8.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage8.Image")));
             this.xtraTabPage8.Name = "xtraTabPage8";
             this.xtraTabPage8.Size = new System.Drawing.Size(382, 150);
-            this.xtraTabPage8.Text = "Source";
+            this.xtraTabPage8.Text = "Target";
             // 
             // chkTargetVersions
             // 
@@ -1042,9 +1042,9 @@ namespace Fme.Database.Verification
             this.labelControl6.Location = new System.Drawing.Point(24, 100);
             this.labelControl6.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.labelControl6.Name = "labelControl6";
-            this.labelControl6.Size = new System.Drawing.Size(79, 13);
+            this.labelControl6.Size = new System.Drawing.Size(78, 13);
             this.labelControl6.TabIndex = 36;
-            this.labelControl6.Text = "Source Key Field";
+            this.labelControl6.Text = "Target Key Field";
             // 
             // labelControl4
             // 
@@ -1104,7 +1104,7 @@ namespace Fme.Database.Verification
             this.xtraTabPage6.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage6.Image")));
             this.xtraTabPage6.Name = "xtraTabPage6";
             this.xtraTabPage6.Size = new System.Drawing.Size(392, 150);
-            this.xtraTabPage6.Text = "Target";
+            this.xtraTabPage6.Text = "Source";
             // 
             // chkSourceVersions
             // 
@@ -1208,9 +1208,9 @@ namespace Fme.Database.Verification
             this.labelControl3.Location = new System.Drawing.Point(24, 95);
             this.labelControl3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.labelControl3.Name = "labelControl3";
-            this.labelControl3.Size = new System.Drawing.Size(78, 13);
+            this.labelControl3.Size = new System.Drawing.Size(79, 13);
             this.labelControl3.TabIndex = 44;
-            this.labelControl3.Text = "Target Key Field";
+            this.labelControl3.Text = "Source Key Field";
             // 
             // btnSourceData
             // 

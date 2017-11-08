@@ -346,6 +346,7 @@ namespace Fme.Database.Verification
             chkSourceRandom.Enabled = !value;
             chkSourceVersions.Enabled = !value;
             chkTargetVersions.Enabled = !value;
+            navGridMappings.Enabled = !value;
 
             GridControl[] configGrids = { gridMappings ,gridCalcFields, gridFieldLookup };
 
@@ -374,7 +375,7 @@ namespace Fme.Database.Verification
                 currentTask.Dispose();
                 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
@@ -405,8 +406,30 @@ namespace Fme.Database.Verification
                         MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                     return;
                 }
-                model.ColumnCompare = CompareMappingHelper.
+
+              //  if (model.ColumnCompare.Count > 0)
+              //      return;
+
+                var temp = CompareMappingHelper.
                     GetPairs(model.Source.SelectedSchema(), model.Target.SelectedSchema());
+
+                List<CompareMappingModel> items = new List<CompareMappingModel>();
+                foreach (var item in temp)
+                {
+                    if (model.ColumnCompare.Where(w => w.LeftSide == item.LeftSide && w.RightSide == item.RightSide).SingleOrDefault() == null)
+                        model.ColumnCompare.Add(item);
+
+                }
+               //foreach (var item in model.ColumnCompare)
+               // {
+               //     var addnew = temp.Where(w => w.LeftSide == item.LeftSide && w.RightSide == item.RightSide).SingleOrDefault();
+               //     if (addnew == null)
+               //         items.Add(item);
+               // }                
+               // model.ColumnCompare.AddRange(items.Distinct(new MappingModelComparer()));
+
+               // //var x =  model.ColumnCompare.Distinct(new MappingModelComparer()).ToList();
+                //model.ColumnCompare = x;
 
                 bsMappings.DataSource = model.ColumnCompare;
                 gridMappings.DataSource = bsMappings;
@@ -499,14 +522,17 @@ namespace Fme.Database.Verification
         {
             //"Supported Files (*.txt;*.csv;*.sql)|*.txt;*.csv;*.sql|Text File *.txt;*.csv|*.txt;*.csv|SQL Filter *.sql|*.sql"
             ButtonEdit edit = sender as ButtonEdit;
+            string initFolder = string.IsNullOrEmpty(edit?.Text) ? Directory.GetCurrentDirectory() : edit.Text;
+
             OpenFileDialog dlg = new OpenFileDialog()
             {
                 //Filter = "Supported Files (*.txt;*.csv)|*.txt;*.csv"
                 Filter = "Supported Files (*.txt;*.csv;*.sql)|*.txt;*.csv;*.sql|Text File *.txt;*.csv|*.txt;*.csv|SQL Filter *.sql|*.sql"
-                , InitialDirectory = Path.GetDirectoryName(edit?.Text)
-              //  , FileName = Path.GetFileName(edit?.Text)
+            //    , InitialDirectory = Path.GetDirectoryName(initFolder)
+              //  , FileName = Path.GetFileName(edit?.Text ?? Directory.GetCurrentDirectory())
             };
-            dlg.FileName = Path.GetFileName(edit?.Text);
+            dlg.InitialDirectory = initFolder;
+            dlg.FileName = Path.GetFileName(initFolder);
 
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
@@ -2074,17 +2100,20 @@ namespace Fme.Database.Verification
         private void CalculatedFields_OnShowFileDialog(object sender, ButtonPressedEventArgs e)
         {
             ButtonEdit edit = sender as ButtonEdit;
-
+            string initFolder = string.IsNullOrEmpty(edit?.Text) ? Directory.GetCurrentDirectory() : edit.Text;
             OpenFileDialog dlg = new OpenFileDialog()
             {
                 Filter = "DQL/SQL files (*.dql, *.sql)|*.dql;*.sql|All files (*.*)|*.*",
-                InitialDirectory = Path.GetDirectoryName(edit.Text),
-                FileName = Path.GetFileName(edit.Text)
+               // InitialDirectory = Path.GetDirectoryName(initFolder),
+              //  FileName = Path.GetFileName(edit.Text)
                
             };
+            dlg.InitialDirectory = Path.GetDirectoryName(initFolder);
+            dlg.FileName = Path.GetFileName(initFolder);
+
             if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.Cancel) return;
 
-           
+          
             edit.Text = dlg.FileName;
         }
 

@@ -132,6 +132,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Extern.Dql.Executor\Extern.Dql.Executor.csproj">
+      <Project>{ae951c52-de41-416b-88cb-e13837b265c2}</Project>
+      <Name>Extern.Dql.Executor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Fme.DqlProvider\Fme.DqlProvider.csproj">
       <Project>{3588db7e-8962-4505-bc6b-d43de0af4bce}</Project>
       <Name>Fme.DqlProvider</Name>

@@ -23,6 +23,9 @@ using System.Threading.Tasks;
 using System.Data.Common;
 using System.Collections;
 using Fme.Library.Extensions;
+using System.Diagnostics;
+using System.IO;
+using Fme.Library.Exceptions;
 
 namespace Fme.Library
 {
@@ -67,6 +70,14 @@ namespace Fme.Library
             }
         }
         /// <summary>
+        /// Uses the external query engine.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool UseExternalQueryEngine()
+        {
+            return File.Exists("UseExternalQuery.prop");
+        }
+        /// <summary>
         /// Executes the query.
         /// </summary>
         /// <param name="select">The select.</param>
@@ -74,6 +85,9 @@ namespace Fme.Library
         /// <returns>DataSet.</returns>
         public override DataSet ExecuteQuery(string select, CancellationToken token)
         {
+            if (UseExternalQueryEngine())
+                return ExecuteQueryExternal(select);
+
             DataSet dataSet = null;           
             
             using (var cn = new DqlConnection(ConnectionString))
@@ -90,6 +104,31 @@ namespace Fme.Library
             }
             return dataSet;
         }
+              
+        /// <summary>
+        /// Executes the external query.
+        /// </summary>
+        /// <param name="select">The select.</param>
+        /// <returns>DataSet.</returns>
+        /// <exception cref="System.Exception"></exception>
+        private DataSet ExecuteQueryExternal(string select)
+        {
+            ExternalQueryModel model = new ExternalQueryModel(DateTime.Now.Ticks.ToString());
+            try
+            {
+                var results = model.ExecuteQuery(this.ConnectionString, select);                
+                return results;
+            }
+            catch(Exception ex)
+            {
+                throw ex;              
+            }
+            finally
+            {
+                model.PerformCleanup();
+            }
+        }
+
         /// <summary>
         /// Executes the query.
         /// </summary>
@@ -163,9 +202,12 @@ namespace Fme.Library
         /// <returns>List&lt;TableSchemaModel&gt;.</returns>
         public override List<TableSchemaModel> GetSchemaModel()
         {
+            if (UseExternalQueryEngine())
+                return GetSchemaModelExternal();
+
             DqlDataTypeMap map = new DqlDataTypeMap();
             List<TableSchemaModel> tableSchemaModel = new List<TableSchemaModel>();
-
+            
             using (DqlConnection cn = new DqlConnection(ConnectionString))
             {
                 cn.Open();
@@ -179,6 +221,32 @@ namespace Fme.Library
                 }
             }
             return tableSchemaModel;        
+        }
+        public void TestConnection()
+        {
+            string select = "select distinct name from dm_type enable(return_top 1)";
+            ExecuteQueryExternal(select);
+        }
+        /// <summary>
+        /// Gets the schema model external.
+        /// </summary>
+        /// <returns>List&lt;TableSchemaModel&gt;.</returns>
+        public List<TableSchemaModel> GetSchemaModelExternal()
+        {
+            DqlDataTypeMap map = new DqlDataTypeMap();
+            List<TableSchemaModel> tableSchemaModel = new List<TableSchemaModel>();
+
+            string select = "select distinct t.name, t.attr_name, t.attr_type, '0' as min_length, t.attr_length, t.attr_repeating, a.not_null as mandatory from dm_type t, dmi_dd_attr_info a where t.name = a.type_name and t.attr_name = a.attr_name enable(row_based)";
+                        
+            var schema = ExecuteQueryExternal(select).Tables[0].AsEnumerable().GroupBy(g => g.Field<string>("name"));
+
+            foreach (var item in schema)
+            {
+                TableSchemaModel table = new TableSchemaModel();
+                tableSchemaModel.Add(table);
+                FillSchemaModel(table, item);
+            }            
+            return tableSchemaModel;
         }
         /// <summary>
         /// Fills the schema.

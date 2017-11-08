@@ -20,6 +20,8 @@ using System.Threading.Tasks;
 using Documentum.Interop.DFC;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Fme.DqlProvider
 {
@@ -30,8 +32,13 @@ namespace Fme.DqlProvider
     /// <seealso cref="System.ICloneable" />
     /// <seealso cref="System.Data.IDbConnection" />
     public class DqlConnection : DbConnection, ICloneable
-    {             
-
+    {
+        [DllImport("ole32.dll")]
+        public static extern void CoFreeUnusedLibrariesEx(UInt32 unloadDelay, UInt32 reserved);
+        /// <summary>
+        /// The default broker host
+        /// </summary>
+        public static string DefaultBrokerHost = SetDefaultBrokerHost();
         /// <summary>
         /// The state
         /// </summary>
@@ -68,6 +75,11 @@ namespace Fme.DqlProvider
         /// </summary>
         IDfLoginInfo _loginInfoObj = null;
 
+        /// <summary>
+        /// The session identifier
+        /// </summary>
+        private long sessionId = 0;
+
         public List<string> Catalogs { get; private set; }
 
         /// <summary>
@@ -76,19 +88,7 @@ namespace Fme.DqlProvider
         /// <exception cref="System.Exception">Failed creating Documentum client</exception>
         public DqlConnection()
         {
-            _clientx = new DfClientX();
-            _client = _clientx.getLocalClient();
-            if (_client == null)
-                throw new Exception("Failed creating Documentum client");
-
-            IDfDocbaseMap map = _client.getDocbaseMap();
-            Catalogs = new List<string>();
-            int count = map.getDocbaseCount();
-
-            for (int i = 0; i < count; i++)
-            {
-                Catalogs.Add(map.getDocbaseName(i));
-            }
+            sessionId = DateTime.Now.Ticks;
         }
         /// <summary>
         /// Initializes a new instance of the <see cref="DqlConnection"/> class.
@@ -98,6 +98,7 @@ namespace Fme.DqlProvider
             : this()
         {
             this.builder = builder;
+            InitializeBroker();
         }
 
         /// <summary>
@@ -110,6 +111,7 @@ namespace Fme.DqlProvider
         {
             this.credential = credential;
             this.connectionString = connectionString;
+            InitializeBroker();
         }
 
         /// <summary>
@@ -120,8 +122,66 @@ namespace Fme.DqlProvider
             : this()
         {
             this.connectionString = connectionString;
+            InitializeBroker();
         }
 
+        /// <summary>
+        /// Initializes the broker.
+        /// </summary>
+        /// <exception cref="Exception">Failed creating Documentum client</exception>
+        private void InitializeBroker()
+        {
+            
+            //File.AppendAllText("DqlConnect.log", sessionId + " InitalizeBroker\r\n\r\n");
+
+            _clientx = new DfClientX();
+            _client = _clientx.getLocalClient();
+            if (_client == null)
+                throw new Exception("Failed creating Documentum client");
+                              
+            IDfTypedObject config = _client.getClientConfig();
+
+            builder = new DqlConnectionStringBuilder(this.ConnectionString);
+
+            config.setString("dfc.docbroker.host", DefaultBrokerHost ?? SetDefaultBrokerHost());
+            //File.AppendAllText("DqlConnect.log", sessionId + " Broker set to: " + DefaultBrokerHost + Environment.NewLine);
+
+            builder.SetExtendedProperties(config);
+
+            //builder.GetExtendedProperties().ForEach(item =>
+            //{ config.setString(item.Key, item.Value); });
+
+            IDfDocbaseMap map = _client.getDocbaseMap();
+            Catalogs = new List<string>();
+            int count = map.getDocbaseCount();
+
+            for (int i = 0; i < count; i++)
+            {
+                Catalogs.Add(map.getDocbaseName(i));
+            }
+            map = null;
+            config = null;
+        }
+
+        /// <summary>
+        /// Sets the default broker host.
+        /// </summary>
+        /// <returns>System.String.</returns>
+        public static string SetDefaultBrokerHost()
+        {
+            var clientx = new DfClientX();
+            var client = clientx.getLocalClient();
+
+            IDfTypedObject config = client.getClientConfig();
+
+            DefaultBrokerHost = config.getString("dfc.docbroker.host");
+            config = null;      clientx = null;
+            GC.Collect();
+            //FreeDllsNow(0);
+
+            return DefaultBrokerHost;
+
+        }
         /// <summary>
         /// Starts a database transaction.
         /// </summary>
@@ -156,6 +216,7 @@ namespace Fme.DqlProvider
             _loginInfoObj = null;
             _clientx = null;
             _client = null;
+            state = ConnectionState.Closed;
         }
 
         /// <summary>
@@ -241,23 +302,26 @@ namespace Fme.DqlProvider
                 builder.ConnectionString = this.ConnectionString;
             }
 
-            _loginInfoObj = _clientx.getLoginInfo();            
+            _loginInfoObj = _clientx.getLoginInfo();
             _loginInfoObj.setUser(builder.UserId);
             _loginInfoObj.setPassword(builder.Password);
+            //File.AppendAllText("DqlConnect.log", sessionId + " login success\r\n");
 
             try
-            {   
+            {
                 // Create a new session to the requested DocBase
                 _session = _client.newSession(builder.Repository, _loginInfoObj);
                 if (_session == null && !_session.isConnected())
                 {
-                    throw new DqlSessionException("Failed conecting to Documentum");                    
+                    state = ConnectionState.Closed;
+                    throw new DqlSessionException("Failed conecting to Documentum");
                 }
                 state = ConnectionState.Open;
             }
             catch (Exception ex)
             {
-                throw new DqlSessionException("Unable to create session. Make sure the repository is available.", ex);               
+                state = ConnectionState.Closed;
+                throw new DqlSessionException("Unable to create session. Make sure the repository is available.\r\n" + connectionString, ex);
             }
 
         }
@@ -310,19 +374,26 @@ namespace Fme.DqlProvider
             get { return DqlClientFactory.Instance; }
         }
 
-      
+
         /// <summary>
         /// Releases the unmanaged resources used by the <see cref="T:System.ComponentModel.Component" /> and optionally releases the managed resources.
         /// </summary>
         /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
-        {            
+        {
+            //File.AppendAllText("DqlConnect.log", sessionId + " Dispose\r\n");
             base.Dispose(disposing);
 
             if (disposing)
             {
+                this._client = null;
+                this._clientx = null;
+                this._session = null;
+                this._loginInfoObj = null;
+                state = ConnectionState.Closed;
+                //   FreeDllsNow(0);
                 GC.Collect();
-                GC.WaitForPendingFinalizers();
+                // GC.WaitForPendingFinalizers();
             }
         }
 
@@ -400,15 +471,48 @@ namespace Fme.DqlProvider
         /// <returns>IDfCollection.</returns>
         public IDfCollection ExecuteQuery(DqlCommand command)
         {
-            if (state == ConnectionState.Closed)
-                throw new System.InvalidOperationException("Invalid operation. The connection is closed.");            
+            //File.AppendAllText("DqlConnect.log", sessionId + " executing query \r\n");
+            //File.AppendAllText("DqlConnect.log", sessionId + " state " + state + Environment.NewLine);
 
+            if (state == ConnectionState.Closed)
+                throw new System.InvalidOperationException("Invalid operation. The connection is closed.");
+
+            if (_session == null || !_session.isConnected())
+            {
+                throw new DqlSessionException("Invalid Documentum Session");
+            }         
+
+            if (_clientx == null)
+            {
+                throw new Exception("The operation in invalid. Please check the connection and/or connection string and try again.\r\nFailed to retrieve a DQL client object");
+            }
             IDfQuery query = _clientx.getQuery();
+            if (query == null)
+                throw new Exception("IDfQuery object is null");
 
             query.setDQL(command.CommandText);
             query.setBatchSize(10000);
 
             return query.execute(_session, (int)tagDfQueryTypes.IDfQuery_DF_READ_QUERY);
+        }
+
+        /// <summary>
+        /// Frees the DLLS now.
+        /// </summary>
+        /// <param name="pause">The pause.</param>
+        public static void FreeDllsNow(UInt32 pause)
+        {
+            try
+            {                
+                //CoFreeUnusedLibrariesEx(pause, (UInt32)0);
+                //System.Threading.Thread.Sleep((int)pause);
+                //// CoUninitialize();
+            }
+            catch (Exception)
+            {
+                //string exStr = ex.ToString();
+                //Console.WriteLine(exStr);
+            }
         }
     }
 

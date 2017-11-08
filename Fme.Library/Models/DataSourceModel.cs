@@ -138,10 +138,14 @@ namespace Fme.Library.Models
         /// <returns>TableSchemaModel.</returns>
         public TableSchemaModel SelectedSchema()
         {
-            return TableSchemas.Where(w => w.TableName == SelectedTable).FirstOrDefault();
-        }
-        
+            var schema = TableSchemas.Where(w => w.TableName == SelectedTable).FirstOrDefault();
 
-      
+            string error = string.Format("The selected Schema {0} was not found in the data source {1}", 
+                this.SelectedTable, this.DataSource.GetConnectionStringBuilder()["Data source"]);
+
+            if (schema == null)
+                throw new Exception(error);
+            return schema;
+        }  
     }
 }

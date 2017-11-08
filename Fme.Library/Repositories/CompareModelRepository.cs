@@ -118,6 +118,7 @@ namespace Fme.Library.Repositories
             {
                 await Task.Run(() =>
                 {
+                    
                     cancelToken.Token.ThrowIfCancellationRequested();
                     #region Initalize and Reset prior results
                     var pairs = Model.ColumnCompare.Where(w => w.IsCalculated == false && w.Selected).ToList();               
@@ -129,18 +130,17 @@ namespace Fme.Library.Repositories
 
                     QueryBuilder query = Model.Source.DataSource.GetQueryBuilder();            
                     query.IncludeVersion = Model.Source.IncludeVersions;
-
+                                        
                     var select1 = query.BuildSql(Model.Source, pairs.Select(s => s.LeftSide).ToArray(),Model.GetSourceIds(), Model.GetSourceFilter());
-
-                   // var select1 = query.BuildSql(Model.Source.Key, pairs.Select(s => s.LeftSide).ToArray(),
-                   // Model.Source.SelectedTable, string.Empty, Model.Source.MaxRows, Model.Source.Key, Model.GetIdsFromFile());
-
-                    LogQuery(Model.Source, select1, Alias.Left);
-
-                    OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Source, select1, "Executing Source Query..."));
                                        
-                    var data1 = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);                    
-                    if (data1.Tables == null || data1.Tables.Count == 0)
+                    LogQuery(Model.Source, select1, Alias.Left);
+                    OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Source, select1, "Executing Source Query..."));
+                                                            
+                    DateTime start1 = DateTime.Now;
+                    var data1 = Model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
+                    DateTime done1 = DateTime.Now;
+                    
+                    if (data1 == null || data1.Tables == null || data1.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Source.SelectedTable);
 
                     var table1 = data1.MergeAll();
@@ -157,21 +157,19 @@ namespace Fme.Library.Repositories
                     
                     query = Model.Target.DataSource.GetQueryBuilder();
                     query.IncludeVersion = Model.Target.IncludeVersions;
-
-
+                    
                     var select2 = query.BuildSql(Model.Target, pairs.Select(s => s.RightSide).ToArray(), 
                         table1.SelectKeys<string>(Alias.Primary_Key), null);
-
-                    //var select2 = query.BuildSql(Model.Target.Key, pairs.Select(s => s.RightSide).ToArray(),
-                    //    Model.Target.SelectedTable, string.Empty, Model.Target.MaxRows, Model.Target.Key,  
-                    //    table1.SelectKeys<string>(Alias.Primary_Key));
-
+                                        
                     LogQuery(Model.Target, select2, Alias.Right);
 
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Target, select2, "Executing Target Query..."));
-                        
-                    var data2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);                    
-                    if (data2.Tables == null || data2.Tables.Count == 0)
+
+                    DateTime start2 = DateTime.Now;
+                    var data2 = Model.Target.DataSource.ExecuteQuery(select2, cancelToken.Token);
+                    DateTime done2 = DateTime.Now;
+                    
+                    if (data2 == null || data2.Tables == null || data2.Tables.Count == 0)
                         throw new Exception("No data was returned for the selected table " + Model.Target.SelectedTable);
 
                     var table2 = data2.MergeAll();
@@ -212,8 +210,10 @@ namespace Fme.Library.Repositories
 
                     Model.CompareModelStatus += this.CompareModelStatus;
                     Model.ExecuteCalculatedFields(table1, table2, cancelToken);
-                    
-                    
+
+                    Model.Queries.Add(new QueryMessageModel("Source Query", start1, done1, select1, data1.Table().Rows.Count));
+                    Model.Queries.Add(new QueryMessageModel("Target Query", start2, done2, select2, data2.Table().Rows.Count));
+
                     table1.Merge(table2, false, MissingSchemaAction.AddWithKey);
                     CompareMappingHelper.OrderColumns(table1, Model.ColumnCompare.Where(w=> w.Selected).ToList());                    
                     CompareMappingHelper.CompareColumns(this, table1, Model, cancelToken);
