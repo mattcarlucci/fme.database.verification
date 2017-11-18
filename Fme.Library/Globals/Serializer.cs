@@ -35,9 +35,10 @@ namespace Fme.Library
         public static void Serialize<T>(String path, List<T> content)
         {
             XmlSerializer serializer = new XmlSerializer(typeof(List<T>));
-
+            
             using (StreamWriter streamWriter = new StreamWriter(path))
             {
+                
                 serializer.Serialize(streamWriter, content);
             }
         }     

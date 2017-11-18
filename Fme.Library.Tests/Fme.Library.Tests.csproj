@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitTest2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cd_clinical.xlsx">
@@ -74,10 +75,14 @@
     <None Include="dm_document3.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="lookup.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Northwinds.xlsx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="SmartSolve Extract.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fme.DqlProvider\Fme.DqlProvider.csproj">

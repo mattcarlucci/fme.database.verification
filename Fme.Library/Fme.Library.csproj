@@ -66,17 +66,21 @@
     <Compile Include="DataSources\DqlDataSource.cs" />
     <Compile Include="Builders\DqlQueryBuilder.cs" />
     <Compile Include="DataSources\OleDbDatatypeMapping.cs" />
+    <Compile Include="Enums\ReturnTypeEnums.cs" />
     <Compile Include="EventArgs\CalculatedQueryEventArgs.cs" />
     <Compile Include="EventArgs\CompareModelEventArgs.cs" />
+    <Compile Include="EventArgs\ValidationEventArgs.cs" />
     <Compile Include="Exceptions\ExternalQueryException.cs" />
     <Compile Include="Extensions\DataSetExtensions.cs" />
     <Compile Include="Extensions\DataTableExtensions.cs" />
     <Compile Include="Extensions\DeprecatedAttribute.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\EnumerableExtensionExtensions.cs" />
     <Compile Include="Enums\ComparisonTypeEnum.cs" />
     <Compile Include="Enums\DataSourceEnums.cs" />
     <Compile Include="DataSources\ExcelDataSource.cs" />
     <Compile Include="Builders\ExcelDbConnectionStringBuilder.cs" />
+    <Compile Include="Extensions\MacroLibrary.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Globals\GlobalSuppressions.cs" />
     <Compile Include="Extensions\KernelExtensions.cs" />
@@ -100,6 +104,7 @@
     <Compile Include="EventArgs\DataTableEventArgs.cs" />
     <Compile Include="Globals\Serializer.cs" />
     <Compile Include="DataSources\SqlDataSource.cs" />
+    <Compile Include="Repositories\ValidatorRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fme.DqlProvider\Fme.DqlProvider.csproj">

@@ -148,7 +148,7 @@ namespace Fme.Database.Verification
                 ["Password"] = txtPassword.Text
             };
             Model.DataSource = new SqlDataSource(builder.ConnectionString);
-            Model.TableSchemas = Model.DataSource.GetSchemaModel();
+            Model.RefreshSchemaModel();
             Model.DataSource.ProviderName = "Microsoft Sql Server";
         }
 
@@ -163,7 +163,7 @@ namespace Fme.Database.Verification
                 ["Password"] = txtPassword.Text
             };
             Model.DataSource = new AccessDataSource(builder.ConnectionString);
-            Model.TableSchemas = Model.DataSource.GetSchemaModel();
+            Model.RefreshSchemaModel();            
             Model.DataSource.ProviderName = "Microsoft Access";
         }
 
@@ -175,7 +175,8 @@ namespace Fme.Database.Verification
             DqlConnectionStringBuilder builder = new DqlConnectionStringBuilder(txtUserId.Text, txtPassword.Text, btnDataSource.Text);
             builder["Extended Properties"] = txtExt.Text.Trim('\'', '\"');
             Model.DataSource = new DqlDataSource(builder.ConnectionString);
-            Model.TableSchemas = Model.DataSource.GetSchemaModel();
+            Model.RefreshSchemaModel();
+            
             Model.DataSource.ProviderName = "OpenText Documentum";
         }
 
@@ -191,7 +192,27 @@ namespace Fme.Database.Verification
                 ["Extended Properties"] = txtExt.Text
             };
             Model.DataSource = new ExcelDataSource(builder.ConnectionString);
-            Model.TableSchemas = Model.DataSource.GetSchemaModel();
+            Model.RefreshSchemaModel();
+
+            //var macros = Model.TableSchemas.SelectMany(s => s.Fields).
+            //    Where(w => string.IsNullOrEmpty(w.ValidationMacros) == false);
+
+            //var schema = Model.DataSource.GetSchemaModel();
+
+            //foreach (var macro in macros)
+            //{
+            //   // var item = Model.TableSchemas.Where(w => w.TableName == macro.TableName).SingleOrDefault().
+            //   //     Fields.Where(w => w.Name == macro.Name).SingleOrDefault();
+
+            //    var item = schema.Where(w => w.TableName == macro.TableName).SingleOrDefault().
+            //        Fields.Where(w => w.Name == macro.Name).SingleOrDefault();
+
+            //    if (item != null)
+            //        item.ValidationMacros = macro.ValidationMacros;
+                
+            //}
+
+            //Model.TableSchemas = schema;
             Model.DataSource.ProviderName = "Microsoft Excel";
         }
 

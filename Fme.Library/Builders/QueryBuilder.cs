@@ -267,7 +267,7 @@ namespace Fme.Library
         {           
             var aliases = BuildFieldAliases(fields, aliasPrefix);
             filter = string.IsNullOrEmpty(filter) ? "" : " AND " + filter;
-            return string.Format("select {0} as primary_key, {1} from [{2}] where {0} IS NOT NULL {0}", primaryKey, aliases, tableName, filter);
+            return string.Format("select {0} as primary_key, {1} from [{2}] where {0} IS NOT NULL {3}", primaryKey, aliases, tableName, filter);
         }
         
         /// <summary>

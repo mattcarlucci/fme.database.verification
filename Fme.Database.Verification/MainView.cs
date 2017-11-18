@@ -388,7 +388,43 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="DevExpress.XtraBars.ItemClickEventArgs"/> instance containing the event data.</param>
         private void btnRefresh_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
+            Cursor = Cursors.WaitCursor;
+            this.model.Source.RefreshSchemaModel();
 
+            if (string.IsNullOrEmpty(model.Source.SelectedTable) == false)
+            {
+                gridSourcehSchema.DataSource = model.Source.SelectedSchema().Fields;
+
+                cbSourceTable.Properties.Items.Clear();
+                cbSourceTable.Properties.Items.
+                    AddRange(model.Source.TableSchemas.Select(s => s.TableName).ToArray());
+
+                cbSourceKey.Properties.Items.Clear();
+                cbSourceKey.Properties.Items.
+                    AddRange(model.Source.SelectedSchema().Fields.Select(s => s.Name).ToList());
+
+                cbLeftSide.Items.Clear();
+                cbLeftSide.Items.AddRange(cbSourceKey.Properties.Items);
+            }
+
+            this.model.Target.RefreshSchemaModel();
+            if (string.IsNullOrEmpty(model.Target.SelectedTable) == false)
+            {
+                gridTargetSchema.DataSource = model.Target.SelectedSchema().Fields;
+
+                cbTargetTable.Properties.Items.Clear();
+                cbTargetTable.Properties.Items.
+                    AddRange(model.Target.TableSchemas.Select(s => s.TableName).ToArray());
+
+                cbTargetKey.Properties.Items.Clear();
+                cbTargetKey.Properties.Items.
+                    AddRange(model.Target.SelectedSchema().Fields.Select(s => s.Name).ToList());
+                               
+                cbRightSide.Items.Clear();
+                cbRightSide.Items.AddRange(cbTargetKey.Properties.Items);
+            }
+            gridMappings.RefreshDataSource();
+            Cursor = Cursors.Default;
         }
 
         /// <summary>
@@ -487,7 +523,7 @@ namespace Fme.Database.Verification
 
                 chkSourceVersions.Visible = model.Source.DataSource is DqlDataSource;
                 chkTargetVersions.Visible = model.Target.DataSource is DqlDataSource;
-
+                
 
 
             }
@@ -1288,7 +1324,8 @@ namespace Fme.Database.Verification
 
             tmrMonitor.Stop();
             tabMessages.Text = "System Messages";
-
+            gridSourcehSchema.ResetDataSource(null);
+            gridTargetSchema.ResetDataSource(null);
             SetupGridMappings();
             SetupMapping();
         }
@@ -1364,7 +1401,8 @@ namespace Fme.Database.Verification
         /// </summary>
         public void SetTargetModel()
         {
-            btnTargetData.Text = model.Target.DataSource.GetConnectionStringBuilder()["Data Source"] as string;
+            if (model.Target.DataSource != null)
+                btnTargetData.Text = model.Target.DataSource.GetConnectionStringBuilder()["Data Source"] as string;
 
             cbTargetTable.Properties.Items.Clear();
 
@@ -2142,6 +2180,15 @@ namespace Fme.Database.Verification
             Debug.Print("Hovering");
         }
 
-     
+        private void btnValidateSource_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(this.model.Source.SelectedTable))
+            {
+                MessageBox.Show("Please select the source Table", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            frmValidator frm = new frmValidator(this.model, this.model.Source);
+            frm.ShowDialog();
+        }
     }
 }

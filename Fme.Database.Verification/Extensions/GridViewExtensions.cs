@@ -69,6 +69,19 @@ namespace Fme.Database.Verification.Extensions
             view.BestFitColumns(bestFitColumns);
         }
 
+        /// <summary>
+        /// Fixeds the width.
+        /// </summary>
+        /// <param name="view">The view.</param>
+        /// <param name="width">The width.</param>
+        public static void FixedWidth(this GridView view, int width)
+        {
+            
+            foreach (GridColumn col in view.Columns)
+                col.MinWidth = width;
+                
+        }
+
 
     }
 }

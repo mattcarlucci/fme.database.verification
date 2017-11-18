@@ -44,6 +44,9 @@
   <ItemGroup>
     <Reference Include="DevExpress.BonusSkins.v16.2" />
     <Reference Include="DevExpress.Data.v16.2" />
+    <Reference Include="DevExpress.Images.v16.2, Version=16.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DevExpress.Mvvm.v16.2, Version=16.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Office.v16.2.Core, Version=16.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Pdf.v16.2.Core, Version=16.2.6.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
@@ -81,11 +84,23 @@
     <Compile Include="frmConnection.Designer.cs">
       <DependentUpon>frmConnection.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmMacroSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMacroSetup.Designer.cs">
+      <DependentUpon>frmMacroSetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSqlEdit.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmSqlEdit.Designer.cs">
       <DependentUpon>frmSqlEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmValidator.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmValidator.Designer.cs">
+      <DependentUpon>frmValidator.cs</DependentUpon>
     </Compile>
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MainView.cs">
@@ -100,8 +115,14 @@
     <EmbeddedResource Include="frmConnection.resx">
       <DependentUpon>frmConnection.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmMacroSetup.resx">
+      <DependentUpon>frmMacroSetup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmSqlEdit.resx">
       <DependentUpon>frmSqlEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmValidator.resx">
+      <DependentUpon>frmValidator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainView.resx">
       <DependentUpon>MainView.cs</DependentUpon>
@@ -120,7 +141,9 @@
     <None Include="app.config" />
     <None Include="fme.database.verification.snk" />
     <None Include="Properties\DataSources\Fme.Library.Models.CompareMappingModel.datasource" />
+    <None Include="Properties\DataSources\Fme.Library.Models.FieldSchemaModel.datasource" />
     <None Include="Properties\DataSources\Fme.Library.Models.QueryMessageModel.datasource" />
+    <None Include="Properties\DataSources\Fme.Library.Models.ValidationMacro.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

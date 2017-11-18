@@ -24,7 +24,7 @@ namespace Fme.Library.Comparison
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <seealso cref="Fme.Library.Comparison.IGenericConverter{T}" />
-    public class GenericConverter<T> : IGenericConverter<T>
+    public class GenericConverter<T> : IGenericConverter<T>, IGenericConverter
     {
         /// <summary>
         /// The token
@@ -110,6 +110,32 @@ namespace Fme.Library.Comparison
         {
             return selector(value);
            //  return value.CompareTo(selector);           
+        }
+
+        public bool Compare(object value, Func<object, bool> selector)
+        {
+            return selector(value);
+        }
+
+        object IGenericConverter.Convert(string value)
+        {
+            return Convert(value);
+        }
+
+        List<object> IGenericConverter.Convert(string[] values)
+        {
+            throw new NotImplementedException();
+            //return Convert(values).Cast<List<object>>();
+        }
+
+        public string Join(object[] values, Func<object, object> selector)
+        {
+            return Join(values, selector);
+        }
+
+        public string Transform(string value, Func<object, object> selector)
+        {
+            return Transform(value, selector);
         }
     }
    

@@ -146,6 +146,30 @@ namespace Fme.Library.Models
             if (schema == null)
                 throw new Exception(error);
             return schema;
-        }  
+        }
+
+        /// <summary>
+        /// Refreshes the design.
+        /// </summary>
+        public void RefreshSchemaModel()
+        {
+            if (DataSource == null) return;
+
+            var macros = TableSchemas.SelectMany(s => s.Fields).
+                Where(w => string.IsNullOrEmpty(w.ValidationMacros) == false);
+
+            var schema = DataSource.GetSchemaModel();
+
+            foreach (var macro in macros)
+            {               
+                var item = schema.Where(w => w.TableName == macro.TableName).SingleOrDefault().
+                    Fields.Where(w => w.Name == macro.Name).SingleOrDefault();
+
+                if (item != null)
+                    item.ValidationMacros = macro.ValidationMacros;
+
+            }
+            TableSchemas = schema;
+        }
     }
 }
