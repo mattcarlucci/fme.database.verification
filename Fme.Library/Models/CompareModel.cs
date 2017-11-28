@@ -218,6 +218,8 @@ namespace Fme.Library.Models
         /// <returns>System.String[].</returns>
         public string GetSourceFilter()
         {
+            if (this.Source.IdListFile == null) return null;
+
             if (this.Source.IdListFile.ToLower().EndsWith(".sql"))
             {
                 if (File.Exists(this.Source.IdListFile))

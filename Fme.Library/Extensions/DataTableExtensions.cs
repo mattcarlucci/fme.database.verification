@@ -90,5 +90,29 @@ namespace Fme.Library.Extensions
             }
             return result;
         }
+        /// <summary>
+        /// To the schema.
+        /// </summary>
+        /// <param name="source">The source.</param>
+        /// <param name="name">The name.</param>
+        /// <returns>DataTable.</returns>
+        public static DataTable GetSchema(this DataTable source, string name)
+        {
+            //this only captures attributes for this application.  There are more attributes to make this interaceable
+            DataTable target = new DataTable(name);
+            target.Columns.Add("COLUMN_NAME");
+            target.Columns.Add("ORDINAL_POSITION", typeof(Int64));
+            target.Columns.Add("DATA_TYPE", typeof(object));
+            target.Columns.Add("CHARACTER_MAXIMUM_LENGTH");
+            foreach(DataColumn col in source.Columns)
+            {
+                var row = target.NewRow();
+                row["COLUMN_NAME"] = col.ColumnName;
+                row["ORDINAL_POSITION"] = col.Ordinal;
+                row["DATA_TYPE"] = col.DataType;
+                row["CHARACTER_MAXIMUM_LENGTH"] = col.MaxLength;                
+            }
+            return target;
+        }
     }
 }

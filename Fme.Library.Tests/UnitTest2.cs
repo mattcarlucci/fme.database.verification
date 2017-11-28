@@ -60,7 +60,7 @@ namespace Fme.Library.Tests
         public void ValidationTest_StringIsAlpha()
         {
             var string1 = "aE@";
-            Assert.AreEqual(true, string1.IsAlpha());
+            Assert.AreEqual(false, string1.IsAlpha());
         }
         /// <summary>
         /// Validations the test string is not alpha.

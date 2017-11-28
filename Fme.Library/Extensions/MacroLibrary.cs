@@ -65,6 +65,16 @@ namespace Fme.Library.Extensions
             return value.FirstOrDefault().Equals(symbol.FirstOrDefault());
         }
         /// <summary>
+        /// Determines whether the specified criteria has value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="criteria">The criteria.</param>
+        /// <returns><c>true</c> if the specified criteria has value; otherwise, <c>false</c>.</returns>
+        public static bool HasValue(this string value, string criteria)
+        {
+            return value.Equals(criteria);
+        }
+        /// <summary>
         /// Determines whether the specified value is empty.
         /// </summary>
         /// <param name="value">The value.</param>

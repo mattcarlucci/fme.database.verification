@@ -90,6 +90,12 @@
     <Compile Include="frmMacroSetup.Designer.cs">
       <DependentUpon>frmMacroSetup.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmSchemaEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSchemaEditor.Designer.cs">
+      <DependentUpon>frmSchemaEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmSqlEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -117,6 +123,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMacroSetup.resx">
       <DependentUpon>frmMacroSetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSchemaEditor.resx">
+      <DependentUpon>frmSchemaEditor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmSqlEdit.resx">
       <DependentUpon>frmSqlEdit.cs</DependentUpon>

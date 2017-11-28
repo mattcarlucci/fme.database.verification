@@ -21,6 +21,7 @@ using System.Threading;
 using System.Xml.Serialization;
 using System.Linq;
 using System.Collections;
+using Fme.Library.Extensions;
 
 namespace Fme.Library
 {
@@ -176,8 +177,14 @@ namespace Fme.Library
         /// <returns>DbConnection.</returns>
         public abstract DbConnection CreateConnection();
 
-
-
-
+        /// <summary>
+        /// Adds the update schema.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="query">The query.</param>
+        public virtual List<TableSchemaModel> CustomSchema(string name, string query)
+        {
+           return FillSchema(query, name);                       
+        }
     }
 }

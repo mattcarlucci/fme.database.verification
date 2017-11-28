@@ -33,6 +33,7 @@ using System.Threading;
 using Fme.Library.Extensions;
 using System.Diagnostics;
 using DevExpress.XtraGrid;
+using System.Collections.Concurrent;
 
 namespace Fme.Database.Verification
 {
@@ -42,7 +43,10 @@ namespace Fme.Database.Verification
     /// <seealso cref="DevExpress.XtraEditors.XtraForm" />
     public partial class frmValidator : DevExpress.XtraEditors.XtraForm
     {
-        List<ValidationEventArgs> eventItems = new List<ValidationEventArgs>();
+        private DateTime executionStartTime;
+
+        //List<ValidationEventArgs> eventItems = new List<ValidationEventArgs>();
+        ConcurrentBag<ValidationEventArgs> eventItems = new ConcurrentBag<ValidationEventArgs>();
         /// <summary>
         /// Gets or sets the model.
         /// </summary>
@@ -73,7 +77,17 @@ namespace Fme.Database.Verification
             gridView1.BestFitWidth(false, true);
             RefreshSummary();
             this.Text = data.DataSource.GetConnectionStringBuilder()["Data Source"]?.ToString();           
-            gridControl3.DataSource = eventItems;
+            gridControl3.DataSource = eventItems.ToList();
+            
+            QueryBuilder query = model.Source.DataSource.GetQueryBuilder();
+                       
+            if (string.IsNullOrEmpty(data.SelectedSchema().Query))
+            {
+                data.SelectedSchema().Query = query.BuildSql(model.Source,
+                    data.SelectedSchema().Fields.Select(s => s.Name).ToArray(), null, null);
+            }
+            memoEdit1.Text = data.SelectedSchema().Query.Replace("\r\n", "\n").Replace("\n", "\r\n");
+            memoEdit1.ReadOnly = true;
         }
 
         /// <summary>
@@ -164,6 +178,7 @@ namespace Fme.Database.Verification
         public void RefreshSummary()
         {
             gridControl2.DataSource = ValidatorRepository.GetFunctionSummary(dataSource.SelectedSchema().Fields, eventItems);
+            gridControl3.DataSource = eventItems.ToList();
             gridControl2.RefreshDataSource();
             gridControl3.RefreshDataSource();            
         }
@@ -205,22 +220,49 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="DevExpress.XtraBars.ItemClickEventArgs"/> instance containing the event data.</param>
         private void btnExecute_ItemClick(object sender, DevExpress.XtraBars.ItemClickEventArgs e)
         {
-            Cursor = Cursors.WaitCursor;
-            ValidatorRepository repo = new ValidatorRepository();
-            repo.Validate += Repo_Validate;
-            CancellationTokenSource cancelToken = new CancellationTokenSource();
-            eventItems.Clear();
-            eventItems = new List<ValidationEventArgs>();
-            gridControl3.DataSource = eventItems;
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+                xtraTabControl1.SelectedTabPage = xtraTabPage2;
+                //barEditItem2.Visibility = DevExpress.XtraBars.BarItemVisibility.Always;
 
-            QueryBuilder query = this.model.Source.DataSource.GetQueryBuilder();
-            query.IncludeVersion = model.Source.IncludeVersions;
-            var select1 = query.BuildSql(model.Source, dataSource.SelectedSchema().Fields.Select(s => s.Name).ToArray(), model.GetSourceIds(), model.GetSourceFilter());
-            var data1 = model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
-            repo.Execute(data1.Table(), dataSource.SelectedSchema().Fields);
-            RefreshSummary();
-            Cursor = Cursors.Default;
-            MessageBox.Show("Validation Complete", "Validation Service", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                ValidatorRepository repo = new ValidatorRepository();
+                repo.Validate += Repo_Validate;
+                CancellationTokenSource cancelToken = new CancellationTokenSource();
+          
+                eventItems = new ConcurrentBag<ValidationEventArgs>();
+                gridControl3.DataSource = eventItems;
+
+                QueryBuilder query = this.model.Source.DataSource.GetQueryBuilder();
+                query.IncludeVersion = model.Source.IncludeVersions;
+                var select1 = query.BuildSql(model.Source, dataSource.SelectedSchema().Fields.Select(s => s.Name).ToArray(), model.GetSourceIds(), model.GetSourceFilter());
+                DateTime qStartTime = DateTime.Now;
+
+                if (dataSource.SelectedSchema().IsCustom)
+                    select1 = dataSource.SelectedSchema().Query;
+
+                executionStartTime = DateTime.Now;
+
+                var data1 = model.Source.DataSource.ExecuteQuery(select1, cancelToken.Token);
+                this.gridSourceData.DataSource = data1.Table();
+
+                lblQueryElapsed.Caption = "Query: " + new TimeSpan(DateTime.Now.Ticks - qStartTime.Ticks).Duration().ToString();
+
+                repo.Execute(data1.Table(), dataSource.SelectedSchema().Fields);
+                RefreshSummary();
+
+                lblElapsed.Caption = "Validation: "+ new TimeSpan(DateTime.Now.Ticks - executionStartTime.Ticks).Duration().ToString();
+                MessageBox.Show("Validation Complete", "Validation Service", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message, ex.GetType().Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+                barEditItem2.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
+            }
         }
 
         /// <summary>
@@ -230,6 +272,7 @@ namespace Fme.Database.Verification
         /// <param name="e">The <see cref="ValidationEventArgs"/> instance containing the event data.</param>
         private void Repo_Validate(object sender, ValidationEventArgs e)
         {
+            
             eventItems.Add(e);
            // Debug.Print(e.ToString());
         }
@@ -285,5 +328,15 @@ namespace Fme.Database.Verification
             }
         }
 
+        /// <summary>
+        /// Handles the DataSourceChanged event of the gridControl2 control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void gridControl2_DataSourceChanged(object sender, EventArgs e)
+        {
+            var total = gridView2.Columns.Skip(1).Sum(s => s.Width);
+            gridView2.Columns[0].Width = gridControl2.Width - total - 300;
+        }
     }
 }

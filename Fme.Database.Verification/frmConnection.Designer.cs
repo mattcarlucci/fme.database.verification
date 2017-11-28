@@ -39,19 +39,19 @@
             this.txtExt = new DevExpress.XtraEditors.TextEdit();
             this.btnCancel = new DevExpress.XtraEditors.SimpleButton();
             this.btnOk = new DevExpress.XtraEditors.SimpleButton();
-            this.pictureEdit1 = new DevExpress.XtraEditors.PictureEdit();
             this.btnTestCn = new DevExpress.XtraEditors.SimpleButton();
             this.cbProviders = new DevExpress.XtraEditors.ComboBoxEdit();
             this.btnDataSource = new DevExpress.XtraEditors.ComboBoxEdit();
             this.pbar = new DevExpress.XtraEditors.MarqueeProgressBarControl();
             this.lblMessage = new DevExpress.XtraEditors.LabelControl();
+            this.pictureEdit1 = new DevExpress.XtraEditors.PictureEdit();
             ((System.ComponentModel.ISupportInitialize)(this.txtUserId.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPassword.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtExt.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbProviders.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnDataSource.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbar.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // txtUserId
@@ -142,21 +142,6 @@
             this.btnOk.Text = "Ok";
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
-            // pictureEdit1
-            // 
-            this.pictureEdit1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pictureEdit1.EditValue = ((object)(resources.GetObject("pictureEdit1.EditValue")));
-            this.pictureEdit1.Location = new System.Drawing.Point(12, 7);
-            this.pictureEdit1.Name = "pictureEdit1";
-            this.pictureEdit1.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(236)))), ((int)(((byte)(239)))));
-            this.pictureEdit1.Properties.Appearance.Options.UseBackColor = true;
-            this.pictureEdit1.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
-            this.pictureEdit1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
-            this.pictureEdit1.Properties.ZoomAccelerationFactor = 1D;
-            this.pictureEdit1.Size = new System.Drawing.Size(51, 44);
-            this.pictureEdit1.TabIndex = 14;
-            this.pictureEdit1.DoubleClick += new System.EventHandler(this.PictureEdit1_DoubleClick);
-            // 
             // btnTestCn
             // 
             this.btnTestCn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -205,6 +190,21 @@
             this.lblMessage.Size = new System.Drawing.Size(0, 13);
             this.lblMessage.TabIndex = 16;
             // 
+            // pictureEdit1
+            // 
+            this.pictureEdit1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pictureEdit1.EditValue = ((object)(resources.GetObject("pictureEdit1.EditValue")));
+            this.pictureEdit1.Location = new System.Drawing.Point(12, 7);
+            this.pictureEdit1.Name = "pictureEdit1";
+            this.pictureEdit1.Properties.Appearance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(235)))), ((int)(((byte)(236)))), ((int)(((byte)(239)))));
+            this.pictureEdit1.Properties.Appearance.Options.UseBackColor = true;
+            this.pictureEdit1.Properties.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
+            this.pictureEdit1.Properties.ShowCameraMenuItem = DevExpress.XtraEditors.Controls.CameraMenuItemVisibility.Auto;
+            this.pictureEdit1.Properties.ZoomAccelerationFactor = 1D;
+            this.pictureEdit1.Size = new System.Drawing.Size(51, 44);
+            this.pictureEdit1.TabIndex = 14;
+            this.pictureEdit1.DoubleClick += new System.EventHandler(this.PictureEdit1_DoubleClick);
+            // 
             // frmConnection
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -235,10 +235,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.txtUserId.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtPassword.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtExt.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.cbProviders.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.btnDataSource.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbar.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureEdit1.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

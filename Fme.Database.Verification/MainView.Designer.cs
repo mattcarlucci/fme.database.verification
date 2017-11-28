@@ -91,6 +91,7 @@ namespace Fme.Database.Verification
             this.tabConfiguration = new DevExpress.XtraTab.XtraTabPage();
             this.xtraTabControl4 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage8 = new DevExpress.XtraTab.XtraTabPage();
+            this.btnTargetEditSchema = new DevExpress.XtraEditors.SimpleButton();
             this.chkTargetVersions = new System.Windows.Forms.CheckBox();
             this.labelControl12 = new DevExpress.XtraEditors.LabelControl();
             this.cbTargetTZ = new DevExpress.XtraEditors.ComboBoxEdit();
@@ -104,6 +105,7 @@ namespace Fme.Database.Verification
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.xtraTabControl3 = new DevExpress.XtraTab.XtraTabControl();
             this.xtraTabPage6 = new DevExpress.XtraTab.XtraTabPage();
+            this.btnSourceEditSchema = new DevExpress.XtraEditors.SimpleButton();
             this.btnValidateSource = new DevExpress.XtraEditors.SimpleButton();
             this.chkSourceVersions = new System.Windows.Forms.CheckBox();
             this.labelControl11 = new DevExpress.XtraEditors.LabelControl();
@@ -592,8 +594,9 @@ namespace Fme.Database.Verification
             this.bar3.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.lblStatus),
             new DevExpress.XtraBars.LinkPersistInfo(this.barEditStatus),
-            new DevExpress.XtraBars.LinkPersistInfo(this.lblElapsed),
-            new DevExpress.XtraBars.LinkPersistInfo(this.lblVersion)});
+            new DevExpress.XtraBars.LinkPersistInfo(this.barEditStatus),
+            new DevExpress.XtraBars.LinkPersistInfo(this.lblVersion),
+            new DevExpress.XtraBars.LinkPersistInfo(this.lblElapsed)});
             this.bar3.OptionsBar.AllowQuickCustomization = false;
             this.bar3.OptionsBar.DrawDragBorder = false;
             this.bar3.OptionsBar.UseWholeRow = true;
@@ -609,7 +612,6 @@ namespace Fme.Database.Verification
             this.lblStatus.PaintStyle = DevExpress.XtraBars.BarItemPaintStyle.CaptionGlyph;
             this.lblStatus.Size = new System.Drawing.Size(500, 0);
             this.lblStatus.TextAlignment = System.Drawing.StringAlignment.Near;
-            this.lblStatus.Width = 500;
             // 
             // barEditStatus
             // 
@@ -928,13 +930,14 @@ namespace Fme.Database.Verification
             this.xtraTabControl4.Location = new System.Drawing.Point(439, 15);
             this.xtraTabControl4.Name = "xtraTabControl4";
             this.xtraTabControl4.SelectedTabPage = this.xtraTabPage8;
-            this.xtraTabControl4.Size = new System.Drawing.Size(388, 181);
+            this.xtraTabControl4.Size = new System.Drawing.Size(398, 181);
             this.xtraTabControl4.TabIndex = 28;
             this.xtraTabControl4.TabPages.AddRange(new DevExpress.XtraTab.XtraTabPage[] {
             this.xtraTabPage8});
             // 
             // xtraTabPage8
             // 
+            this.xtraTabPage8.Controls.Add(this.btnTargetEditSchema);
             this.xtraTabPage8.Controls.Add(this.chkTargetVersions);
             this.xtraTabPage8.Controls.Add(this.labelControl12);
             this.xtraTabPage8.Controls.Add(this.cbTargetTZ);
@@ -948,8 +951,19 @@ namespace Fme.Database.Verification
             this.xtraTabPage8.Controls.Add(this.labelControl2);
             this.xtraTabPage8.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage8.Image")));
             this.xtraTabPage8.Name = "xtraTabPage8";
-            this.xtraTabPage8.Size = new System.Drawing.Size(382, 150);
+            this.xtraTabPage8.Size = new System.Drawing.Size(392, 150);
             this.xtraTabPage8.Text = "Target";
+            // 
+            // btnTargetEditSchema
+            // 
+            this.btnTargetEditSchema.Location = new System.Drawing.Point(351, 70);
+            this.btnTargetEditSchema.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnTargetEditSchema.Name = "btnTargetEditSchema";
+            this.btnTargetEditSchema.Size = new System.Drawing.Size(17, 18);
+            this.btnTargetEditSchema.TabIndex = 58;
+            this.btnTargetEditSchema.Text = "...";
+            this.btnTargetEditSchema.Visible = false;
+            this.btnTargetEditSchema.Click += new System.EventHandler(this.btnTargetEditSchema_Click);
             // 
             // chkTargetVersions
             // 
@@ -966,7 +980,7 @@ namespace Fme.Database.Verification
             // 
             // labelControl12
             // 
-            this.labelControl12.Location = new System.Drawing.Point(204, 125);
+            this.labelControl12.Location = new System.Drawing.Point(206, 125);
             this.labelControl12.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.labelControl12.Name = "labelControl12";
             this.labelControl12.Size = new System.Drawing.Size(79, 13);
@@ -976,7 +990,7 @@ namespace Fme.Database.Verification
             // cbTargetTZ
             // 
             this.cbTargetTZ.EditValue = "0";
-            this.cbTargetTZ.Location = new System.Drawing.Point(289, 122);
+            this.cbTargetTZ.Location = new System.Drawing.Point(292, 122);
             this.cbTargetTZ.MenuManager = this.barManager1;
             this.cbTargetTZ.Name = "cbTargetTZ";
             this.cbTargetTZ.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
@@ -987,7 +1001,7 @@ namespace Fme.Database.Verification
             // 
             // simpleButton2
             // 
-            this.simpleButton2.Location = new System.Drawing.Point(347, 36);
+            this.simpleButton2.Location = new System.Drawing.Point(351, 36);
             this.simpleButton2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.simpleButton2.Name = "simpleButton2";
             this.simpleButton2.Size = new System.Drawing.Size(17, 18);
@@ -999,7 +1013,7 @@ namespace Fme.Database.Verification
             // 
             // simpleButton1
             // 
-            this.simpleButton1.Location = new System.Drawing.Point(347, 70);
+            this.simpleButton1.Location = new System.Drawing.Point(369, 70);
             this.simpleButton1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(17, 18);
@@ -1017,7 +1031,7 @@ namespace Fme.Database.Verification
             this.cbTargetKey.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cbTargetKey.Properties.Sorted = true;
-            this.cbTargetKey.Size = new System.Drawing.Size(226, 20);
+            this.cbTargetKey.Size = new System.Drawing.Size(229, 20);
             this.cbTargetKey.TabIndex = 38;
             this.cbTargetKey.SelectedIndexChanged += new System.EventHandler(this.cbTargetKey_SelectedIndexChanged);
             this.cbTargetKey.SelectedValueChanged += new System.EventHandler(this.cbTargetKey_SelectedIndexChanged);
@@ -1033,7 +1047,7 @@ namespace Fme.Database.Verification
             this.cbTargetTable.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
             this.cbTargetTable.Properties.Sorted = true;
-            this.cbTargetTable.Size = new System.Drawing.Size(226, 20);
+            this.cbTargetTable.Size = new System.Drawing.Size(229, 20);
             this.cbTargetTable.TabIndex = 37;
             this.cbTargetTable.SelectedIndexChanged += new System.EventHandler(this.cbTargetTable_SelectedIndexChanged);
             this.cbTargetTable.Leave += new System.EventHandler(this.cbTargetTable_Leave);
@@ -1065,7 +1079,7 @@ namespace Fme.Database.Verification
             this.btnTargetData.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
             new DevExpress.XtraEditors.Controls.EditorButton()});
             this.btnTargetData.Properties.ReadOnly = true;
-            this.btnTargetData.Size = new System.Drawing.Size(322, 20);
+            this.btnTargetData.Size = new System.Drawing.Size(325, 20);
             this.btnTargetData.TabIndex = 34;
             this.btnTargetData.ButtonClick += new DevExpress.XtraEditors.Controls.ButtonPressedEventHandler(this.btnTargetData_ButtonClick);
             // 
@@ -1091,6 +1105,7 @@ namespace Fme.Database.Verification
             // 
             // xtraTabPage6
             // 
+            this.xtraTabPage6.Controls.Add(this.btnSourceEditSchema);
             this.xtraTabPage6.Controls.Add(this.btnValidateSource);
             this.xtraTabPage6.Controls.Add(this.chkSourceVersions);
             this.xtraTabPage6.Controls.Add(this.labelControl11);
@@ -1107,6 +1122,17 @@ namespace Fme.Database.Verification
             this.xtraTabPage6.Name = "xtraTabPage6";
             this.xtraTabPage6.Size = new System.Drawing.Size(392, 150);
             this.xtraTabPage6.Text = "Source";
+            // 
+            // btnSourceEditSchema
+            // 
+            this.btnSourceEditSchema.Location = new System.Drawing.Point(351, 65);
+            this.btnSourceEditSchema.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btnSourceEditSchema.Name = "btnSourceEditSchema";
+            this.btnSourceEditSchema.Size = new System.Drawing.Size(17, 18);
+            this.btnSourceEditSchema.TabIndex = 57;
+            this.btnSourceEditSchema.Text = "...";
+            this.btnSourceEditSchema.Visible = false;
+            this.btnSourceEditSchema.Click += new System.EventHandler(this.btnNewSchema_Click);
             // 
             // btnValidateSource
             // 
@@ -1167,7 +1193,7 @@ namespace Fme.Database.Verification
             // 
             // btnGetSchema
             // 
-            this.btnGetSchema.Location = new System.Drawing.Point(351, 65);
+            this.btnGetSchema.Location = new System.Drawing.Point(369, 65);
             this.btnGetSchema.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btnGetSchema.Name = "btnGetSchema";
             this.btnGetSchema.Size = new System.Drawing.Size(17, 18);
@@ -3178,6 +3204,8 @@ namespace Fme.Database.Verification
         private DevExpress.XtraGrid.Columns.GridColumn colCount;
         private DevExpress.XtraGrid.Columns.GridColumn colSql;
         private DevExpress.XtraEditors.SimpleButton btnValidateSource;
+        private DevExpress.XtraEditors.SimpleButton btnSourceEditSchema;
+        private DevExpress.XtraEditors.SimpleButton btnTargetEditSchema;
     }
 
 }

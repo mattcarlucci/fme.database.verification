@@ -28,6 +28,11 @@ namespace Fme.Library.Models
     public class DataSourceModel
     {
         /// <summary>
+        /// The add new schema
+        /// </summary>
+        public const string ADD_NEW_SCHEMA = "<Add Custom>";
+
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -158,7 +163,10 @@ namespace Fme.Library.Models
             var macros = TableSchemas.SelectMany(s => s.Fields).
                 Where(w => string.IsNullOrEmpty(w.ValidationMacros) == false);
 
+            var custom = TableSchemas.Where(w => w.TableName != null && w.IsCustom);
+
             var schema = DataSource.GetSchemaModel();
+            schema.AddRange(custom);
 
             foreach (var macro in macros)
             {               
@@ -169,7 +177,12 @@ namespace Fme.Library.Models
                     item.ValidationMacros = macro.ValidationMacros;
 
             }
+            schema.Add(new TableSchemaModel(ADD_NEW_SCHEMA));
             TableSchemas = schema;
+        }
+        private void AddDefault()
+        {
+            
         }
     }
 }

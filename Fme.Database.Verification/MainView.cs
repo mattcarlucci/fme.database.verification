@@ -87,8 +87,6 @@ namespace Fme.Database.Verification
         {
             var fluent = mvvmContext1.OfType<MainViewModel>();
             UserLookAndFeel.Default.StyleChanged += new EventHandler(Default_StyleChanged);
-
-
         }
 
         /// <summary>
@@ -100,7 +98,6 @@ namespace Fme.Database.Verification
         private void Default_StyleChanged(object sender, EventArgs e)
         {
             navGridMappings.BackColor = this.BackColor;
-
         }
 
         /// <summary>
@@ -593,6 +590,34 @@ namespace Fme.Database.Verification
             btnFilterFile.Text = dlg.FileName;
 
         }
+
+        private void ShowHideSourceSchemaEdit()
+        {
+            try
+            {
+                btnSourceEditSchema.Visible = model.Source.SelectedSchema().IsCustom;                
+            }
+            catch (Exception)
+            {
+                btnSourceEditSchema.Visible = false;                
+                return;
+            }
+        }
+        /// <summary>
+        /// Shows the hide schema edit.
+        /// </summary>
+        private void ShowHideTargetSchemaEdit()
+        {
+            try
+            {                
+                btnTargetEditSchema.Visible = model.Target.SelectedSchema().IsCustom;
+            }
+            catch (Exception)
+            {             
+                btnTargetEditSchema.Visible = false;
+                return;
+            }
+        }
         /// <summary>
         /// Handles the SelectedIndexChanged event of the cbSourceTable control.
         /// </summary>
@@ -603,9 +628,27 @@ namespace Fme.Database.Verification
 
             try
             {
-             //   if (string.IsNullOrEmpty(cbSourceTable.Text)) return;
+                //   if (string.IsNullOrEmpty(cbSourceTable.Text)) return;
 
+                
+                if (cbSourceTable.Text == DataSourceModel.ADD_NEW_SCHEMA)
+                {
+                    frmSchemaEditor editor = new frmSchemaEditor(this.model.Source, "", true);
+                    var result = editor.ShowDialog();
+                    if (result == DialogResult.Cancel)
+                    {
+                        cbSourceTable.Text = model.Source.SelectedTable;
+                        return;
+                    }
+                    else
+                    {
+                        cbSourceTable.Text = editor.compiledSchema.TableName;
+                        ShowHideSourceSchemaEdit();
+                    }
+                    
+                }
                 model.Source.SelectedTable = cbSourceTable.Text;
+                ShowHideSourceSchemaEdit();
 
                 cbSourceKey.Properties.Items.Clear();
 
@@ -618,6 +661,7 @@ namespace Fme.Database.Verification
                 gridSourcehSchema.DataSource = model.Source.SelectedSchema().Fields;
                 
                 gridMappings.RefreshDataSource();
+                
             }
             catch(Exception)
             {
@@ -634,9 +678,26 @@ namespace Fme.Database.Verification
         {
             try
             {
-               // if (string.IsNullOrEmpty(cbTargetTable.Text)) return;
+                // if (string.IsNullOrEmpty(cbTargetTable.Text)) return;
 
+                if (cbTargetTable.Text == DataSourceModel.ADD_NEW_SCHEMA)
+                {
+                    frmSchemaEditor editor = new frmSchemaEditor(this.model.Target, "", true);
+                    var result = editor.ShowDialog();
+                    if (result == DialogResult.Cancel)
+                    {
+                        cbTargetTable.Text = model.Target.SelectedTable;
+                        return;
+                    }
+                    else
+                    {
+                        cbTargetTable.Text = editor.compiledSchema.TableName;
+                        ShowHideTargetSchemaEdit();
+                    }
+
+                }
                 model.Target.SelectedTable = cbTargetTable.Text;
+                ShowHideTargetSchemaEdit();
 
                 cbTargetKey.Properties.Items.Clear();
 
@@ -1401,6 +1462,7 @@ namespace Fme.Database.Verification
         /// </summary>
         public void SetTargetModel()
         {
+          
             if (model.Target.DataSource != null)
                 btnTargetData.Text = model.Target.DataSource.GetConnectionStringBuilder()["Data Source"] as string;
 
@@ -1414,8 +1476,7 @@ namespace Fme.Database.Verification
             cbTargetTZ.Text = model.Target.TimeZoneOffset.ToString();
 
             chkTargetVersions.Checked = model.Target.IncludeVersions;
-            chkTargetVersions.Visible = model.Target.DataSource is DqlDataSource;
-
+            chkTargetVersions.Visible = model.Target.DataSource is DqlDataSource;        
         }
         /// <summary>
         /// Setups the mapping.
@@ -2180,6 +2241,11 @@ namespace Fme.Database.Verification
             Debug.Print("Hovering");
         }
 
+        /// <summary>
+        /// Handles the Click event of the btnValidateSource control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
         private void btnValidateSource_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(this.model.Source.SelectedTable))
@@ -2189,6 +2255,30 @@ namespace Fme.Database.Verification
             }
             frmValidator frm = new frmValidator(this.model, this.model.Source);
             frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// Handles the Click event of the btnNewSchema control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void btnNewSchema_Click(object sender, EventArgs e)
+        {            
+            frmSchemaEditor editor = new frmSchemaEditor(this.model.Source, model.Source.SelectedTable, false);
+            var result = editor.ShowDialog();
+            cbSourceTable_SelectedIndexChanged(this, EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Handles the Click event of the btnTargetEditSchema control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="EventArgs"/> instance containing the event data.</param>
+        private void btnTargetEditSchema_Click(object sender, EventArgs e)
+        {
+            frmSchemaEditor editor = new frmSchemaEditor(this.model.Target, model.Target.SelectedTable, false);
+            var result = editor.ShowDialog();
+            cbTargetTable_SelectedIndexChanged(this, EventArgs.Empty);
         }
     }
 }

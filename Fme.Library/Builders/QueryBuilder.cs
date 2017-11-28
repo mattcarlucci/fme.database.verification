@@ -80,6 +80,16 @@ namespace Fme.Library
         }
 
         /// <summary>
+        /// Gets the default SQL.
+        /// </summary>
+        /// <param name="tableName">Name of the table.</param>
+        /// <returns>System.String.</returns>
+        public virtual string GetDefaultSql(string tableName)
+        {
+            return string.Format("Select * from [{0}]", tableName);
+        }
+
+        /// <summary>
         /// Gets the in clauses.
         /// </summary>
         /// <param name="field">The field.</param>

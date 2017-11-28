@@ -132,7 +132,10 @@ namespace Fme.Library.Repositories
                     query.IncludeVersion = Model.Source.IncludeVersions;
                                         
                     var select1 = query.BuildSql(Model.Source, pairs.Select(s => s.LeftSide).ToArray(),Model.GetSourceIds(), Model.GetSourceFilter());
-                                       
+
+                    if (Model.Source.SelectedSchema().IsCustom)
+                        select1 = Model.Source.SelectedSchema().Query;
+
                     LogQuery(Model.Source, select1, Alias.Left);
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Source, select1, "Executing Source Query..."));
                                                             
@@ -160,7 +163,10 @@ namespace Fme.Library.Repositories
                     
                     var select2 = query.BuildSql(Model.Target, pairs.Select(s => s.RightSide).ToArray(), 
                         table1.SelectKeys<string>(Alias.Primary_Key), null);
-                                        
+
+                    if (Model.Target.SelectedSchema().IsCustom)
+                        select2 = Model.Target.SelectedSchema().Query;
+
                     LogQuery(Model.Target, select2, Alias.Right);
 
                     OnCompareModelStatus(this, new CompareModelStatusEventArgs(Model.Target, select2, "Executing Target Query..."));

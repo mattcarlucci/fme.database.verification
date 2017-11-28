@@ -37,8 +37,16 @@ namespace Fme.Library.Repositories
     /// <seealso cref="System.Collections.Generic.Dictionary{System.String, System.Func{System.String, System.String, System.Boolean}}" />
     public class ValidatorRepository : Dictionary<string, Func<string, string, bool>>
     {
+        /// <summary>
+        /// Occurs when [validate].
+        /// </summary>
         public event EventHandler<ValidationEventArgs> Validate;
 
+        /// <summary>
+        /// Handles the <see cref="E:Validate" /> event.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The <see cref="ValidationEventArgs"/> instance containing the event data.</param>
         protected virtual void OnValidate(object sender, ValidationEventArgs e)
         {
             if (Validate != null)
@@ -68,8 +76,10 @@ namespace Fme.Library.Repositories
             Add("IsChar", (value, parms) => GetString(value, parms).IsChar(ParseParameters(parms).Last()));
             Add("GreaterThanEqualInteger", (value, parms) => GreaterThanEqualInteger(value, parms));
             Add("GreaterThanEqualDate", (value, parms) => GreaterThanEqualDate(value, parms));
-            Add("VerifyDateFormat", (value, parms) => VerifyDateFormat(value, parms));
-            Add("LookInList", (value, parms) => LookInList(value, parms));
+            Add("HasDateFormat", (value, parms) => VerifyDateFormat(value, parms));
+            Add("LookInFile", (value, parms) => LookInList(value, parms));
+            Add("LengthCheck", (value, parms) => LengthCheck(value, parms));
+            //Add("HasValues", (value, parms) => GetString(value, parms).HasValue(ParseParameters(parms).Last()));
 
             var tmp = new Dictionary<string, Func<string, string, bool>>();           
             foreach (var kvp in this)
@@ -79,29 +89,31 @@ namespace Fme.Library.Repositories
             }
             this.AddRange(tmp);
         }
+      
         /// <summary>
-        /// Gets or sets the <see cref="Dictionary{System.String, System.String[]}"/> with the specified key.
+        /// Lengthes the check.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns>Dictionary&lt;System.String, System.String[]&gt;.</returns>
-        //public new Dictionary<string, Func<string, string, bool>> this[string key]
-        //{
-        //    get
-        //    {
-        //        if (ContainsKey(key) == false)
-        //            return this["IsBlank"];
+        /// <param name="value">The value.</param>
+        /// <param name="parms">The parms.</param>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        public bool LengthCheck(string value, string parms)
+        {
+            
+            var operation = ParseParameters(parms).Skip(1).Take(1).FirstOrDefault();
 
-        //        return this[key];
-        //    }
-        //    set
-        //    {
-        //        if (ContainsKey(key) == false)
-        //            this.Add(key, null);
+            if (operation == ">")
+                return GetString(value, parms).Length > ParseParameters(parms).Last().ToInteger();
+            else if (operation == ">=")
+                return GetString(value, parms).Length >= ParseParameters(parms).Last().ToInteger();
+            else if (operation == "<")
+                return GetString(value, parms).Length < ParseParameters(parms).Last().ToInteger();
+            else if (operation == "<=")
+                return GetString(value, parms).Length <= ParseParameters(parms).Last().ToInteger();
+            else if (operation == "=" || operation == "==")
+                return GetString(value, parms).Length == ParseParameters(parms).Last().ToInteger();
 
-        //        this[key] = value;
-        //    }
-        //}
-        
+            return false;
+        }
         /// <summary>
         /// Creates the matrix.
         /// </summary>
@@ -162,7 +174,7 @@ namespace Fme.Library.Repositories
         /// </summary>
         /// <param name="fields">The fields.</param>
         /// <returns>DataTable.</returns>
-        public static DataTable GetFunctionSummary(List<FieldSchemaModel> fields, List<ValidationEventArgs> items)
+        public static DataTable GetFunctionSummary(IEnumerable<FieldSchemaModel> fields, IEnumerable<ValidationEventArgs> items)
         {
             var cols = fields.Where(w => string.IsNullOrEmpty(w.ValidationMacros) == false).ToList();
 
@@ -203,23 +215,37 @@ namespace Fme.Library.Repositories
             validator.LoadLists(string.Join("; ", cols.Select(s => s.ValidationMacros).ToList()));
 
             string[] keyFields = { "DOC_DOCUMENT_NO", "DOC_DOCUMENT_REV"};
-            foreach (DataRow row in table.Rows)
-            {                   
+            //Parallel.ForEach(table.AsEnumerable(), row =>
+             foreach (DataRow row in table.Rows)
+            {
                 foreach (var col in cols)
-                {   
+                {
                     string value = row[col.Name]?.ToString();
-                    foreach (var method in ParseFunctions(col.ValidationMacros))
-                    {       
-                        var rtype = method.First() == '+' || method.First() == '-' ? true : false;
+                    //Parallel.ForEach(ParseFunctions(col.ValidationMacros), method =>
+                    {
+                        foreach (var method in ParseFunctions(col.ValidationMacros))
+                        {
+                            List<bool> results = new List<bool>();
 
-                        var items = ParseParameters(method);
-                        var result = validator[items.First()](value, method);
-                        if (ShouldReturn(method, result))
-                            OnValidate(this, new ValidationEventArgs(col.Name, method, result, row, keyFields, table.Rows.Count, value));
-                        //Debug.Print("{0} {1} {2} {3}", col.Name, method, value, result);
-                    }
+                            var groups = ParseFunctionGroups(method);
+                            bool result = false;
+                            foreach (var group in groups)
+                            {
+                                var items = ParseParameters(group);
+                                result = validator[items.First()](value, group);
+                                results.Add(result);
+                            }
+                            if (method.Contains(" OR "))
+                                result = results.Any(a => a == true);
+                            else if (method.Contains(" AND "))
+                                result = results.All(a => a == true);
+
+                            if (ShouldReturn(method, result))
+                                OnValidate(this, new ValidationEventArgs(col.Name, method, result, row, keyFields, table.Rows.Count, value));
+                        }
+                    }//);
                 }
-            }
+            }//);
         }
         /// <summary>
         /// Looks the in list.
@@ -285,7 +311,18 @@ namespace Fme.Library.Repositories
 
             return dateValue.CompareTo(filter) >= 0;
         }
-        
+
+        /// <summary>
+        /// Parses the function groups.
+        /// </summary>
+        /// <param name="parms">The parms.</param>
+        /// <returns>System.String[].</returns>
+        public static string[] ParseFunctionGroups(string parms)
+        {
+
+            return parms.Split(new string[] { " AND ", " OR "},
+                StringSplitOptions.RemoveEmptyEntries);
+        }
         /// <summary>
         /// Parses the function.
         /// </summary>
@@ -293,7 +330,8 @@ namespace Fme.Library.Repositories
         /// <returns>System.String[].</returns>
         public static string[] ParseParameters(string parms)
         {
-            return parms.Split(new char[] { '(', ')', ',', ' ', '\"' }, StringSplitOptions.RemoveEmptyEntries);
+            return parms.Split(new char[] { '(', ')', ',', ' ', '\"' }, 
+                StringSplitOptions.RemoveEmptyEntries);
         }
         
         /// <summary>
@@ -302,13 +340,14 @@ namespace Fme.Library.Repositories
         /// <param name="functions">The functions.</param>
         public void LoadLists(string functions)
         {
-            var methods = ParseFunctions(functions).Where(w => w.StartsWith("LookInList")).ToList();
+            var methods = ParseFunctions(functions).
+                Where(w => w.Trim('+','-', ' ').StartsWith("LookInFile")).ToList();
+
             foreach (var method in methods)
             {
                 var file = ParseParameters(method).Last();
                 this.lookupLists.Add(file, File.ReadAllLines(file));
             }
-
         }
         
         /// <summary>
@@ -318,7 +357,8 @@ namespace Fme.Library.Repositories
         /// <returns>System.String[].</returns>
         public static string[] ParseFunctions(string parms)
         {
-            return parms.Split(new string[] { "AND", ";", "\r", "\n", "\t"  }, StringSplitOptions.RemoveEmptyEntries);
+            return parms.Split(new string[] { ";", "\r", "\n", "\t"  }, 
+                StringSplitOptions.RemoveEmptyEntries);
         }
         
         /// <summary>
@@ -332,7 +372,10 @@ namespace Fme.Library.Repositories
             var items = ParseParameters(parms);
             if (items.Count() == 1)
                 return value;
-            return value.Substring(items[1].ToInteger(), items[2].ToInteger());
+
+            int len = items.Count() > 2 ? items[2].ToInteger() : value.Length;
+            len = Math.Min(len, value.Length-items[1].ToInteger());
+            return value.Substring(items[1].ToInteger(), len);
         }
     }
 }
