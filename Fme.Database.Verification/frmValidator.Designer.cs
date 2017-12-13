@@ -81,6 +81,9 @@
             this.xtraTabPage5 = new DevExpress.XtraTab.XtraTabPage();
             this.gridSourceData = new DevExpress.XtraGrid.GridControl();
             this.viewSourceData = new DevExpress.XtraGrid.Views.Grid.GridView();
+            this.xtraTabPage6 = new DevExpress.XtraTab.XtraTabPage();
+            this.gridControl4 = new DevExpress.XtraGrid.GridControl();
+            this.gridView4 = new DevExpress.XtraGrid.Views.Grid.GridView();
             ((System.ComponentModel.ISupportInitialize)(this.validationMacroBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.fieldSchemaModelBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xtraTabControl1)).BeginInit();
@@ -105,6 +108,9 @@
             this.xtraTabPage5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridSourceData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewSourceData)).BeginInit();
+            this.xtraTabPage6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView4)).BeginInit();
             this.SuspendLayout();
             // 
             // validationMacroBindingSource
@@ -127,6 +133,7 @@
             this.xtraTabPage1,
             this.xtraTabPage2,
             this.xtraTabPage3,
+            this.xtraTabPage6,
             this.xtraTabPage4,
             this.xtraTabPage5});
             // 
@@ -579,6 +586,36 @@
             this.viewSourceData.OptionsView.EnableAppearanceEvenRow = true;
             this.viewSourceData.OptionsView.EnableAppearanceOddRow = true;
             // 
+            // xtraTabPage6
+            // 
+            this.xtraTabPage6.Controls.Add(this.gridControl4);
+            this.xtraTabPage6.Image = ((System.Drawing.Image)(resources.GetObject("xtraTabPage6.Image")));
+            this.xtraTabPage6.Name = "xtraTabPage6";
+            this.xtraTabPage6.Size = new System.Drawing.Size(918, 474);
+            this.xtraTabPage6.Text = "Report Summary";
+            // 
+            // gridControl4
+            // 
+            this.gridControl4.ContextMenuStrip = this.ctxGrid;
+            this.gridControl4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridControl4.Location = new System.Drawing.Point(0, 0);
+            this.gridControl4.MainView = this.gridView4;
+            this.gridControl4.MenuManager = this.barManager1;
+            this.gridControl4.Name = "gridControl4";
+            this.gridControl4.Size = new System.Drawing.Size(918, 474);
+            this.gridControl4.TabIndex = 2;
+            this.gridControl4.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
+            this.gridView4});
+            // 
+            // gridView4
+            // 
+            this.gridView4.GridControl = this.gridControl4;
+            this.gridView4.Name = "gridView4";
+            this.gridView4.OptionsBehavior.ReadOnly = true;
+            this.gridView4.OptionsFind.AlwaysVisible = true;
+            this.gridView4.OptionsFind.FindMode = DevExpress.XtraEditors.FindMode.Always;
+            this.gridView4.OptionsView.ColumnAutoWidth = false;
+            // 
             // frmValidator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -617,6 +654,9 @@
             this.xtraTabPage5.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridSourceData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.viewSourceData)).EndInit();
+            this.xtraTabPage6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridControl4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gridView4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -675,5 +715,8 @@
         private DevExpress.XtraBars.BarEditItem barEditItem2;
         private DevExpress.XtraEditors.Repository.RepositoryItemMarqueeProgressBar repositoryItemMarqueeProgressBar1;
         private DevExpress.XtraBars.BarStaticItem lblQueryElapsed;
+        private DevExpress.XtraTab.XtraTabPage xtraTabPage6;
+        private DevExpress.XtraGrid.GridControl gridControl4;
+        private DevExpress.XtraGrid.Views.Grid.GridView gridView4;
     }
 }

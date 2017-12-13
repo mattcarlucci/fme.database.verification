@@ -13,6 +13,7 @@ namespace Fme.Library
     /// <seealso cref="System.EventArgs" />
     public class ValidationEventArgs : EventArgs
     {
+        public string PrimaryKey { get; set; }
         public string DocumentNumber { get; set; }
         public string Revision { get; set; }
 
@@ -31,16 +32,39 @@ namespace Fme.Library
         /// <param name="method">The method.</param>
         /// <param name="result">if set to <c>true</c> [result].</param>
         /// <param name="row">The row.</param>
-        public ValidationEventArgs(string fieldName, string method, bool result, DataRow row, string[] keys, int count, string value)
+        public ValidationEventArgs(string fieldName, string method, bool result, DataRow row, string[] keys, string count, string value)
         {
+            
             this.FieldName = fieldName;
             this.Method = method;
             this.Result = result;
             this.DataRow = DataRow;
-            this.Count = count;
+         //   this.Count = count;
             this.Value = value;
             DocumentNumber = row[keys.First()].ToString();
             Revision = row[keys.Last()].ToString();
+            PrimaryKey = DocumentNumber + Revision;
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ValidationEventArgs"/> class.
+        /// </summary>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <param name="method">The method.</param>
+        /// <param name="result">if set to <c>true</c> [result].</param>
+        /// <param name="row">The row.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="count">The count.</param>
+        /// <param name="value">The value.</param>
+        public ValidationEventArgs(string fieldName, string method, bool result, DataRow row, string key, int count, string value)
+        {
+
+            this.FieldName = fieldName;
+            this.Method = method;
+            this.Result = result;
+            this.DataRow = row;
+            this.Count = count;
+            this.Value = value;
+            PrimaryKey = key;
         }
 
         /// <summary>

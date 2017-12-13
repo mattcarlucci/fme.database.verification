@@ -241,7 +241,7 @@ namespace Fme.Library.Repositories
                                 result = results.All(a => a == true);
 
                             if (ShouldReturn(method, result))
-                                OnValidate(this, new ValidationEventArgs(col.Name, method, result, row, keyFields, table.Rows.Count, value));
+                                OnValidate(this, new ValidationEventArgs(col.Name, method, result, row, row["PRIMARY_KEY"].ToString(), table.Rows.Count, value));
                         }
                     }//);
                 }

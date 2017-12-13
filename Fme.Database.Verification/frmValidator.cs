@@ -250,7 +250,7 @@ namespace Fme.Database.Verification
 
                 repo.Execute(data1.Table(), dataSource.SelectedSchema().Fields);
                 RefreshSummary();
-
+                CreateReportSummary();
                 lblElapsed.Caption = "Validation: "+ new TimeSpan(DateTime.Now.Ticks - executionStartTime.Ticks).Duration().ToString();
                 MessageBox.Show("Validation Complete", "Validation Service", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -264,7 +264,26 @@ namespace Fme.Database.Verification
                 barEditItem2.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             }
         }
-
+        /// <summary>
+        /// Creates the report summary.
+        /// </summary>
+        private void CreateReportSummary()
+        {
+            Dictionary<string, int> keys = new Dictionary<string, int>();
+            var root = eventItems.First().DataRow.Table;
+            var clone = root.Clone();
+            foreach(var item in eventItems) //.Select(s=> s.PrimaryKey).Distinct().ToList())
+            {
+                if (keys.ContainsKey(item.PrimaryKey))
+                    continue;
+                keys.Add(item.PrimaryKey, 0);
+                var desRow = clone.NewRow();
+                desRow.ItemArray = item.DataRow.ItemArray.Clone() as object[];
+                
+                clone.Rows.Add(desRow);
+            }
+            gridControl4.DataSource = clone;
+        }
         /// <summary>
         /// Handles the Validate event of the Repo control.
         /// </summary>
