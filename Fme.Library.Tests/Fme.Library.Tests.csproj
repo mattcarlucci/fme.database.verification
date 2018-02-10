@@ -57,23 +57,11 @@
     <Compile Include="UnitTest2.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="cd_clinical.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Comparisons\dm_document1.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Comparisons\dm_document2.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="dm_document1.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="dm_document2.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="dm_document3.xlsx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="lookup.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -82,7 +70,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-    <None Include="SmartSolve Extract.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fme.DqlProvider\Fme.DqlProvider.csproj">
